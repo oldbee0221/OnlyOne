@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "665610795264",
+    "firebase_url": "https://onepagebookmms5.firebaseio.com",
+    "project_id": "onepagebookmms5",
+    "storage_bucket": "onepagebookmms5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:665610795264:android:5815dc0511b80cb0",
+        "android_client_info": {
+          "package_name": "mms5.onepagebook.com.onlyonesms"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "665610795264-bb4fs9h2sqdd8obomgti862kqsak902g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "mms5.onepagebook.com.onlyonesms",
+            "certificate_hash": "b2dcbe9c27d6a3c61db040d58abff6eda7b7fa4f"
+          }
+        },
+        {
+          "client_id": "665610795264-q1csbh5n4ard96tsj8hsfluplebmvdol.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAhCEYpUUr_d8vUwLwDClh8WLc4-KDBIXU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "665610795264-q1csbh5n4ard96tsj8hsfluplebmvdol.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

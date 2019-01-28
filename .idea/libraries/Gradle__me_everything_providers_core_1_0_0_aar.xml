@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: me.everything:providers-core:1.0.0@aar">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/providers-core-1.0.0.aar/d2a24104a9c0c2fc2acbaac615593d4c/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/providers-core-1.0.0.aar/d2a24104a9c0c2fc2acbaac615593d4c/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/me.everything/providers-core/1.0.0/200f3ad2e0c75c4916f4ebd9c61e5e1eabfd34a6/providers-core-1.0.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

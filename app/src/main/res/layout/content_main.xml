@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:background="@android:color/white"
+      android:orientation="vertical"
+      app:layout_behavior="@string/appbar_scrolling_view_behavior"
+      tools:context=".MainActivity"
+      tools:showIn="@layout/activity_main">
+
+        <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginLeft="20dp"
+          android:layout_marginTop="30dp"
+          android:layout_marginRight="20dp"
+          android:lineSpacingMultiplier="1.2"
+          android:text="@string/desc"
+          android:textColor="@android:color/black"
+          android:textSize="15sp" />
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginLeft="20dp"
+          android:layout_marginTop="26dp"
+          android:layout_marginRight="20dp"
+          android:background="@drawable/bg_statics"
+          android:orientation="vertical">
+
+            <LinearLayout
+              android:layout_width="match_parent"
+              android:layout_height="50dp"
+              android:gravity="center_vertical"
+              android:orientation="horizontal">
+
+                <TextView
+                  android:layout_width="0dp"
+                  android:layout_height="match_parent"
+                  android:layout_weight="2"
+                  android:background="@color/colorPrimary"
+                  android:gravity="center_vertical"
+                  android:paddingLeft="10dp"
+                  android:paddingRight="10dp"
+                  android:text="@string/label_today_sms_count"
+                  android:textColor="@android:color/white"
+                  android:textSize="16sp" />
+
+                <TextView
+                  android:id="@+id/text_today_count"
+                  android:layout_width="0dp"
+                  android:layout_height="wrap_content"
+                  android:layout_weight="3"
+                  android:paddingLeft="10dp"
+                  android:paddingRight="10dp"
+                  android:textColor="@android:color/black"
+                  android:textSize="15sp" />
+            </LinearLayout>
+
+            <View
+              android:layout_width="match_parent"
+              android:layout_height="0.5dp"
+              android:background="#464646" />
+
+            <LinearLayout
+              android:layout_width="match_parent"
+              android:layout_height="50dp"
+              android:gravity="center_vertical"
+              android:orientation="horizontal">
+
+                <TextView
+                  android:layout_width="0dp"
+                  android:layout_height="match_parent"
+                  android:layout_weight="2"
+                  android:background="@color/colorPrimary"
+                  android:gravity="center_vertical"
+                  android:paddingLeft="10dp"
+                  android:paddingRight="10dp"
+                  android:text="@string/label_month_sms_count"
+                  android:textColor="@android:color/white"
+                  android:textSize="16sp" />
+
+                <TextView
+                  android:id="@+id/text_month_count"
+                  android:layout_width="0dp"
+                  android:layout_height="wrap_content"
+                  android:layout_weight="3"
+                  android:paddingLeft="10dp"
+                  android:paddingRight="10dp"
+                  android:textColor="@android:color/black"
+                  android:textSize="15sp" />
+            </LinearLayout>
+
+            <View
+              android:layout_width="match_parent"
+              android:layout_height="0.5dp"
+              android:background="#464646" />
+
+            <LinearLayout
+              android:layout_width="match_parent"
+              android:layout_height="50dp"
+              android:gravity="center_vertical"
+              android:orientation="horizontal">
+
+                <TextView
+                  android:layout_width="0dp"
+                  android:layout_height="match_parent"
+                  android:layout_weight="2"
+                  android:background="@color/colorPrimary"
+                  android:gravity="center_vertical"
+                  android:paddingLeft="10dp"
+                  android:paddingRight="10dp"
+                  android:text="@string/label_phone_number"
+                  android:textColor="@android:color/white"
+                  android:textSize="16sp" />
+
+                <TextView
+                  android:id="@+id/text_phone_number"
+                  android:layout_width="0dp"
+                  android:layout_height="wrap_content"
+                  android:layout_weight="3"
+                  android:paddingLeft="10dp"
+                  android:paddingRight="10dp"
+                  android:textColor="@android:color/black"
+                  android:textSize="15sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <FrameLayout
+          android:layout_width="match_parent"
+          android:layout_height="150dp">
+
+            <TextView
+              android:id="@+id/btn_show_dialog"
+              android:layout_width="match_parent"
+              android:layout_height="40dp"
+              android:layout_gravity="bottom"
+              android:layout_marginLeft="30dp"
+              android:layout_marginRight="30dp"
+              android:background="@color/colorPrimaryDark"
+              android:gravity="center"
+              android:text="@string/term_making_default"
+              android:textColor="@android:color/white"
+              android:textSize="16sp" />
+
+            <TextView
+              android:id="@+id/text_default_app"
+              android:layout_width="match_parent"
+              android:layout_height="40dp"
+              android:layout_gravity="center_horizontal"
+              android:layout_marginLeft="30dp"
+              android:layout_marginRight="30dp"
+              android:gravity="center"
+              android:text="@string/mgs_default_app"
+              android:textColor="@android:color/black"
+              android:textSize="16sp" />
+
+            <ProgressBar
+              android:id="@+id/progress"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              android:visibility="gone" />
+        </FrameLayout>
+
+        <TextView
+          android:id="@+id/btn_go_to"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:layout_marginLeft="30dp"
+          android:layout_marginTop="16dp"
+          android:layout_marginRight="30dp"
+          android:layout_marginBottom="24dp"
+          android:gravity="center"
+          android:paddingLeft="30dp"
+          android:background="@drawable/bg_btn_primary"
+          android:paddingTop="12dp"
+          android:paddingRight="30dp"
+          android:paddingBottom="12dp"
+          android:text="@string/go_to_another_sms_app"
+          android:textColor="@android:color/white"
+          android:textSize="13sp" />
+    </LinearLayout>
+</ScrollView>
