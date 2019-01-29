@@ -22,18 +22,17 @@ import mms5.onepagebook.com.onlyonesms.api.ApiCallback;
 import mms5.onepagebook.com.onlyonesms.api.Client;
 import mms5.onepagebook.com.onlyonesms.api.body.SendingChangedNumberBody;
 import mms5.onepagebook.com.onlyonesms.api.response.DefaultResult;
+import mms5.onepagebook.com.onlyonesms.common.Constants;
 import mms5.onepagebook.com.onlyonesms.manager.GsonManager;
 import mms5.onepagebook.com.onlyonesms.manager.PreferenceManager;
 import mms5.onepagebook.com.onlyonesms.manager.RetrofitManager;
 import mms5.onepagebook.com.onlyonesms.model.UserInfo;
 import mms5.onepagebook.com.onlyonesms.util.Utils;
 
-public class OnePageSmsReceiver extends BroadcastReceiver {
+public class OnePageSmsReceiver extends BroadcastReceiver implements Constants {
   private static final String ACTION_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
 
   private static final String EXTRA_ERROR_CODE = "errorCode";
-  private static final String FRAG_01 = "01";
-  private static final String FRAG_NUMBER = "입력하신 수신번호";
 
   public static ContentValues parseReceivedSmsMessage(final Context context, final SmsMessage[] msgs, final int error) {
     final SmsMessage sms = msgs[0];
@@ -162,12 +161,27 @@ public class OnePageSmsReceiver extends BroadcastReceiver {
     String address = message.getDisplayOriginatingAddress();
     String body = message.getDisplayMessageBody();
 
-    if (body.contains(FRAG_01) || body.contains(FRAG_NUMBER)) {
+    if (checkMsg(body)) {
       uploadSms(context, address, body);
       return false;
     }
 
     return true;
+  }
+
+  private boolean checkMsg(String m) {
+    if(m.contains(FRAG_01)) {
+      if (m.contains(FRAG_S4)) return true;
+      if (m.contains(FRAG_S8)) return true;
+      if (m.contains(FRAG_S6)) return true;
+      if (m.contains(FRAG_S7)) return true;
+      if (m.contains(FRAG_S2)) return true;
+      if (m.contains(FRAG_S1)) return true;
+      if (m.contains(FRAG_S3)) return true;
+      if (m.contains(FRAG_S5)) return true;
+    }
+
+    return false;
   }
 
   private void uploadSms(Context context, String address, String message) {

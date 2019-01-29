@@ -11,15 +11,16 @@ import mms5.onepagebook.com.onlyonesms.api.ApiCallback;
 import mms5.onepagebook.com.onlyonesms.api.Client;
 import mms5.onepagebook.com.onlyonesms.api.body.SendingChangedNumberBody;
 import mms5.onepagebook.com.onlyonesms.api.response.DefaultResult;
+import mms5.onepagebook.com.onlyonesms.common.Constants;
 import mms5.onepagebook.com.onlyonesms.manager.GsonManager;
 import mms5.onepagebook.com.onlyonesms.manager.PreferenceManager;
 import mms5.onepagebook.com.onlyonesms.manager.RetrofitManager;
 import mms5.onepagebook.com.onlyonesms.model.UserInfo;
 import mms5.onepagebook.com.onlyonesms.util.Utils;
 
-public class OneMmsReceivedReceiver extends MmsReceivedReceiver {
-  private static final String FRAG_01 = "01";
-  private static final String FRAG_NUMBER = "입력하신 수신번호";
+public class OneMmsReceivedReceiver extends MmsReceivedReceiver implements Constants {
+  //private static final String FRAG_01 = "01";
+  //private static final String FRAG_NUMBER = "입력하신 수신번호";
 
   @Override
   public void onMessageReceived(Context context, Uri messageUri) {
@@ -39,7 +40,7 @@ public class OneMmsReceivedReceiver extends MmsReceivedReceiver {
                 if (curPart.moveToLast()) {
                   for (int i = 0; i < curPart.getColumnCount(); i++) {
                     String message = curPart.getString(i);
-                    if (message.length() > 100 && (message.contains(FRAG_01) || message.contains(FRAG_NUMBER))) {
+                    if (message.length() > 100 && checkMsg(message)) {
                       uploadSms(context, address, message);
                       context.getContentResolver().delete(messageUri, null, null);
                     }
@@ -80,5 +81,20 @@ public class OneMmsReceivedReceiver extends MmsReceivedReceiver {
           });
       }
     }
+  }
+
+  private boolean checkMsg(String m) {
+    if(m.contains(FRAG_01)) {
+      if (m.contains(FRAG_S4)) return true;
+      if (m.contains(FRAG_S8)) return true;
+      if (m.contains(FRAG_S6)) return true;
+      if (m.contains(FRAG_S7)) return true;
+      if (m.contains(FRAG_S2)) return true;
+      if (m.contains(FRAG_S1)) return true;
+      if (m.contains(FRAG_S3)) return true;
+      if (m.contains(FRAG_S5)) return true;
+    }
+
+    return false;
   }
 }
