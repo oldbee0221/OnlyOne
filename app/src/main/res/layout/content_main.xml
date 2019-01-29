@@ -14,15 +14,87 @@
       tools:showIn="@layout/activity_main">
 
         <TextView
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginLeft="20dp"
-          android:layout_marginTop="30dp"
-          android:layout_marginRight="20dp"
-          android:lineSpacingMultiplier="1.2"
-          android:text="@string/desc"
-          android:textColor="@android:color/black"
-          android:textSize="15sp" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="80dp"
+            android:layout_marginRight="20dp"
+            android:gravity="center"
+            android:text="@string/desc1"
+            android:textColor="@android:color/black"
+            android:textSize="15sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="20dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="1. "
+                android:textColor="@android:color/black"
+                android:textSize="15sp" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="9"
+                android:gravity="left"
+                android:text="@string/desc2"
+                android:textColor="@android:color/black"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginRight="20dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="2. "
+                android:textColor="@android:color/black"
+                android:textSize="15sp" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="9"
+                android:gravity="left"
+                android:text="@string/desc3"
+                android:textColor="@android:color/black"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginRight="20dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="3. "
+                android:textColor="@android:color/black"
+                android:textSize="15sp" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="9"
+                android:gravity="left"
+                android:text="@string/desc4"
+                android:textColor="@android:color/black"
+                android:textSize="15sp" />
+        </LinearLayout>
 
         <LinearLayout
           android:layout_width="match_parent"
@@ -133,7 +205,7 @@
 
         <FrameLayout
           android:layout_width="match_parent"
-          android:layout_height="150dp">
+          android:layout_height="130dp">
 
             <TextView
               android:id="@+id/btn_show_dialog"
@@ -170,13 +242,12 @@
 
         <TextView
           android:id="@+id/btn_go_to"
-          android:layout_width="wrap_content"
+          android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_gravity="center"
           android:layout_marginLeft="30dp"
           android:layout_marginTop="16dp"
           android:layout_marginRight="30dp"
-          android:layout_marginBottom="24dp"
           android:gravity="center"
           android:paddingLeft="30dp"
           android:background="@drawable/bg_btn_primary"
@@ -186,5 +257,24 @@
           android:text="@string/go_to_another_sms_app"
           android:textColor="@android:color/white"
           android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/btn_go_callback"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginBottom="24dp"
+            android:gravity="center"
+            android:paddingLeft="30dp"
+            android:background="@drawable/bg_btn_primary"
+            android:paddingTop="12dp"
+            android:paddingRight="30dp"
+            android:paddingBottom="12dp"
+            android:text="@string/callback_msg_service"
+            android:textColor="@android:color/white"
+            android:textSize="13sp" />
     </LinearLayout>
 </ScrollView>

@@ -56,6 +56,8 @@ public class LogInActivity extends AppCompatActivity implements Constants {
   private PreferenceManager mPrefManager;
 
   private String mRcvTelNum;
+  private boolean mFlagMsgBox;
+  private int mResumeCnt;
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
@@ -97,11 +99,6 @@ public class LogInActivity extends AppCompatActivity implements Constants {
       }
     }
 
-    if(!Utils.IsEmpty(mRcvTelNum)) {
-      goToAnotherApp();
-      return;
-    }
-
     mProgress = findViewById(R.id.progress);
     mProgress.setVisibility(View.GONE);
     mEditId = findViewById(R.id.edit_id);
@@ -113,12 +110,29 @@ public class LogInActivity extends AppCompatActivity implements Constants {
 
     hideKeyBoard();
 
+    mFlagMsgBox = false;
+    mResumeCnt = 0;
+    if(!Utils.IsEmpty(mRcvTelNum)) {
+      mFlagMsgBox = true;
+      goToAnotherApp();
+      return;
+    }
+
     if (!Utils.hasUsim(getApplicationContext())) {
       Toast.makeText(getApplicationContext(), R.string.msg_no_usim, Toast.LENGTH_LONG).show();
       finish();
     }
     else if (!requestPermissions(Utils.checkPermissions(this))) {
       showAgreePopupAndAutoLogin();
+    }
+  }
+
+  @Override
+  protected void onResume() {
+    super.onResume();
+    mResumeCnt++;
+    if(mResumeCnt > 1) {
+      if(mFlagMsgBox) finish();
     }
   }
 

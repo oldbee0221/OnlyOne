@@ -121,13 +121,19 @@ public class MainActivity extends AppCompatActivity implements Constants {
       }
     });
 
+    findViewById(R.id.btn_go_callback).setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        Intent i = new Intent(MainActivity.this, CBMMainActivity.class);
+        startActivity(i);
+      }
+    });
+
     loadStatics();
 
     if (!PreferenceManager.getInstance(getApplicationContext()).getShowMaingDefault()) {
       showDefaultAppDialog();
     }
-
-
   }
 
   private void setViewBySetting() {

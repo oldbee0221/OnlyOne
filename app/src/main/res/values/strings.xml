@@ -20,13 +20,14 @@
     <string name="msg_fail_to_log_in">로그인 실패 하였습니다.</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="desc">
-        온리원문자 어플을 설치해주셔서 감사합니다.\n
-        1. 이 페이지가 보이면 휴대폰에 문자앱 설치가\n
-        &#160;&#160;정상적으로 완료된 것입니다.\n
-        2. 오늘 발송문자량과 이달 발송문자량은 본 어플\n
-        &#160;&#160;을 통해 발송된 문자량 입니다.\n
-        3. 본 어플 사용을 중단하실 때는 환경설정>애플리케\n
-        &#160;&#160;이션 관리에서 삭제하시면 됩니다.</string>
+        온리원문자 어플을 설치해주셔서 감사합니다.\n\n
+        1. 이 페이지가 보이면 휴대폰에 문자앱 설치가 정상적으로 완료된 것입니다.\n
+        2. 오늘 발송문자량과 이달 발송문자량은 본 어플을 통해 발송된 문자량 입니다.\n
+        3. 본 어플 사용을 중단하실 때는 환경설정>애플리케이션 관리에서 삭제하시면 됩니다.</string>
+    <string name="desc1">온리원문자 어플을 설치해주셔서 감사합니다.</string>
+    <string name="desc2">이 페이지가 보이면 휴대폰에 문자앱 설치가 정상적으로 완료된 것입니다.</string>
+    <string name="desc3">오늘 발송문자량과 이달 발송문자량은 본 어플을 통해 발송된 문자량 입니다.</string>
+    <string name="desc4">본 어플 사용을 중단하실 때는 환경설정>애플리케이션 관리에서 삭제하시면 됩니다.</string>
     <string name="label_today_sms_count">오늘 발송 문자량</string>
     <string name="label_month_sms_count">이달 발송 문자량</string>
     <string name="label_phone_number">휴대폰 번호</string>
@@ -38,6 +39,12 @@
     <string name="term_making_default">기본 문자 앱으로 바꾸기</string>
     <string name="mgs_default_app">현재 기본 앱입니다.</string>
     <string name="go_to_another_sms_app">다른 문자 앱으로 가기</string>
-  <string name="msg_processing_sending_mms">문자를 보내는 중입니다.</string>
+    <string name="msg_processing_sending_mms">문자를 보내는 중입니다.</string>
+
+    <string name="callback_msg_service">콜백문자 서비스</string>
+    <string name="use">사용</string>
+    <string name="not_use">미사용</string>
+    <string name="callback_msg_reg">콜백 메시지 작성</string>
+    <string name="callback_msg_address">콜백 주소록 설정</string>
 
 </resources>
