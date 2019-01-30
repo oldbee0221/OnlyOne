@@ -42,6 +42,7 @@
     <string name="msg_processing_sending_mms">문자를 보내는 중입니다.</string>
 
     <string name="callback_msg_service">콜백문자 서비스</string>
+    <string name="use_check">사용여부</string>
     <string name="use">사용</string>
     <string name="not_use">미사용</string>
     <string name="callback_msg_reg">콜백 메시지 작성</string>

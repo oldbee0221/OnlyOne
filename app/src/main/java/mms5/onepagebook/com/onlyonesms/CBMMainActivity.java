@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.answers.Answers;
@@ -14,6 +16,10 @@ import io.fabric.sdk.android.Fabric;
 import mms5.onepagebook.com.onlyonesms.common.Constants;
 
 public class CBMMainActivity extends AppCompatActivity implements Constants {
+
+    private RadioGroup mRgUse;
+    private RadioButton mRbUse;
+    private RadioButton mRbNotUse;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -47,5 +53,7 @@ public class CBMMainActivity extends AppCompatActivity implements Constants {
             getSupportActionBar().setDisplayShowCustomEnabled(true);
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
+
+        mRgUse = findViewById(R.id.rg_use);
     }
 }

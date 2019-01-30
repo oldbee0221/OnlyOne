@@ -7,8 +7,42 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="64dp"
         android:orientation="vertical">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="12dp"
+                android:textColor="@android:color/black"
+                android:textSize="14dp"
+                android:text="@string/use_check"/>
+
+            <RadioGroup
+                android:id="@+id/rg_use"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <RadioButton
+                    android:id="@+id/rb_use"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:text="@string/use"/>
+
+                <RadioButton
+                    android:id="@+id/rb_not_use"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="@string/not_use"/>
+            </RadioGroup>
+        </LinearLayout>
     </LinearLayout>
 
 </ScrollView>
