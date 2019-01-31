@@ -33,6 +33,7 @@ public class RetrofitManager {
       OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
       httpClient.cookieJar(cookieJar(context));
       httpClient.addInterceptor(new NetworkCheckInterceptor(context));
+      String bUrl = PreferenceManager.getInstance(context).getBaseUrl();
 
       if (MainActivity.HAS_TO_SHOW_LOGS) {
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
@@ -42,13 +43,17 @@ public class RetrofitManager {
 
       client = httpClient.build();
       retrofit = new Retrofit.Builder()
-        .baseUrl(BASE_URL)
+        .baseUrl(bUrl)
         .client(client)
         .addConverterFactory(ScalarsConverterFactory.create())
         .addConverterFactory(GsonConverterFactory.create(GsonManager.getGson()))
         .build();
     }
     return retrofit;
+  }
+
+  public static void cleanRetrofit() {
+    retrofit = null;
   }
 
   private static PersistentCookieJar cookieJar(Context context) {

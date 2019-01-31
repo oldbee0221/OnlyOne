@@ -14,6 +14,8 @@ public class PreferenceManager {
   private static final String KEY_IS_TASK_RUNNING = "com.onlyonesms.PreferenceManager.is_task_running";
   private static final String KEY_SHOW_MAKEING_DEFAULT = "com.onlyonesms.PreferenceManager.show_making_default";
   private static final String KEY_LAST_REMOVED_TIME = "com.onlyonesms.PreferenceManager.last_removed_time";
+  private static final String KEY_BASE_URL = "com.onlyonesms.PreferenceManager.baseurl";
+  private static final String KEY_CALLBACK_MSG_USE = "com.onlyonesms.PreferenceManager.cbmsguse";
 
   private static SharedPreferences pref;
   private static PreferenceManager instance;
@@ -120,6 +122,16 @@ public class PreferenceManager {
     editor.apply();
   }
 
+  public boolean getIsUseCBMsg() {
+    return pref.getBoolean(KEY_CALLBACK_MSG_USE, false);
+  }
+
+  public void setIsUseCBMsg(boolean isRunning) {
+    SharedPreferences.Editor editor = pref.edit();
+    editor.putBoolean(KEY_CALLBACK_MSG_USE, isRunning);
+    editor.apply();
+  }
+
   public void setShowMakingDefault(boolean yes) {
     SharedPreferences.Editor editor = pref.edit();
     editor.putBoolean(KEY_SHOW_MAKEING_DEFAULT, yes);
@@ -137,6 +149,16 @@ public class PreferenceManager {
   public void setLastRemovedTime(long time) {
     SharedPreferences.Editor editor = pref.edit();
     editor.putLong(KEY_LAST_REMOVED_TIME, time);
+    editor.apply();
+  }
+
+  public String getBaseUrl() {
+    return pref.getString(KEY_BASE_URL, RetrofitManager.BASE_URL);
+  }
+
+  public void setBaseUrl(String baseUrl) {
+    SharedPreferences.Editor editor = pref.edit();
+    editor.putString(KEY_BASE_URL, baseUrl);
     editor.apply();
   }
 }
