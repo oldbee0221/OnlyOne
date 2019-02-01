@@ -48,4 +48,8 @@
     <string name="callback_msg_reg">콜백 메시지 작성</string>
     <string name="callback_msg_address">콜백 주소록 설정</string>
 
+    <string name="connect_service">접속 서비스</string>
+    <string name="choose_connect_service">접속 서비스를 선택하세요</string>
+    <string name="msg_please_service_point">접속 서비스를 선택해주세요</string>
+
 </resources>

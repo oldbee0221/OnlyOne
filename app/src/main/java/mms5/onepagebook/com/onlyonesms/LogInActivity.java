@@ -1,6 +1,7 @@
 package mms5.onepagebook.com.onlyonesms;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -17,7 +18,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
@@ -30,10 +34,12 @@ import com.google.firebase.iid.InstanceIdResult;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 import io.fabric.sdk.android.Fabric;
 import mms5.onepagebook.com.onlyonesms.api.ApiCallback;
 import mms5.onepagebook.com.onlyonesms.api.Client;
+import mms5.onepagebook.com.onlyonesms.api.body.ServiceListBody;
 import mms5.onepagebook.com.onlyonesms.api.body.SignInBody;
 import mms5.onepagebook.com.onlyonesms.api.response.DefaultResult;
 import mms5.onepagebook.com.onlyonesms.common.Constants;
@@ -41,6 +47,8 @@ import mms5.onepagebook.com.onlyonesms.manager.GsonManager;
 import mms5.onepagebook.com.onlyonesms.manager.PreferenceManager;
 import mms5.onepagebook.com.onlyonesms.manager.RealmManager;
 import mms5.onepagebook.com.onlyonesms.manager.RetrofitManager;
+import mms5.onepagebook.com.onlyonesms.model.ServiceList;
+import mms5.onepagebook.com.onlyonesms.model.ServiceListData;
 import mms5.onepagebook.com.onlyonesms.model.UserInfo;
 import mms5.onepagebook.com.onlyonesms.service.CheckTaskService;
 import mms5.onepagebook.com.onlyonesms.service.SyncContactsService;
@@ -58,6 +66,11 @@ public class LogInActivity extends AppCompatActivity implements Constants {
   private String mRcvTelNum;
   private boolean mFlagMsgBox;
   private int mResumeCnt;
+
+  private Spinner mSpnService;
+  private ArrayList<ServiceListData> mServiceList;
+
+  private Context mContext;
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
@@ -84,6 +97,9 @@ public class LogInActivity extends AppCompatActivity implements Constants {
     super.onCreate(savedInstanceState);
     Fabric.with(this, new Answers(), new Crashlytics());
     setContentView(R.layout.activity_log_in);
+
+    mContext = getApplicationContext();
+
     Toolbar toolbar = findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
 
@@ -104,6 +120,7 @@ public class LogInActivity extends AppCompatActivity implements Constants {
     mEditId = findViewById(R.id.edit_id);
     mEditPw = findViewById(R.id.edit_pw);
     mBtnLogIn = findViewById(R.id.login_btn);
+    mSpnService = findViewById(R.id.spn_service);
 
     mPrefManager = PreferenceManager.getInstance(getApplicationContext());
     initListeners();
@@ -121,8 +138,7 @@ public class LogInActivity extends AppCompatActivity implements Constants {
     if (!Utils.hasUsim(getApplicationContext())) {
       Toast.makeText(getApplicationContext(), R.string.msg_no_usim, Toast.LENGTH_LONG).show();
       finish();
-    }
-    else if (!requestPermissions(Utils.checkPermissions(this))) {
+    } else if (!requestPermissions(Utils.checkPermissions(this))) {
       showAgreePopupAndAutoLogin();
     }
   }
@@ -171,11 +187,17 @@ public class LogInActivity extends AppCompatActivity implements Constants {
     if (TextUtils.isEmpty(mEditId.getText().toString())) {
       Toast.makeText(getApplicationContext(), R.string.msg_please_type_id, Toast.LENGTH_SHORT).show();
       return false;
-    }
-    else if (TextUtils.isEmpty(mEditPw.getText().toString())) {
+    } else if (TextUtils.isEmpty(mEditPw.getText().toString())) {
       Toast.makeText(getApplicationContext(), R.string.msg_please_type_pw, Toast.LENGTH_SHORT).show();
       return false;
     }
+
+    if(mSpnService.getSelectedItemPosition() == 0) {
+      Toast.makeText(getApplicationContext(), R.string.msg_please_service_point, Toast.LENGTH_SHORT).show();
+      return false;
+    }
+
+    RetrofitManager.cleanRetrofit();
 
     return true;
   }
@@ -235,6 +257,8 @@ public class LogInActivity extends AppCompatActivity implements Constants {
       } catch (Exception ignored) {
         mPrefManager.clear(getClass().getSimpleName());
       }
+    } else {
+      getServiceList();
     }
   }
 
@@ -398,6 +422,57 @@ public class LogInActivity extends AppCompatActivity implements Constants {
         imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
       }
     }
+  }
+
+
+  private void getServiceList() {
+    RetrofitManager.retrofit(getApplicationContext()).create(Client.class)
+            .serviceList(new ServiceListBody())
+            .enqueue(new ApiCallback<ServiceList>() {
+              @Override
+              public void onSuccess(ServiceList response) {
+                String result = response.result;
+
+                if (DefaultResult.RESULT_0.equals(result)) {
+                  mServiceList = response.data;
+                  if(mServiceList != null && mServiceList.size() > 0) {
+                    int size = mServiceList.size();
+                    String[] svcNm = new String[size+1];
+                    svcNm[0] = getString(R.string.choose_connect_service);
+
+                    for(int i=0; i<size; i++) {
+                      svcNm[i+1] = mServiceList.get(i).service_name;
+                    }
+
+                    ArrayAdapter adapter = new ArrayAdapter(getApplicationContext(),
+                            R.layout.custom_spinner_item,
+                            svcNm);
+                    adapter.setDropDownViewResource(R.layout.custom_spinner_dropdown_item);
+
+                    mSpnService.setAdapter(adapter);
+
+                    mSpnService.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                      @Override
+                      public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                        if(i > 0) {
+                          PreferenceManager.getInstance(mContext).setBaseUrl(mServiceList.get(i-1).domain);
+                        } else {
+                          PreferenceManager.getInstance(mContext).setBaseUrl(RetrofitManager.BASE_URL);
+                        }
+                      }
+
+                      @Override
+                      public void onNothingSelected(AdapterView<?> adapterView) {
+
+                      }
+                    });
+                  }
+                }
+              }
+
+              @Override
+              public void onFail(int error, String msg) {}
+            });
   }
 }
 
