@@ -99,6 +99,10 @@ public class CBMMainActivity extends AppCompatActivity implements Constants, Vie
                 break;
 
             case R.id.btn_cb_reg:
+            {
+                Intent i = new Intent(CBMMainActivity.this, CBMRegActivity.class);
+                startActivity(i);
+            }
                 break;
         }
     }

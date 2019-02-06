@@ -4,4 +4,13 @@
     <color name="colorPrimaryDark">#2965A7</color>
     <color name="colorAccent">#2965A7</color>
     <color name="text_primary">#000000</color>
+
+    <color name="brownish_grey">#616161</color>
+    <color name="black_10">#212121</color>
+    <color name="dark">#182533</color>
+    <color name="warm_grey">#818181</color>
+    <color name="dark_indigo">#0a2148</color>
+    <color name="dark_indigo_80">#cc0a2148</color>
+    <color name="dusk_blue">#254e8e</color>
+    <color name="dark_slate_blue">#273f66</color>
 </resources>

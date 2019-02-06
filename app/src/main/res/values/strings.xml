@@ -52,4 +52,10 @@
     <string name="choose_connect_service">접속 서비스를 선택하세요</string>
     <string name="msg_please_service_point">접속 서비스를 선택해주세요</string>
 
+    <string name="tab_1">수신</string>
+    <string name="tab_2">부재중</string>
+    <string name="tab_3">발신</string>
+    <string name="delete">삭제</string>
+    <string name="update">수정</string>
+
 </resources>

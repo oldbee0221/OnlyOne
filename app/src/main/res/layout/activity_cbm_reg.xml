@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff">
+
+    <RelativeLayout
+        android:id="@+id/rl_title"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:layout_alignParentTop="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/app_name"
+            android:textColor="@android:color/white"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_main_tab"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:layout_below="@id/rl_title"
+        android:orientation="horizontal">
+        <RelativeLayout
+            android:id="@+id/rl_main_tab_1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+            <TextView
+                android:id="@+id/tv_main_tab_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:textSize="18sp"
+                android:textColor="@color/brownish_grey"
+                android:text="@string/tab_1"/>
+            <View
+                android:id="@+id/v_main_tab_1"
+                android:layout_width="80dp"
+                android:layout_height="2dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:background="@color/colorPrimary"
+                android:visibility="gone"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_main_tab_2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+            <TextView
+                android:id="@+id/tv_main_tab_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:textColor="@color/brownish_grey"
+                android:textSize="18sp"
+                android:text="@string/tab_2"/>
+            <View
+                android:id="@+id/v_main_tab_2"
+                android:layout_width="80dp"
+                android:layout_height="2dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:background="@color/colorPrimary"
+                android:visibility="gone"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_main_tab_3"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+            <TextView
+                android:id="@+id/tv_main_tab_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:textColor="@color/brownish_grey"
+                android:textSize="18sp"
+                android:text="@string/tab_3"/>
+            <View
+                android:id="@+id/v_main_tab_3"
+                android:layout_width="80dp"
+                android:layout_height="2dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:background="@color/colorPrimary"
+                android:visibility="gone"/>
+        </RelativeLayout>
+    </LinearLayout>
+
+    <View
+        android:id="@+id/v_title_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/ll_main_tab"
+        android:background="#d3d3d3" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/v_title_line">
+    </android.support.v4.view.ViewPager>
+
+</RelativeLayout>

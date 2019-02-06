@@ -12,4 +12,6 @@ public interface Constants {
     String FRAG_S6 = "MMS 지원하지 않";
     String FRAG_S7 = "MMS를 수신할 수 없";
     String FRAG_S8 = "다시 시도해";
+
+    int NOTHING = -108;
 }
