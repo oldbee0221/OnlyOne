@@ -10,8 +10,11 @@ import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import android.util.Log;
 
 import java.util.ArrayList;
+
+import mms5.onepagebook.com.onlyonesms.common.Constants;
 
 public class Utils {
   public static String[] checkPermissions(Context context) {
@@ -122,5 +125,11 @@ public class Utils {
     if(d.length() == 0) return true;
 
     return false;
+  }
+
+  public static void Log(String msg) {
+    if(Constants.LOG_VISIBLE) {
+      Log.d("Pumpkin", msg);
+    }
   }
 }

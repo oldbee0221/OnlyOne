@@ -1,6 +1,7 @@
 package mms5.onepagebook.com.onlyonesms.common;
 
 public interface Constants {
+    boolean LOG_VISIBLE = true;
     String EXTRA_RCV_TEL_NUM = "EXTRA_RCV_TEL_NUM";
 
     String FRAG_01 = "01";
