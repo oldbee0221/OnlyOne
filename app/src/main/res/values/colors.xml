@@ -13,4 +13,16 @@
     <color name="dark_indigo_80">#cc0a2148</color>
     <color name="dusk_blue">#254e8e</color>
     <color name="dark_slate_blue">#273f66</color>
+    <color name="azure">#00abef</color>
+    <color name="tomato">#eb3333</color>
+    <color name="slate_grey">#5d6670</color>
+    <color name="dark_grey_blue">#33485d</color>
+    <color name="dark_blue_grey">#1e2f40</color>
+    <color name="black_40">#66000000</color>
+
+    <color name="white_two">#eeeeee</color>
+    <color name="white_30">#4dffffff</color>
+    <color name="white_40">#b3ffffff</color>
+    <color name="white_99">#99ffffff</color>
+
 </resources>
