@@ -1,20 +1,53 @@
 package mms5.onepagebook.com.onlyonesms;
 
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.v4.content.FileProvider;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.answers.Answers;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import io.fabric.sdk.android.Fabric;
+import mms5.onepagebook.com.onlyonesms.base.GlideApp;
 import mms5.onepagebook.com.onlyonesms.common.Constants;
 import mms5.onepagebook.com.onlyonesms.util.Utils;
 
@@ -24,15 +57,30 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
     private final int START_TIME = 1000;
     private final int END_TIME = 1001;
 
+    private final int REQUEST_IMAGE_ALBUM = 201;
+    private final int REQUEST_IMAGE_CAPTURE = 202;
+    private final int REQUEST_IMAGE_CROP = 203;
+
+    private Uri mContentUri;
+    private String mCurrentPhotoPath;
+    private String mRealPath;
+    private Bitmap mBmPhoto;
+
     private boolean[] days_week = new boolean[7];
     private boolean mAllDay = false;
     private int mWhichTime = START_TIME;
     private int mHourS = 0, mMinS = 0, mHourE = 0, mMinE = 0;
+    private int mPhotoGetMode;
 
     private TextView[] tv_days_week = new TextView[7];
     private View[] v_days_week = new View[7];
     private TextView tv_start, tv_end;
+    private ImageView iv_photo;
     private CheckBox cb_send_abs, cb_all_day;
+    private Spinner spn_sendtype, spn_sendoption;
+    private LinearLayout ll_img_del;
+    private LinearLayout ll_img_load;
+    private LinearLayout ll_img_box;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,6 +99,8 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
         findViewById(R.id.ll_friday).setOnClickListener(this);
         findViewById(R.id.ll_sunday).setOnClickListener(this);
         findViewById(R.id.ll_saturday).setOnClickListener(this);
+
+        iv_photo = findViewById(R.id.iv_photo);
 
         tv_days_week[0] = findViewById(R.id.tv_monday);
         tv_days_week[1] = findViewById(R.id.tv_tuesday);
@@ -79,6 +129,59 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
         cb_all_day = findViewById(R.id.cb_all_day);
         cb_send_abs.setOnCheckedChangeListener(this);
         cb_all_day.setOnCheckedChangeListener(this);
+
+        ll_img_del = findViewById(R.id.ll_img_del);
+        ll_img_del.setOnClickListener(this);
+
+        ll_img_load = findViewById(R.id.ll_img_load);
+        ll_img_load.setOnClickListener(this);
+
+        ll_img_box = findViewById(R.id.ll_img_box);
+        ll_img_box.setOnClickListener(this);
+
+        setSendTypeSpinner();
+        setSendOptionSpinner();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == RESULT_OK) {
+            switch(requestCode) {
+                case REQUEST_IMAGE_CAPTURE:
+                    if(rotatePhoto()) {
+                        CropImage.activity(mContentUri).setGuidelines(CropImageView.Guidelines.ON).start(CBMRegActivity.this);
+                    } else {
+                        Message msg = new Message();
+                        msg.what = REQUEST_IMAGE_CAPTURE;
+                        mHandler.sendMessage(msg);
+                    }
+                    break;
+
+                case REQUEST_IMAGE_ALBUM:
+                    mContentUri = data.getData();
+                    mRealPath = getPath(mContentUri);
+                    CropImage.activity(mContentUri).setGuidelines(CropImageView.Guidelines.ON).start(CBMRegActivity.this);
+                    break;
+
+                case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
+                    CropImage.ActivityResult result = CropImage.getActivityResult(data);
+                    if (resultCode == AppCompatActivity.RESULT_OK) {
+                        Uri resultUri = result.getUri();
+                        mCurrentPhotoPath = resultUri.getPath();
+
+                        iv_photo.setVisibility(View.VISIBLE);
+                        mBmPhoto = BitmapFactory.decodeFile(mCurrentPhotoPath);
+                        GlideApp.with(this)
+                                .load(mBmPhoto)
+                                .into(iv_photo);
+                    } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                        Exception error = result.getError();
+                        Utils.Log("CropImage error => " + error.getMessage());
+                    }
+                    break;
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -126,6 +229,17 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
                     mWhichTime = END_TIME;
                     timePickerDlg();
                 }
+                break;
+
+            case R.id.ll_img_del:
+                iv_photo.setVisibility(View.GONE);
+                break;
+
+            case R.id.ll_img_load:
+                onClickImageLoad();
+                break;
+
+            case R.id.ll_img_box:
                 break;
 
         }
@@ -193,4 +307,306 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
         TimePickerDialog pktmDlg = new TimePickerDialog(CBMRegActivity.this, this, hour, min, false);
         pktmDlg.show();
     }
+
+    private void setSendTypeSpinner() {
+        spn_sendtype = findViewById(R.id.spn_sendtype);
+
+        ArrayAdapter<String> aa = new ArrayAdapter<>(this,
+                R.layout.custom_spinner_item2,
+                getResources().getStringArray(R.array.send_types));
+        aa.setDropDownViewResource(R.layout.custom_spinner_dropdown_item2);
+        spn_sendtype.setAdapter(aa);
+
+        spn_sendtype.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    private void setSendOptionSpinner() {
+        spn_sendoption = findViewById(R.id.spn_sendoption);
+
+        ArrayAdapter<String> aa = new ArrayAdapter<>(this,
+                R.layout.custom_spinner_item2,
+                getResources().getStringArray(R.array.send_options));
+        aa.setDropDownViewResource(R.layout.custom_spinner_dropdown_item2);
+        spn_sendoption.setAdapter(aa);
+
+        spn_sendoption.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    private void onClickImageLoad() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        String[] options = new String[2];
+        options[0] = getString(R.string.photo_take);
+        options[1] = getString(R.string.photo_capture);
+
+        builder.setItems(options, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+               switch(i) {
+                   case 0:
+                       mPhotoGetMode = REQUEST_IMAGE_ALBUM;
+                       getPhoto();
+                       break;
+
+                   case 1:
+                       mPhotoGetMode = REQUEST_IMAGE_CAPTURE;
+                       getPhoto();
+                       break;
+               }
+            }
+        });
+
+        builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    private void getPhoto() {
+        if(mPhotoGetMode == REQUEST_IMAGE_ALBUM) {
+            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(intent, REQUEST_IMAGE_ALBUM);
+        } else if(mPhotoGetMode == REQUEST_IMAGE_CAPTURE) {
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                dispatchTakePictureIntentEx();
+            } else {
+                dispatchTakePictureIntent();
+            }
+        }
+    }
+
+    public void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                Utils.Log("dispatchTakePictureIntent()" + ex.toString());
+            }
+
+            if (photoFile != null) {
+                mContentUri = Uri.fromFile(photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,	Uri.fromFile(photoFile));
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            }
+        }
+    }
+
+    public void dispatchTakePictureIntentEx() {
+        String state = Environment.getExternalStorageState();
+        if(Environment.MEDIA_MOUNTED.equals(state)) {
+            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            if(takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                File photoFile = null;
+                try {
+                    photoFile = createImageFileEx();
+                } catch(IOException e) {
+                    Utils.Log("dispatchTakePictureIntentEx() " + e.toString());
+                }
+
+                if(photoFile != null) {
+                    mContentUri = FileProvider.getUriForFile(this, "com.amorepacific.apbeautytailor.fileprovider", photoFile);
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,	mContentUri);
+                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                }
+            }
+        }
+    }
+
+    public File createImageFile() throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        mCurrentPhotoPath = image.getAbsolutePath(); //나중에 Rotate하기 위한 파일 경로.
+
+        return image;
+    }
+
+    public File createImageFileEx() throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/onepagebook/");
+        if(!storageDir.exists()) {
+            storageDir.mkdirs();
+        }
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",    /* suffix */
+                storageDir      /* directory */
+        );
+
+        mCurrentPhotoPath = image.getAbsolutePath(); //나중에 Rotate하기 위한 파일 경로.
+
+        return image;
+    }
+
+    public String getPath(Uri uri) {
+        String[] projection = {MediaStore.Images.Media.DATA};
+        Cursor cursor = managedQuery(uri, projection, null, null, null);
+        startManagingCursor(cursor);
+        int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+
+        return cursor.getString(columnIndex);
+    }
+
+    public boolean rotatePhoto() {
+        Utils.Log("rotatePhoto()");
+        ExifInterface exif;
+        try {
+            if (mCurrentPhotoPath == null) {
+                if(mContentUri == null) {
+                    Utils.Log("rotatePhoto() - 1");
+                    return false;
+                } else {
+                    mCurrentPhotoPath = mContentUri.getPath();
+                }
+            }
+            exif = new ExifInterface(mCurrentPhotoPath);
+            int exifOrientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+            int exifDegree = exifOrientationToDegrees(exifOrientation);
+            if (exifDegree != 0) {
+                Bitmap bitmap = getBitmap();
+                Bitmap rotatePhoto = rotate(bitmap, exifDegree);
+                saveBitmap(rotatePhoto);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            Utils.Log("rotatePhoto() - 2");
+            return false;
+        }
+
+        return true;
+    }
+
+    public int exifOrientationToDegrees(int exifOrientation) {
+        if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) {
+            return 90;
+        } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_180) {
+            return 180;
+        } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_270) {
+            return 270;
+        }
+
+        return 0;
+    }
+
+    public static Bitmap rotate(Bitmap image, int degrees) {
+        if (degrees != 0 && image != null) {
+            Matrix m = new Matrix();
+            m.setRotate(degrees, (float) image.getWidth(), (float) image.getHeight());
+
+            try {
+                Bitmap b = Bitmap.createBitmap(image, 0, 0, image.getWidth(), image.getHeight(), m, true);
+
+                if (image != b) {
+                    image.recycle();
+                    image = b;
+                }
+
+                image = b;
+            } catch (OutOfMemoryError ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        return image;
+    }
+
+    public void saveBitmap(Bitmap bitmap) {
+        File file = new File(mCurrentPhotoPath);
+
+        OutputStream out = null;
+        try {
+            out = new FileOutputStream(file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+        try {
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Bitmap getBitmap() {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inInputShareable = true;
+        options.inDither = false;
+        options.inTempStorage = new byte[32 * 1024];
+        options.inPurgeable = true;
+        options.inJustDecodeBounds = false;
+
+        File f = new File(mCurrentPhotoPath);
+
+        FileInputStream fs = null;
+        try {
+            fs = new FileInputStream(f);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        Bitmap bm = null;
+
+        try {
+            if (fs != null) bm = BitmapFactory.decodeFileDescriptor(fs.getFD(), null, options);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (fs != null) {
+                try {
+                    fs.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return bm;
+    }
+
+    public Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch(msg.what) {
+                case REQUEST_IMAGE_CAPTURE:
+                    Toast.makeText(getApplicationContext(), R.string.donot_take_photo, Toast.LENGTH_LONG).show();
+                    break;
+            }
+        }
+    };
 }

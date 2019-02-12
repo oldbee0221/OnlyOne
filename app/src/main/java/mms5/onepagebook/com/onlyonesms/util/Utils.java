@@ -33,6 +33,17 @@ public class Utils {
       permissionToRequest.add(Manifest.permission.READ_CONTACTS);
     }
 
+    if (checkNoPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+      permissionToRequest.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+    }
+    if (checkNoPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+      permissionToRequest.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+    }
+
+    if (checkNoPermission(context, Manifest.permission.CAMERA)) {
+      permissionToRequest.add(Manifest.permission.CAMERA);
+    }
+
     String[] permissionArray = new String[permissionToRequest.size()];
     for (int i = 0; i < permissionToRequest.size(); i++) {
       permissionArray[i] = permissionToRequest.get(i);

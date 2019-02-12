@@ -70,6 +70,13 @@
     <string name="adoption">적용</string>
     <string name="msg_reg">메시지 등록</string>
     <string name="please_reg_msg">메시지가 등록되어 있지 않습니다.\n메시지를 등록해주세요.</string>
+    <string name="save">저장</string>
+    <string name="cancel">취소</string>
+    <string name="photo_take">앨범에서 선택</string>
+    <string name="photo_capture">카메라 촬영</string>
+    <string name="donot_take_photo">촬영한 사진 데이터를 가져오지 못했습니다</string>
+    <string name="msg_save">메시지 저장</string>
+    <string name="msg_box">메시지 보관함</string>
 
     <string name="monday">월</string>
     <string name="tuesday">화</string>

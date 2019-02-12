@@ -5,10 +5,12 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
+import mms5.onepagebook.com.onlyonesms.db.dao.ImageBoxDao;
 import mms5.onepagebook.com.onlyonesms.db.dao.MsgDao;
+import mms5.onepagebook.com.onlyonesms.db.entity.ImageBox;
 import mms5.onepagebook.com.onlyonesms.db.entity.Msg;
 
-@Database(version = 1, entities = {Msg.class})
+@Database(version = 1, entities = {Msg.class, ImageBox.class})
 public abstract class AppDatabase extends RoomDatabase {
 
     private static final String DB_NAME = "olnyonessm.db";
@@ -29,4 +31,5 @@ public abstract class AppDatabase extends RoomDatabase {
     }
 
     abstract public MsgDao getMsgDao();
+    abstract public ImageBoxDao getImageBoxDao();
 }
