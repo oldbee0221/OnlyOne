@@ -1,11 +1,16 @@
 package mms5.onepagebook.com.onlyonesms.fragment;
 
 import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
 
 import mms5.onepagebook.com.onlyonesms.base.BaseFragment;
 
 public class CBMTab2Fragment extends BaseFragment implements View.OnClickListener {
-
+    private LinearLayout ll_no_msg;
+    private LinearLayout ll_msg;
+    private Button btn_reg;
+    
     public static CBMTab2Fragment create() {
         CBMTab2Fragment fragment = new CBMTab2Fragment();
         return fragment;
