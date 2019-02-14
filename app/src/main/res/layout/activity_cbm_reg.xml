@@ -468,7 +468,7 @@
             </LinearLayout>
 
             <android.support.v7.widget.AppCompatEditText
-                android:id="@+id/edit_msg1"
+                android:id="@+id/edt_msg1"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_margin="10dp"
@@ -478,7 +478,7 @@
                 android:background="@drawable/bg_edit"/>
 
             <android.support.v7.widget.AppCompatEditText
-                android:id="@+id/edit_msg2"
+                android:id="@+id/edt_msg2"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:layout_margin="10dp"
@@ -506,19 +506,19 @@
                     android:id="@+id/ll_msg_save"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
+                    android:layout_marginLeft="24dp"
                     android:layout_toRightOf="@id/cb_ad"
                     android:layout_centerVertical="true"
                     android:gravity="center_vertical">
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/outline_mail_black_18"/>
+                        android:src="@drawable/outline_save_alt_black_18"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="2dp"
-                        android:text="@string/msg_box"
+                        android:text="@string/msg_save"
                         android:textSize="15sp"/>
                 </LinearLayout>
 
@@ -528,6 +528,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
+                    android:layout_marginRight="16dp"
                     android:gravity="center_vertical">
                     <ImageView
                         android:layout_width="wrap_content"

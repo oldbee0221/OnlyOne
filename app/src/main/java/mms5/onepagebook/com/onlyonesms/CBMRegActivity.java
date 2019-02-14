@@ -1,6 +1,7 @@
 package mms5.onepagebook.com.onlyonesms;
 
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -25,6 +26,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -49,6 +51,8 @@ import java.util.Date;
 import io.fabric.sdk.android.Fabric;
 import mms5.onepagebook.com.onlyonesms.base.GlideApp;
 import mms5.onepagebook.com.onlyonesms.common.Constants;
+import mms5.onepagebook.com.onlyonesms.db.AppDatabase;
+import mms5.onepagebook.com.onlyonesms.db.entity.Msg;
 import mms5.onepagebook.com.onlyonesms.util.Utils;
 
 public class CBMRegActivity extends AppCompatActivity implements Constants, View.OnClickListener,
@@ -61,6 +65,8 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
     private final int REQUEST_IMAGE_CAPTURE = 202;
     private final int REQUEST_IMAGE_CROP = 203;
 
+    private Context mContext;
+
     private Uri mContentUri;
     private String mCurrentPhotoPath;
     private String mRealPath;
@@ -72,12 +78,15 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
     private int mHourS = 0, mMinS = 0, mHourE = 0, mMinE = 0;
     private int mPhotoGetMode;
 
+    private Msg dMsg = new Msg();
+
     private TextView[] tv_days_week = new TextView[7];
     private View[] v_days_week = new View[7];
     private TextView tv_start, tv_end;
     private ImageView iv_photo;
-    private CheckBox cb_send_abs, cb_all_day;
+    private CheckBox cb_send_abs, cb_all_day, cb_ad;
     private Spinner spn_sendtype, spn_sendoption;
+    private EditText edt_msg1, edt_msg2;
     private LinearLayout ll_img_del;
     private LinearLayout ll_img_load;
     private LinearLayout ll_img_box;
@@ -87,6 +96,10 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Answers(), new Crashlytics());
         setContentView(R.layout.activity_cbm_reg);
+
+        mContext = getApplicationContext();
+
+        dMsg.msgType = getIntent().getStringExtra(Constants.EXTRA_CB_MSGTYPE);
 
         for(int i=0; i<7; i++) {
             days_week[i] = false;
@@ -99,6 +112,9 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
         findViewById(R.id.ll_friday).setOnClickListener(this);
         findViewById(R.id.ll_sunday).setOnClickListener(this);
         findViewById(R.id.ll_saturday).setOnClickListener(this);
+
+        findViewById(R.id.ll_msg_box).setOnClickListener(this);
+        findViewById(R.id.ll_msg_save).setOnClickListener(this);
 
         iv_photo = findViewById(R.id.iv_photo);
 
@@ -127,8 +143,10 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
 
         cb_send_abs = findViewById(R.id.cb_send_abs);
         cb_all_day = findViewById(R.id.cb_all_day);
+        cb_ad = findViewById(R.id.cb_ad);
         cb_send_abs.setOnCheckedChangeListener(this);
         cb_all_day.setOnCheckedChangeListener(this);
+        cb_ad.setOnCheckedChangeListener(this);
 
         ll_img_del = findViewById(R.id.ll_img_del);
         ll_img_del.setOnClickListener(this);
@@ -138,6 +156,9 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
 
         ll_img_box = findViewById(R.id.ll_img_box);
         ll_img_box.setOnClickListener(this);
+
+        edt_msg1 = findViewById(R.id.edt_msg1);
+        edt_msg2 = findViewById(R.id.edt_msg2);
 
         setSendTypeSpinner();
         setSendOptionSpinner();
@@ -232,6 +253,7 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
                 break;
 
             case R.id.ll_img_del:
+                mCurrentPhotoPath = "";
                 iv_photo.setVisibility(View.GONE);
                 break;
 
@@ -242,19 +264,31 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
             case R.id.ll_img_box:
                 break;
 
+            case R.id.ll_msg_box:
+                break;
+
+            case R.id.ll_msg_save:
+                save();
+                break;
+
         }
     }
 
     @Override
     public void onTimeSet(TimePicker timePicker, int h, int m) {
+        String tm;
         if(mWhichTime == START_TIME) {
             mHourS = h;
             mMinS = m;
-            tv_start.setText((mHourS < 10 ? "0" : "") + mHourS + ":" + (mMinS < 10 ? "0" : "") + mMinS);
+            tm = (mHourS < 10 ? "0" : "") + mHourS + ":" + (mMinS < 10 ? "0" : "") + mMinS;
+            tv_start.setText(tm);
+            dMsg.startTime = Integer.parseInt(tm.replace(":", ""));
         } else if(mWhichTime == END_TIME) {
             mHourE = h;
             mMinE = m;
-            tv_end.setText((mHourE < 10 ? "0" : "") + mHourE + ":" + (mMinE < 10 ? "0" : "") + mMinE);
+            tm = (mHourE < 10 ? "0" : "") + mHourE + ":" + (mMinE < 10 ? "0" : "") + mMinE;
+            tv_end.setText(tm);
+            dMsg.endTime = Integer.parseInt(tm.replace(":", ""));
         }
     }
 
@@ -269,13 +303,28 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
                 if(mAllDay) {
                     tv_start.setTextColor(Color.parseColor("#66000000"));
                     tv_end.setTextColor(Color.parseColor("#66000000"));
+                    dMsg.allDayYn = "Y";
                 } else {
                     tv_start.setTextColor(Color.parseColor("#616161"));
                     tv_end.setTextColor(Color.parseColor("#616161"));
+                    dMsg.allDayYn = "N";
                 }
                 break;
 
             case R.id.cb_send_abs:
+                if(b) {
+                    dMsg.sendOnAbsYn = "Y";
+                } else {
+                    dMsg.sendOnAbsYn = "N";
+                }
+                break;
+
+            case R.id.cb_ad:
+                if(b) {
+                    dMsg.adYn = "Y";
+                } else {
+                    dMsg.adYn = "N";
+                }
                 break;
         }
     }
@@ -320,7 +369,7 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
         spn_sendtype.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+                dMsg.sendType = Integer.toString(position+1);
             }
 
             @Override
@@ -342,7 +391,7 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
         spn_sendoption.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+                dMsg.sendOption = Integer.toString(position+1);
             }
 
             @Override
@@ -350,6 +399,46 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
 
             }
         });
+    }
+
+    private void save() {
+        dMsg.message1 = edt_msg1.getText().toString();
+        dMsg.message2 = edt_msg2.getText().toString();
+
+        if(Utils.IsEmpty(dMsg.message1)) {
+            Toast.makeText(getApplicationContext(), R.string.please_input_msg, Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if(Utils.IsEmpty(dMsg.message2)) {
+            Toast.makeText(getApplicationContext(), R.string.please_input_msg, Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        StringBuffer sb = new StringBuffer();
+        if(days_week[0]) sb.append("월");
+        if(days_week[1]) sb.append("화");
+        if(days_week[2]) sb.append("수");
+        if(days_week[3]) sb.append("목");
+        if(days_week[4]) sb.append("금");
+        if(days_week[5]) sb.append("토");
+        if(days_week[6]) sb.append("일");
+        dMsg.dayOfWeek = sb.toString();
+
+        dMsg.imgPath = mCurrentPhotoPath;
+        dMsg.lastUpdateTime = System.currentTimeMillis();
+        dMsg.useYn = "Y";
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                AppDatabase.getInstance(mContext).getMsgDao().updateUseYnYtoN(dMsg.msgType);
+                AppDatabase.getInstance(mContext).getMsgDao().insert(dMsg);
+                finish();
+            }
+        }).start();
+
+        Utils.Log("mCurrentPhotoPath => " + mCurrentPhotoPath);
     }
 
     private void onClickImageLoad() {
@@ -400,7 +489,7 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
         }
     }
 
-    public void dispatchTakePictureIntent() {
+    private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
@@ -419,7 +508,7 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
         }
     }
 
-    public void dispatchTakePictureIntentEx() {
+    private void dispatchTakePictureIntentEx() {
         String state = Environment.getExternalStorageState();
         if(Environment.MEDIA_MOUNTED.equals(state)) {
             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -440,7 +529,7 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
         }
     }
 
-    public File createImageFile() throws IOException {
+    private File createImageFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
@@ -455,7 +544,7 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
         return image;
     }
 
-    public File createImageFileEx() throws IOException {
+    private File createImageFileEx() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/onepagebook/");
@@ -473,7 +562,7 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
         return image;
     }
 
-    public String getPath(Uri uri) {
+    private String getPath(Uri uri) {
         String[] projection = {MediaStore.Images.Media.DATA};
         Cursor cursor = managedQuery(uri, projection, null, null, null);
         startManagingCursor(cursor);
@@ -483,7 +572,7 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
         return cursor.getString(columnIndex);
     }
 
-    public boolean rotatePhoto() {
+    private boolean rotatePhoto() {
         Utils.Log("rotatePhoto()");
         ExifInterface exif;
         try {
@@ -512,7 +601,7 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
         return true;
     }
 
-    public int exifOrientationToDegrees(int exifOrientation) {
+    private int exifOrientationToDegrees(int exifOrientation) {
         if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) {
             return 90;
         } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_180) {
@@ -524,7 +613,7 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
         return 0;
     }
 
-    public static Bitmap rotate(Bitmap image, int degrees) {
+    private static Bitmap rotate(Bitmap image, int degrees) {
         if (degrees != 0 && image != null) {
             Matrix m = new Matrix();
             m.setRotate(degrees, (float) image.getWidth(), (float) image.getHeight());
@@ -546,7 +635,7 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
         return image;
     }
 
-    public void saveBitmap(Bitmap bitmap) {
+    private void saveBitmap(Bitmap bitmap) {
         File file = new File(mCurrentPhotoPath);
 
         OutputStream out = null;
@@ -563,7 +652,7 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
         }
     }
 
-    public Bitmap getBitmap() {
+    private Bitmap getBitmap() {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inInputShareable = true;
         options.inDither = false;
@@ -599,7 +688,7 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
         return bm;
     }
 
-    public Handler mHandler = new Handler() {
+    private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch(msg.what) {

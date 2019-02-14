@@ -29,4 +29,7 @@ public interface MsgDao {
 
     @Delete
     void delete(Msg msg);
+
+    @Query("UPDATE msg SET useyn = 'N' WHERE mtype = :mt AND useyn = 'Y'")
+    int updateUseYnYtoN(String mt);
 }

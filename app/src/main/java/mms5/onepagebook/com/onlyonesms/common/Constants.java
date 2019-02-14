@@ -3,6 +3,7 @@ package mms5.onepagebook.com.onlyonesms.common;
 public interface Constants {
     boolean LOG_VISIBLE = true;
     String EXTRA_RCV_TEL_NUM = "EXTRA_RCV_TEL_NUM";
+    String EXTRA_CB_MSGTYPE = "onlyonesms.extra.cbwhen";
 
     String FRAG_01 = "01";
     String FRAG_S1 = "번으로 변경";

@@ -23,10 +23,10 @@ public class Msg {
     public int endTime; // 종료시간 (네자리수 오후 1시 34분 => 1334)
 
     @ColumnInfo(name = "stype")
-    public String sendType; //발송방법 (메시지 바로 전송, 확인 후 전송)
+    public String sendType; //발송방법 (메시지 바로 전송: 1, 확인 후 전송: 2)
 
     @ColumnInfo(name = "soption")
-    public String sendOption; //같은 번호 발송 옵션 (중복발송 허용, 하루 1회, 일주일 1회, 한달 1회)
+    public String sendOption; //같은 번호 발송 옵션 (중복발송 허용: 1, 하루 1회: 2, 일주일 1회: 3, 한달 1회: 4)
 
     @ColumnInfo(name = "imgpath")
     public String imgPath; //이미지 경로
