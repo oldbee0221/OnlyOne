@@ -160,6 +160,8 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
         edt_msg1 = findViewById(R.id.edt_msg1);
         edt_msg2 = findViewById(R.id.edt_msg2);
 
+        dMsg.allDayYn = "N";
+
         setSendTypeSpinner();
         setSendOptionSpinner();
     }
@@ -282,13 +284,13 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
             mMinS = m;
             tm = (mHourS < 10 ? "0" : "") + mHourS + ":" + (mMinS < 10 ? "0" : "") + mMinS;
             tv_start.setText(tm);
-            dMsg.startTime = Integer.parseInt(tm.replace(":", ""));
+            dMsg.startTime = tm;
         } else if(mWhichTime == END_TIME) {
             mHourE = h;
             mMinE = m;
             tm = (mHourE < 10 ? "0" : "") + mHourE + ":" + (mMinE < 10 ? "0" : "") + mMinE;
             tv_end.setText(tm);
-            dMsg.endTime = Integer.parseInt(tm.replace(":", ""));
+            dMsg.endTime = tm;
         }
     }
 
@@ -416,12 +418,12 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
         }
 
         StringBuffer sb = new StringBuffer();
-        if(days_week[0]) sb.append("월");
-        if(days_week[1]) sb.append("화");
-        if(days_week[2]) sb.append("수");
-        if(days_week[3]) sb.append("목");
-        if(days_week[4]) sb.append("금");
-        if(days_week[5]) sb.append("토");
+        if(days_week[0]) sb.append("월 ");
+        if(days_week[1]) sb.append("화 ");
+        if(days_week[2]) sb.append("수 ");
+        if(days_week[3]) sb.append("목 ");
+        if(days_week[4]) sb.append("금 ");
+        if(days_week[5]) sb.append("토 ");
         if(days_week[6]) sb.append("일");
         dMsg.dayOfWeek = sb.toString();
 

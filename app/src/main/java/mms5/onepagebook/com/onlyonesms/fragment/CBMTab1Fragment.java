@@ -2,6 +2,7 @@ package mms5.onepagebook.com.onlyonesms.fragment;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import mms5.onepagebook.com.onlyonesms.CBMRegActivity;
 import mms5.onepagebook.com.onlyonesms.R;
 import mms5.onepagebook.com.onlyonesms.base.BaseFragment;
+import mms5.onepagebook.com.onlyonesms.base.GlideApp;
 import mms5.onepagebook.com.onlyonesms.common.Constants;
 import mms5.onepagebook.com.onlyonesms.db.AppDatabase;
 import mms5.onepagebook.com.onlyonesms.db.entity.Msg;
@@ -124,6 +126,28 @@ public class CBMTab1Fragment extends BaseFragment implements View.OnClickListene
 
                     tv_msg1.setText(dMsg.message1);
                     tv_msg2.setText(dMsg.message2);
+
+                    if(dMsg.allDayYn.equalsIgnoreCase("Y")) {
+                        tv_time.setText(getString(R.string.all_day));
+                    } else {
+                        StringBuffer sb = new StringBuffer();
+                        sb.append(dMsg.startTime).append(" ~ ").append(dMsg.endTime);
+                        tv_time.setText(sb.toString());
+                    }
+
+                    tv_week_day.setText(dMsg.dayOfWeek);
+
+                    if(Utils.IsEmpty(dMsg.imgPath)) {
+                        tv_no_image.setVisibility(View.VISIBLE);
+                    } else {
+                        tv_no_image.setVisibility(View.GONE);
+
+                        iv_photo.setVisibility(View.VISIBLE);
+                        mBmPhoto = BitmapFactory.decodeFile(dMsg.imgPath);
+                        GlideApp.with(getContext())
+                                .load(mBmPhoto)
+                                .into(iv_photo);
+                    }
                     break;
             }
         }

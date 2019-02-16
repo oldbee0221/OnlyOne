@@ -17,10 +17,10 @@ public class Msg {
     public String dayOfWeek; // 월화수목금토일
 
     @ColumnInfo(name = "stime")
-    public int startTime; // 시작시간 (네자리수 오후 1시 34분 => 1334)
+    public String startTime; // 시작시간 (네자리수 오후 1시 34분 => 13:34)
 
     @ColumnInfo(name = "etime")
-    public int endTime; // 종료시간 (네자리수 오후 1시 34분 => 1334)
+    public String endTime; // 종료시간 (네자리수 오후 1시 34분 => 13:34)
 
     @ColumnInfo(name = "stype")
     public String sendType; //발송방법 (메시지 바로 전송: 1, 확인 후 전송: 2)
