@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">온리원 문자</string>
-    <string name="notification_channel_alarm_description">온리원 문자 알림 채널입니다.</string>
+    <string name="app_name">유니온문자</string>
+    <string name="notification_channel_alarm_description">유니온문자 알림 채널입니다.</string>
     <string name="default_notification_channel_id">mms5.onepagebook.com.onlyonesms.manager.PushManager.alarm</string>
     <string name="label_id">아이디</string>
     <string name="label_pw">비밀번호</string>
@@ -20,11 +20,11 @@
     <string name="msg_fail_to_log_in">로그인 실패 하였습니다.</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="desc">
-        온리원문자 어플을 설치해주셔서 감사합니다.\n\n
+        유니온문자 어플을 설치해주셔서 감사합니다.\n\n
         1. 이 페이지가 보이면 휴대폰에 문자앱 설치가 정상적으로 완료된 것입니다.\n
         2. 오늘 발송문자량과 이달 발송문자량은 본 어플을 통해 발송된 문자량 입니다.\n
         3. 본 어플 사용을 중단하실 때는 환경설정>애플리케이션 관리에서 삭제하시면 됩니다.</string>
-    <string name="desc1">온리원문자 어플을 설치해주셔서 감사합니다.</string>
+    <string name="desc1">유니온문자 어플을 설치해주셔서 감사합니다.</string>
     <string name="desc2">이 페이지가 보이면 휴대폰에 문자앱 설치가 정상적으로 완료된 것입니다.</string>
     <string name="desc3">오늘 발송문자량과 이달 발송문자량은 본 어플을 통해 발송된 문자량 입니다.</string>
     <string name="desc4">본 어플 사용을 중단하실 때는 환경설정>애플리케이션 관리에서 삭제하시면 됩니다.</string>
@@ -34,7 +34,7 @@
     <string name="unit_sms">건</string>
     <string name="action_logging">log</string>
     <string name="term_confirm">변경</string>
-    <string name="msg_default_app">온리원 문자 앱을 사용하기위해서는,\n온리원 문자 앱을 기본 문자 앱으로\n설정해주셔야합니다.</string>
+    <string name="msg_default_app">유니온문자 앱을 사용하기위해서는,\n유니온문자 앱을 기본 문자 앱으로\n설정해주셔야합니다.</string>
     <string name="term_not_allow">변경하지 않음</string>
     <string name="term_making_default">기본 문자 앱으로 바꾸기</string>
     <string name="mgs_default_app">현재 기본 앱입니다.</string>
