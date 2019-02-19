@@ -267,6 +267,10 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
                 break;
 
             case R.id.ll_msg_box:
+                {   Intent intent = new Intent(CBMRegActivity.this, CBMMsgBoxActivity.class);
+                    intent.putExtra(Constants.EXTRA_CB_MSGTYPE, dMsg.msgType);
+                    startActivity(intent);
+                }
                 break;
 
             case R.id.ll_msg_save:

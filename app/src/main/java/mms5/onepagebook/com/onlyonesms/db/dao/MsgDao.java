@@ -32,4 +32,7 @@ public interface MsgDao {
 
     @Query("UPDATE msg SET useyn = 'N' WHERE mtype = :mt AND useyn = 'Y'")
     int updateUseYnYtoN(String mt);
+
+    @Query("UPDATE msg SET useyn = :uYn WHERE lastupdate = :updateTime")
+    int updateUseYnByUpdateTime(long updateTime, String uYn);
 }

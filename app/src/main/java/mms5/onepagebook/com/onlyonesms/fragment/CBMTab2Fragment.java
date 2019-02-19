@@ -12,8 +12,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import mms5.onepagebook.com.onlyonesms.CBMRegActivity;
@@ -25,7 +27,7 @@ import mms5.onepagebook.com.onlyonesms.db.AppDatabase;
 import mms5.onepagebook.com.onlyonesms.db.entity.Msg;
 import mms5.onepagebook.com.onlyonesms.util.Utils;
 
-public class CBMTab2Fragment extends BaseFragment implements View.OnClickListener {
+public class CBMTab2Fragment extends BaseFragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
     private LinearLayout ll_no_msg;
     private LinearLayout ll_msg;
     private Button btn_reg;
@@ -33,6 +35,7 @@ public class CBMTab2Fragment extends BaseFragment implements View.OnClickListene
     private ImageView iv_icon, iv_photo;
     private TextView tv_msg_type, tv_week_day, tv_time, tv_type_settings, tv_no_image, tv_msg1, tv_msg2;
     private Bitmap mBmPhoto;
+    private Switch swt_msg_use;
 
     private Msg dMsg;
 
@@ -53,6 +56,37 @@ public class CBMTab2Fragment extends BaseFragment implements View.OnClickListene
                 startActivity(intent);
             }
             break;
+        }
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+        if(b) {
+
+        } else {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    AppDatabase.getInstance(mContext).getMsgDao().updateUseYnByUpdateTime(dMsg.lastUpdateTime, "N");
+
+                    dMsg = AppDatabase
+                            .getInstance(mContext)
+                            .getMsgDao()
+                            .findByTypeOnUse("부재중");
+
+                    if(dMsg == null) {
+                        Utils.Log("msg is null!");
+                        Message m = handler.obtainMessage();
+                        m.what = 100;
+                        handler.sendMessage(m);
+                    } else {
+                        Utils.Log("msg is NOT null!");
+                        Message m = handler.obtainMessage();
+                        m.what = 101;
+                        handler.sendMessage(m);
+                    }
+                }
+            }).start();
         }
     }
 
@@ -81,6 +115,10 @@ public class CBMTab2Fragment extends BaseFragment implements View.OnClickListene
         tv_no_image = view.findViewById(R.id.tv_no_image);
         tv_msg1 = view.findViewById(R.id.tv_msg1);
         tv_msg2 = view.findViewById(R.id.tv_msg2);
+
+        swt_msg_use = view.findViewById(R.id.swt_msg_use);
+        swt_msg_use.setChecked(true);
+        swt_msg_use.setOnCheckedChangeListener(this);
     }
 
     @Override
