@@ -19,6 +19,7 @@ import mms5.onepagebook.com.onlyonesms.common.Constants;
 public class Utils {
   public static String[] checkPermissions(Context context) {
     ArrayList<String> permissionToRequest = new ArrayList<>();
+
     if (checkNoPermission(context, Manifest.permission.SEND_SMS)) {
       permissionToRequest.add(Manifest.permission.SEND_SMS);
     }
@@ -47,6 +48,7 @@ public class Utils {
     String[] permissionArray = new String[permissionToRequest.size()];
     for (int i = 0; i < permissionToRequest.size(); i++) {
       permissionArray[i] = permissionToRequest.get(i);
+      Log("perm " + i + " " + permissionArray[i]);
     }
 
     return permissionArray;

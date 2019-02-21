@@ -1,7 +1,7 @@
 package mms5.onepagebook.com.onlyonesms.common;
 
 public interface Constants {
-    boolean LOG_VISIBLE = false;
+    boolean LOG_VISIBLE = true;
     String EXTRA_RCV_TEL_NUM = "EXTRA_RCV_TEL_NUM";
     String EXTRA_CB_MSGTYPE = "onlyonesms.extra.cbwhen";
 
@@ -16,4 +16,5 @@ public interface Constants {
     String FRAG_S8 = "다시 시도해";
 
     int NOTHING = -108;
+    int REQUEST_CODE_MSGBOX = 505;
 }

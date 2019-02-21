@@ -84,6 +84,8 @@
     <string name="tab_2_type">부재중 메시지</string>
     <string name="tab_3_type">발신 메시지</string>
     <string name="there_is_no_image">등록된 이미지가 없습니다</string>
+    <string name="msg_delete">메시지 삭제</string>
+    <string name="q_msg_delete">해당 메시지를 삭제하시겠습니까?</string>
 
     <string name="monday">월</string>
     <string name="tuesday">화</string>

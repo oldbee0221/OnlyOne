@@ -1,5 +1,6 @@
 package mms5.onepagebook.com.onlyonesms;
 
+import android.app.Activity;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -52,6 +53,7 @@ import io.fabric.sdk.android.Fabric;
 import mms5.onepagebook.com.onlyonesms.base.GlideApp;
 import mms5.onepagebook.com.onlyonesms.common.Constants;
 import mms5.onepagebook.com.onlyonesms.db.AppDatabase;
+import mms5.onepagebook.com.onlyonesms.db.entity.ImageBox;
 import mms5.onepagebook.com.onlyonesms.db.entity.Msg;
 import mms5.onepagebook.com.onlyonesms.util.Utils;
 
@@ -161,6 +163,8 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
         edt_msg2 = findViewById(R.id.edt_msg2);
 
         dMsg.allDayYn = "N";
+        dMsg.startTime = "00:00";
+        dMsg.endTime = "00:00";
 
         setSendTypeSpinner();
         setSendOptionSpinner();
@@ -200,6 +204,12 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
                     } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                         Exception error = result.getError();
                         Utils.Log("CropImage error => " + error.getMessage());
+                    }
+                    break;
+
+                case REQUEST_CODE_MSGBOX:
+                    if(resultCode == Activity.RESULT_OK) {
+                        finish();
                     }
                     break;
             }
@@ -269,7 +279,7 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
             case R.id.ll_msg_box:
                 {   Intent intent = new Intent(CBMRegActivity.this, CBMMsgBoxActivity.class);
                     intent.putExtra(Constants.EXTRA_CB_MSGTYPE, dMsg.msgType);
-                    startActivity(intent);
+                    startActivityForResult(intent, REQUEST_CODE_MSGBOX);
                 }
                 break;
 
@@ -440,6 +450,9 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
             public void run() {
                 AppDatabase.getInstance(mContext).getMsgDao().updateUseYnYtoN(dMsg.msgType);
                 AppDatabase.getInstance(mContext).getMsgDao().insert(dMsg);
+                ImageBox imgBox = new ImageBox();
+                imgBox.imgPath = dMsg.imgPath;
+                AppDatabase.getInstance(mContext).getImageBoxDao().insert(imgBox);
                 finish();
             }
         }).start();

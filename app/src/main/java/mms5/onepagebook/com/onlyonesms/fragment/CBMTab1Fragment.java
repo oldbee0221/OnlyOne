@@ -186,6 +186,8 @@ public class CBMTab1Fragment extends BaseFragment implements View.OnClickListene
                                 .load(mBmPhoto)
                                 .into(iv_photo);
                     }
+
+                    swt_msg_use.setChecked(true);
                     break;
             }
         }
