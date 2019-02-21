@@ -1,43 +1,46 @@
 package mms5.onepagebook.com.onlyonesms.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.support.v7.widget.CardView;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import mms5.onepagebook.com.onlyonesms.R;
-import mms5.onepagebook.com.onlyonesms.db.entity.Msg;
+import mms5.onepagebook.com.onlyonesms.base.GlideApp;
+import mms5.onepagebook.com.onlyonesms.db.entity.ImageBox;
 
-public abstract class MsgAdapter extends RecyclerView.Adapter<MsgAdapter.ViewHolder> {
+public abstract class ImgAdapter extends RecyclerView.Adapter<ImgAdapter.ViewHolder> {
     private Context mContext;
-    private ArrayList<Msg> mItems;
+    private ArrayList<ImageBox> mItems;
 
-    public MsgAdapter(Context context) {
+    public ImgAdapter(Context context) {
         mContext = context;
         mItems = new ArrayList<>();
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v= LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_msg, parent, false);
+        View v= LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_img, parent, false);
         return new ViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        final Msg item = mItems.get(position);
+        final ImageBox item = mItems.get(position);
 
-        holder.mTvDate.setText(getDate(item.lastUpdateTime));
-        holder.mTvMessage1.setText(item.message1);
-        holder.mTvMessage2.setText(item.message2);
+        Bitmap bm = BitmapFactory.decodeFile(item.imgPath);
+        GlideApp.with(mContext)
+                .load(bm)
+                .into(holder.mIvPhoto);
 
         holder.mLayoutAdoption.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,7 +62,7 @@ public abstract class MsgAdapter extends RecyclerView.Adapter<MsgAdapter.ViewHol
         return mItems.size();
     }
 
-    public int add(List<Msg> arrayList) {
+    public int add(List<ImageBox> arrayList) {
         mItems.clear();
 
         if(arrayList == null) return 0;
@@ -78,10 +81,10 @@ public abstract class MsgAdapter extends RecyclerView.Adapter<MsgAdapter.ViewHol
         mItems.clear();
     }
 
-    public void remove(Msg item) {
+    public void remove(ImageBox item) {
         int size = mItems.size();
         for(int i=0; i<size; i++) {
-            if(mItems.get(i).lastUpdateTime == item.lastUpdateTime) {
+            if(mItems.get(i).iid == item.iid) {
                 mItems.remove(i);
                 break;
             }
@@ -90,45 +93,13 @@ public abstract class MsgAdapter extends RecyclerView.Adapter<MsgAdapter.ViewHol
         notifyDataSetChanged();
     }
 
-    private String getDate(long millis) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(millis);
-
-        StringBuffer sb = new StringBuffer();
-        sb.append(cal.get(Calendar.YEAR)).append("-");
-
-        int month = cal.get(Calendar.MONTH) + 1;
-        if(month > 10) sb.append(month).append("-");
-        else sb.append("0").append(month).append("-");
-
-        int day = cal.get(Calendar.DAY_OF_MONTH);
-        if(day > 10) sb.append(day).append(" ");
-        else sb.append("0").append(day).append(" ");
-
-        int hour = cal.get(Calendar.HOUR_OF_DAY);
-        if(hour > 10) sb.append(hour).append(":");
-        else sb.append("0").append(hour).append(":");
-
-        int min = cal.get(Calendar.MINUTE);
-        if(min > 10) sb.append(min).append(":");
-        else sb.append("0").append(min).append(":");
-
-        int mil = cal.get(Calendar.MILLISECOND);
-        if(mil > 10) sb.append(mil);
-        else sb.append("0").append(mil);
-
-        return sb.toString();
-    }
-
     public abstract void load();
-    public abstract void onDel(Msg item);
-    public abstract void onAdoption(Msg use);
+    public abstract void onDel(ImageBox item);
+    public abstract void onAdoption(ImageBox use);
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public CardView mCardView;
-        public TextView mTvMessage1;
-        public TextView mTvMessage2;
-        public TextView mTvDate;
+        public ImageView mIvPhoto;
         public LinearLayout mLayoutAdoption;
         public LinearLayout mLayoutDelete;
 
@@ -136,12 +107,11 @@ public abstract class MsgAdapter extends RecyclerView.Adapter<MsgAdapter.ViewHol
             super(itemView);
 
             mCardView = itemView.findViewById(R.id.cv_base);
-            mTvMessage1 = itemView.findViewById(R.id.tv_message1);
-            mTvMessage2 = itemView.findViewById(R.id.tv_message2);
-            mTvDate = itemView.findViewById(R.id.tv_date);
+            mIvPhoto = itemView.findViewById(R.id.iv_photo);
             mLayoutAdoption = itemView.findViewById(R.id.ll_adoption);
             mLayoutDelete = itemView.findViewById(R.id.ll_delete);
         }
     }
 }
+
 

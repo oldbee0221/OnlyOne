@@ -212,6 +212,17 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
                         finish();
                     }
                     break;
+
+                case REQUEST_CODE_IMGBOX:
+                    if(resultCode == Activity.RESULT_OK) {
+                        mCurrentPhotoPath = data.getStringExtra(EXTRA_IMG_PATH);
+                        iv_photo.setVisibility(View.VISIBLE);
+                        mBmPhoto = BitmapFactory.decodeFile(mCurrentPhotoPath);
+                        GlideApp.with(this)
+                                .load(mBmPhoto)
+                                .into(iv_photo);
+                    }
+                    break;
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -274,6 +285,9 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
                 break;
 
             case R.id.ll_img_box:
+                {   Intent intent = new Intent(CBMRegActivity.this, CBMImageBoxActivity.class);
+                    startActivityForResult(intent, REQUEST_CODE_IMGBOX);
+                }
                 break;
 
             case R.id.ll_msg_box:

@@ -35,4 +35,7 @@ public interface MsgDao {
 
     @Query("UPDATE msg SET useyn = :uYn WHERE lastupdate = :updateTime")
     int updateUseYnByUpdateTime(long updateTime, String uYn);
+
+    @Query("UPDATE msg SET imgpath = '' WHERE imgpath = :img")
+    int updateImageEmpty(String img);
 }

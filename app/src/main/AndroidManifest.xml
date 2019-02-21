@@ -97,7 +97,7 @@
         android:theme="@style/AppTheme.NoActionBar" />
 
     <activity
-        android:name=".ImageBoxActivity"
+        android:name=".CBMImageBoxActivity"
         android:label="@string/app_name"
         android:theme="@style/AppTheme.NoActionBar" />
 
