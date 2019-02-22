@@ -7,10 +7,14 @@ import android.content.Context;
 
 import mms5.onepagebook.com.onlyonesms.db.dao.ImageBoxDao;
 import mms5.onepagebook.com.onlyonesms.db.dao.MsgDao;
+import mms5.onepagebook.com.onlyonesms.db.dao.TelNumBlockDao;
+import mms5.onepagebook.com.onlyonesms.db.dao.TelNumPermitDao;
 import mms5.onepagebook.com.onlyonesms.db.entity.ImageBox;
 import mms5.onepagebook.com.onlyonesms.db.entity.Msg;
+import mms5.onepagebook.com.onlyonesms.db.entity.TelNumBlock;
+import mms5.onepagebook.com.onlyonesms.db.entity.TelNumPermit;
 
-@Database(version = 1, entities = {Msg.class, ImageBox.class})
+@Database(version = 1, entities = {Msg.class, ImageBox.class, TelNumBlock.class, TelNumPermit.class})
 public abstract class AppDatabase extends RoomDatabase {
 
     private static final String DB_NAME = "olnyonessm.db";
@@ -32,4 +36,6 @@ public abstract class AppDatabase extends RoomDatabase {
 
     abstract public MsgDao getMsgDao();
     abstract public ImageBoxDao getImageBoxDao();
+    abstract public TelNumPermitDao getTelNumPermitDao();
+    abstract public TelNumBlockDao getTelNumBlockDao();
 }

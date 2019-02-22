@@ -96,6 +96,10 @@ public class CBMDoorActivity extends AppCompatActivity implements Constants, Vie
 
         switch(vid) {
             case R.id.btn_cb_addr:
+            {
+                Intent i = new Intent(CBMDoorActivity.this, CBMMgrNumActivity.class);
+                startActivity(i);
+            }
                 break;
 
             case R.id.btn_cb_reg:
