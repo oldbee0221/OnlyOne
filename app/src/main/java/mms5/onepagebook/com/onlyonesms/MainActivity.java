@@ -1,12 +1,17 @@
 package mms5.onepagebook.com.onlyonesms;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Telephony;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -37,6 +42,7 @@ import mms5.onepagebook.com.onlyonesms.util.Utils;
 public class MainActivity extends AppCompatActivity implements Constants {
   public static final boolean HAS_TO_SHOW_LOGS = false;
   private static final int REQUEST_DEFAULT_APP = 12;
+  private static final int REQUEST_PERMISSION = 120;
 
   private TextView mTextTodayCount;
   private TextView mTextMonthCount;
@@ -73,13 +79,18 @@ public class MainActivity extends AppCompatActivity implements Constants {
   protected void onResume() {
     super.onResume();
     BusManager.getInstance().register(this);
+
+    new Handler().postDelayed(new Runnable() {
+      public void run() {
+        requestPermissions(Utils.checkPermissions(MainActivity.this));
+      }
+    }, 2000);
   }
 
   @Override
   protected void onPause() {
     super.onPause();
     BusManager.getInstance().unregister(this);
-
   }
 
   @Override
@@ -87,6 +98,10 @@ public class MainActivity extends AppCompatActivity implements Constants {
     super.onCreate(savedInstanceState);
     Fabric.with(this, new Answers(), new Crashlytics());
     setContentView(R.layout.activity_main);
+    initView();
+  }
+
+  private void initView() {
     Toolbar toolbar = findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
 
@@ -134,6 +149,39 @@ public class MainActivity extends AppCompatActivity implements Constants {
     if (!PreferenceManager.getInstance(getApplicationContext()).getShowMaingDefault()) {
       showDefaultAppDialog();
     }
+  }
+
+  @Override
+  public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    if (requestCode == REQUEST_PERMISSION) {
+      for (int grantResult : grantResults) {
+        if (grantResult != PackageManager.PERMISSION_GRANTED) {
+          Toast.makeText(getApplicationContext(), "Please allow permissions.", Toast.LENGTH_SHORT).show();
+          finish();
+          return;
+        }
+      }
+    }
+
+    String phoneNo = Utils.getPhoneNumber(MainActivity.this);
+    String sms = getString(R.string.u_can_use_this_app);
+
+    try {
+      //전송
+      SmsManager smsManager = SmsManager.getDefault();
+      smsManager.sendTextMessage(phoneNo, null, sms, null, null);
+    } catch (Exception e) {
+      Toast.makeText(getApplicationContext(), "SMS faild, please try again later!", Toast.LENGTH_LONG).show();
+      e.printStackTrace();
+    }
+  }
+
+  private boolean requestPermissions(String[] permissionArray) {
+    if (permissionArray != null && permissionArray.length > 0) {
+      ActivityCompat.requestPermissions(this, permissionArray, REQUEST_PERMISSION);
+      return true;
+    }
+    return false;
   }
 
   private void setViewBySetting() {

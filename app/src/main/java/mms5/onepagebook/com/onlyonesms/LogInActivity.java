@@ -138,7 +138,7 @@ public class LogInActivity extends AppCompatActivity implements Constants {
     if (!Utils.hasUsim(getApplicationContext())) {
       Toast.makeText(getApplicationContext(), R.string.msg_no_usim, Toast.LENGTH_LONG).show();
       finish();
-    } else if (!requestPermissions(Utils.checkPermissions(this))) {
+    } else if (!requestPermissions(Utils.checkPermission(this))) {
       showAgreePopupAndAutoLogin();
     }
   }
@@ -342,8 +342,7 @@ public class LogInActivity extends AppCompatActivity implements Constants {
       SyncContactsService.enqueue(getApplicationContext());
 
       goToMainActivity();
-    }
-    else {
+    } else {
       //로그인 실패
       if (DefaultResult.RESULT_1.equals(result)) {
         Toast.makeText(getApplicationContext(), R.string.msg_fail_to_log_in_1, Toast.LENGTH_SHORT).show();

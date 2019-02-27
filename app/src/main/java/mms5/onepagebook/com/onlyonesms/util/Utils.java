@@ -54,6 +54,22 @@ public class Utils {
     return permissionArray;
   }
 
+  public static String[] checkPermission(Context context) {
+    ArrayList<String> permissionToRequest = new ArrayList<>();
+
+    if (checkNoPermission(context, Manifest.permission.READ_PHONE_STATE)) {
+      permissionToRequest.add(Manifest.permission.READ_PHONE_STATE);
+    }
+
+    String[] permissionArray = new String[permissionToRequest.size()];
+    for (int i = 0; i < permissionToRequest.size(); i++) {
+      permissionArray[i] = permissionToRequest.get(i);
+      Log("perm " + i + " " + permissionArray[i]);
+    }
+
+    return permissionArray;
+  }
+
   public static boolean checkNoPermission(Context context, String permission) {
     int permissionState = ActivityCompat.checkSelfPermission(context, permission);
     return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !(permissionState == PackageManager.PERMISSION_GRANTED);

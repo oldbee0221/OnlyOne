@@ -26,7 +26,7 @@ public class RealmManager {
 
   public static void writeLog(final String log) {
     if (MainActivity.HAS_TO_SHOW_LOGS) {
-      Log.e("asdf", log);
+      Log.e("Pumpkin", log);
       try {
         Realm.getDefaultInstance().executeTransaction(new Realm.Transaction() {
           @Override
