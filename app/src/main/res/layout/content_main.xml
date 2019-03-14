@@ -276,6 +276,6 @@
             android:text="@string/callback_msg_service"
             android:textColor="@android:color/white"
             android:textSize="13sp"
-            android:visibility="visible"/>
+            android:visibility="invisible"/>
     </LinearLayout>
 </ScrollView>

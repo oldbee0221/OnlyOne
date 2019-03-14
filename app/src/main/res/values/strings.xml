@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">유니온문자</string>
+    <string name="app_name">온리원문자</string>
     <string name="notification_channel_alarm_description">유니온문자 알림 채널입니다.</string>
     <string name="default_notification_channel_id">mms5.onepagebook.com.onlyonesms.manager.PushManager.alarm</string>
     <string name="label_id">아이디</string>
