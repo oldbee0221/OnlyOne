@@ -84,7 +84,7 @@ public class OneMmsReceivedReceiver extends MmsReceivedReceiver implements Const
   }
 
   private boolean checkMsg(String m) {
-    if(m.contains(FRAG_01)) {
+    /*if(m.contains(FRAG_01)) {
       if (m.contains(FRAG_S4)) return true;
       if (m.contains(FRAG_S8)) return true;
       if (m.contains(FRAG_S6)) return true;
@@ -95,6 +95,7 @@ public class OneMmsReceivedReceiver extends MmsReceivedReceiver implements Const
       if (m.contains(FRAG_S5)) return true;
     }
 
-    return false;
+    return false;*/
+    return true;
   }
 }

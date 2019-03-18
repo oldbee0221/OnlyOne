@@ -27,7 +27,7 @@ import mms5.onepagebook.com.onlyonesms.util.Utils;
 
 public class CheckTaskService extends JobIntentService {
   private static final long MINUTE = 60 * 1000L;
-  private static final long MAYBE_SENDING_DURATION = 5 * 60 * 1000L;
+  private static final long MAYBE_SENDING_DURATION = 15 * 60 * 1000L;
 
   private static final int JOB_ID = 67;
   private static final long DELAY = 15L * 1000L;

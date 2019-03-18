@@ -47,7 +47,7 @@ import mms5.onepagebook.com.onlyonesms.util.Utils;
 
 public class TaskHandlerService extends Service {
   private static final String EXTRA_IDX = "mms5.onepagebook.com.onlyonesms.service.extra.idx";
-  private static final long MAYBE_SENDING_DURATION = 10 * 60 * 1000L;
+  private static final long MAYBE_SENDING_DURATION = 15 * 60 * 1000L;
 
   private static final int FOREGROUND_NOTIFICATION_ID = 14;
   private static final int START_HOUR = 8;
