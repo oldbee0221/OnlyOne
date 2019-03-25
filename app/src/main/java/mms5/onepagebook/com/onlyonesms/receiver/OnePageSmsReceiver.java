@@ -1,5 +1,8 @@
 package mms5.onepagebook.com.onlyonesms.receiver;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -10,6 +13,7 @@ import android.database.sqlite.SQLiteException;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Telephony;
+import android.support.v4.app.NotificationCompat;
 import android.telephony.SmsMessage;
 import android.text.TextUtils;
 
@@ -18,6 +22,9 @@ import com.google.android.mms.util_alt.SqliteWrapper;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import me.leolin.shortcutbadger.ShortcutBadger;
+import mms5.onepagebook.com.onlyonesms.R;
+import mms5.onepagebook.com.onlyonesms.SteppingStoneActivity;
 import mms5.onepagebook.com.onlyonesms.api.ApiCallback;
 import mms5.onepagebook.com.onlyonesms.api.Client;
 import mms5.onepagebook.com.onlyonesms.api.body.SendingChangedNumberBody;
@@ -139,6 +146,7 @@ public class OnePageSmsReceiver extends BroadcastReceiver implements Constants {
 
         if (hasToInsert) {
           insertSms(context, messages, errorCode);
+          spitNotification(context, messages);
         }
       }
     }
@@ -202,5 +210,31 @@ public class OnePageSmsReceiver extends BroadcastReceiver implements Constants {
           });
       }
     }
+  }
+
+
+  private void spitNotification(Context context, SmsMessage[] messages) {
+    NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "default");
+    builder.setSmallIcon(R.mipmap.ic_launcher);
+    builder.setContentTitle(context.getString(R.string.app_name));
+    builder.setContentText(messages[0].getDisplayMessageBody());
+    builder.setDefaults(NotificationCompat.DEFAULT_SOUND);
+    builder.setAutoCancel(true);
+
+    Intent intent = new Intent(context, SteppingStoneActivity.class);
+    PendingIntent contentIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+    builder.setContentIntent(contentIntent);
+
+    NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
+    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      notificationManager.createNotificationChannel(new NotificationChannel("default", "기본채널", NotificationManager.IMPORTANCE_DEFAULT));
+    }
+
+    notificationManager.notify(NOTIFICATION_ID, builder.build());
+
+    int badgeCount = Utils.GetIntSharedPreference(context, PREF_BADGE_CNT) + 1;
+    ShortcutBadger.applyCount(context, badgeCount);
+    Utils.PutSharedPreference(context, PREF_BADGE_CNT, badgeCount);
   }
 }

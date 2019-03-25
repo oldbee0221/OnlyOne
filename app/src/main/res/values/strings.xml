@@ -43,6 +43,7 @@
     <string name="u_can_use_this_app">유니온문자앱을 사용하실 수 있습니다.</string>
 
     <string name="callback_msg_service">콜백문자 서비스</string>
+    <string name="msg_box_confirm">메시지 확인</string>
     <string name="use_check">사용여부</string>
     <string name="use">사용</string>
     <string name="not_use">미사용</string>

@@ -256,7 +256,27 @@
           android:paddingBottom="12dp"
           android:text="@string/go_to_another_sms_app"
           android:textColor="@android:color/white"
-          android:textSize="13sp" />
+          android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/btn_go_messagebox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginBottom="24dp"
+            android:gravity="center"
+            android:paddingLeft="30dp"
+            android:background="@drawable/bg_btn_primary"
+            android:paddingTop="12dp"
+            android:paddingRight="30dp"
+            android:paddingBottom="12dp"
+            android:text="@string/msg_box_confirm"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/btn_go_callback"
@@ -275,7 +295,7 @@
             android:paddingBottom="12dp"
             android:text="@string/callback_msg_service"
             android:textColor="@android:color/white"
-            android:textSize="13sp"
+            android:textSize="16sp"
             android:visibility="invisible"/>
     </LinearLayout>
 </ScrollView>

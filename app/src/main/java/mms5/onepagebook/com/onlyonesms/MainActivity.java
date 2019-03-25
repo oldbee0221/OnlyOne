@@ -1,5 +1,6 @@
 package mms5.onepagebook.com.onlyonesms;
 
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -27,6 +28,7 @@ import com.squareup.otto.Subscribe;
 import java.text.NumberFormat;
 
 import io.fabric.sdk.android.Fabric;
+import me.leolin.shortcutbadger.ShortcutBadger;
 import mms5.onepagebook.com.onlyonesms.api.ApiCallback;
 import mms5.onepagebook.com.onlyonesms.api.Client;
 import mms5.onepagebook.com.onlyonesms.api.body.GettingStatisticsBody;
@@ -50,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements Constants {
 
   private TextView mBtnShowDialog;
   private TextView mTextDefaultApp;
+  private TextView mTextGoToMsgBox;
 
   private ProgressBar mProgressBar;
 
@@ -79,6 +82,13 @@ public class MainActivity extends AppCompatActivity implements Constants {
   protected void onResume() {
     super.onResume();
     BusManager.getInstance().register(this);
+
+    int badgeCnt = Utils.GetIntSharedPreference(getApplicationContext(), PREF_BADGE_CNT);
+    if(badgeCnt > 0) {
+      mTextGoToMsgBox.setVisibility(View.VISIBLE);
+    } else {
+      mTextGoToMsgBox.setVisibility(View.GONE);
+    }
 
     new Handler().postDelayed(new Runnable() {
       public void run() {
@@ -122,6 +132,20 @@ public class MainActivity extends AppCompatActivity implements Constants {
     mBtnShowDialog = findViewById(R.id.btn_show_dialog);
     mTextDefaultApp = findViewById(R.id.text_default_app);
 
+    mTextGoToMsgBox = findViewById(R.id.btn_go_messagebox);
+    mTextGoToMsgBox.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        ShortcutBadger.removeCount(getApplicationContext());
+        Utils.PutSharedPreference(getApplicationContext(), PREF_BADGE_CNT, 0);
+
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.setComponent(new ComponentName("com.android.mms","com.android.mms.ui.ConversationList"));
+        startActivity(intent);
+      }
+    });
+
+
     setViewBySetting();
     mBtnShowDialog.setOnClickListener(new View.OnClickListener() {
       @Override
@@ -129,6 +153,7 @@ public class MainActivity extends AppCompatActivity implements Constants {
         showDefaultAppDialog();
       }
     });
+
     findViewById(R.id.btn_go_to).setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {

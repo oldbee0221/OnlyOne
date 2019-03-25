@@ -5,6 +5,7 @@ public interface Constants {
     String EXTRA_RCV_TEL_NUM = "EXTRA_RCV_TEL_NUM";
     String EXTRA_CB_MSGTYPE = "onlyonesms.extra.cbwhen";
     String EXTRA_IMG_PATH = "onlyonesms.extra.imgpath";
+    String PREF_BADGE_CNT = "onlyonesms.pref.bc";
 
     String FRAG_01 = "01";
     String FRAG_S1 = "번으로 변경";
@@ -19,4 +20,6 @@ public interface Constants {
     int NOTHING = -108;
     int REQUEST_CODE_MSGBOX = 505;
     int REQUEST_CODE_IMGBOX = 506;
+
+    int NOTIFICATION_ID = 325;
 }
