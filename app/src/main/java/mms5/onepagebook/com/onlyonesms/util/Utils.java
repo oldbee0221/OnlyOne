@@ -3,10 +3,12 @@ package mms5.onepagebook.com.onlyonesms.util;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
@@ -160,5 +162,18 @@ public class Utils {
     if(Constants.LOG_VISIBLE) {
       Log.d("Pumpkin", msg);
     }
+  }
+
+  public static int GetIntSharedPreference(Context context, String key) {
+    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+    return prefs.getInt(key, 0);
+  }
+
+  public static void PutSharedPreference(Context context, String key, int value) {
+    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+    SharedPreferences.Editor editor = prefs.edit();
+
+    editor.putInt(key, value);
+    editor.commit();
   }
 }

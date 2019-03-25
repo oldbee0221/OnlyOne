@@ -1,5 +1,7 @@
 package mms5.onepagebook.com.onlyonesms;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -9,6 +11,7 @@ import android.os.Handler;
 import android.provider.Telephony;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.telephony.SmsManager;
@@ -27,6 +30,7 @@ import com.squareup.otto.Subscribe;
 import java.text.NumberFormat;
 
 import io.fabric.sdk.android.Fabric;
+import me.leolin.shortcutbadger.ShortcutBadger;
 import mms5.onepagebook.com.onlyonesms.api.ApiCallback;
 import mms5.onepagebook.com.onlyonesms.api.Client;
 import mms5.onepagebook.com.onlyonesms.api.body.GettingStatisticsBody;
@@ -50,10 +54,12 @@ public class MainActivity extends AppCompatActivity implements Constants {
 
   private TextView mBtnShowDialog;
   private TextView mTextDefaultApp;
+  private TextView mTextGoToMsgBox;
 
   private ProgressBar mProgressBar;
 
   private String mRcvTelNum;
+  private Context mContext;
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
@@ -80,6 +86,13 @@ public class MainActivity extends AppCompatActivity implements Constants {
     super.onResume();
     BusManager.getInstance().register(this);
 
+    int badgeCnt = Utils.GetIntSharedPreference(getApplicationContext(), PREF_BADGE_CNT);
+    if(badgeCnt > 0) {
+      mTextGoToMsgBox.setVisibility(View.VISIBLE);
+    } else {
+      mTextGoToMsgBox.setVisibility(View.GONE);
+    }
+
     new Handler().postDelayed(new Runnable() {
       public void run() {
         requestPermissions(Utils.checkPermissions(MainActivity.this));
@@ -96,6 +109,7 @@ public class MainActivity extends AppCompatActivity implements Constants {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    mContext = getApplicationContext();
     Fabric.with(this, new Answers(), new Crashlytics());
     setContentView(R.layout.activity_main);
     initView();
@@ -122,6 +136,32 @@ public class MainActivity extends AppCompatActivity implements Constants {
     mBtnShowDialog = findViewById(R.id.btn_show_dialog);
     mTextDefaultApp = findViewById(R.id.text_default_app);
 
+    mTextGoToMsgBox = findViewById(R.id.btn_go_messagebox);
+    mTextGoToMsgBox.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        ShortcutBadger.removeCount(getApplicationContext());
+        Utils.PutSharedPreference(getApplicationContext(), PREF_BADGE_CNT, 0);
+
+        NotificationManagerCompat.from(MainActivity.this).cancel(NOTIFICATION_ID);
+
+        boolean isWorking = false;
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.setComponent(new ComponentName("com.android.mms", "com.android.mms.ui.ConversationList"));
+        isWorking = tryActivityIntent(mContext, intent);
+        if (!isWorking) {
+          intent.setComponent(new ComponentName("com.android.mms", "com.android.mms.ui.ConversationComposer"));
+          isWorking = tryActivityIntent(mContext, intent);
+        }
+        if (!isWorking) {
+          intent = new Intent(Intent.ACTION_MAIN);
+          intent.setType("vnd.android-dir/mms-sms");
+          tryActivityIntent(mContext, intent);
+        }
+      }
+    });
+
+
     setViewBySetting();
     mBtnShowDialog.setOnClickListener(new View.OnClickListener() {
       @Override
@@ -129,6 +169,7 @@ public class MainActivity extends AppCompatActivity implements Constants {
         showDefaultAppDialog();
       }
     });
+
     findViewById(R.id.btn_go_to).setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
@@ -303,5 +344,19 @@ public class MainActivity extends AppCompatActivity implements Constants {
     public static Finish newInstance() {
       return new Finish();
     }
+  }
+
+  private boolean tryActivityIntent(Context context, Intent activityIntent) {
+    try {
+      if (activityIntent.resolveActivity(context.getPackageManager()) != null) {
+        startActivity(activityIntent);
+        return true;
+      }
+    } catch (SecurityException e) {
+      return false;
+    } catch (Exception e) {
+      return false;
+    }
+    return false;
   }
 }
