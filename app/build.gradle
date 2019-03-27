@@ -22,8 +22,8 @@ android {
         applicationId "mms5.onepagebook.com.onlyonesms"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 45
-        versionName "1.31.12"
+        versionCode 46
+        versionName "1.31.13"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
