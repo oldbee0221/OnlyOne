@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
+import android.provider.Telephony;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 
@@ -54,7 +55,10 @@ public class OneMmsReceivedReceiver extends MmsReceivedReceiver implements Const
                       if (checkMsg(message)) {
                         context.getContentResolver().delete(messageUri, null, null);
                       } else {
-                        spitNotification(context, message);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
+                                && Telephony.Sms.getDefaultSmsPackage(context).equals(context.getPackageName())) {
+                          spitNotification(context, message);
+                        }
                       }
                     }
                   }

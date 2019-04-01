@@ -146,7 +146,10 @@ public class OnePageSmsReceiver extends BroadcastReceiver implements Constants {
 
         if (hasToInsert) {
           insertSms(context, messages, errorCode);
-          spitNotification(context, messages);
+          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
+                  && Telephony.Sms.getDefaultSmsPackage(context).equals(context.getPackageName())) {
+            spitNotification(context, messages);
+          }
         }
       }
     }
