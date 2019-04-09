@@ -61,7 +61,7 @@ public class TaskHandlerService extends Service {
 
   public static void startWork(Context context, String idx) {
     RealmManager.writeLog("Service, startWork");
-    if (!PreferenceManager.getInstance(context).getIsTaskRunning()) {
+    /*if (!PreferenceManager.getInstance(context).getIsTaskRunning()) {
       PreferenceManager.getInstance(context).setIsTaskRunning(true);
       Intent intent = new Intent(context, TaskHandlerService.class);
       intent.putExtra(TaskHandlerService.EXTRA_IDX, idx);
@@ -71,6 +71,14 @@ public class TaskHandlerService extends Service {
       else {
         context.startService(intent);
       }
+    }*/
+
+    Intent intent = new Intent(context, TaskHandlerService.class);
+    intent.putExtra(TaskHandlerService.EXTRA_IDX, idx);
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      context.startForegroundService(intent);
+    } else {
+      context.startService(intent);
     }
   }
 
