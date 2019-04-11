@@ -1,6 +1,8 @@
 package mms5.onepagebook.com.onlyonesms.service;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
@@ -118,8 +120,10 @@ public class TaskHandlerService extends Service {
   private void makeForeground() {
     String msg = getString(R.string.msg_processing_sending_mms);
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      Notification notification = new NotificationCompat.Builder(getApplicationContext(),
-                                                                 PushManager.CHANNEL_SERVICE_ID)
+      NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+      notificationManager.createNotificationChannel(new NotificationChannel(PushManager.CHANNEL_SERVICE_ID, "sending", NotificationManager.IMPORTANCE_DEFAULT));
+
+      Notification notification = new NotificationCompat.Builder(getApplicationContext(), PushManager.CHANNEL_SERVICE_ID)
         .setSmallIcon(R.mipmap.ic_launcher)
         .setContentIntent(makeMainIntent(this))
         .setPriority(NotificationCompat.PRIORITY_MIN)
@@ -129,8 +133,7 @@ public class TaskHandlerService extends Service {
         .build();
 
       startForeground(FOREGROUND_NOTIFICATION_ID, notification);
-    }
-    else {
+    } else {
       Notification notification = new NotificationCompat.Builder(getApplicationContext())
         .setSmallIcon(R.mipmap.ic_launcher)
         .setContentIntent(makeMainIntent(this))
