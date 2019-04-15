@@ -14,6 +14,7 @@ import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -470,7 +471,11 @@ public class LogInActivity extends AppCompatActivity implements Constants {
               }
 
               @Override
-              public void onFail(int error, String msg) {}
+              public void onFail(int error, String msg) {
+                PreferenceManager.getInstance(mContext).setBaseUrl(RetrofitManager.BASE_URL2);
+                RetrofitManager.cleanRetrofit();
+                  getServiceList();
+              }
             });
   }
 }
