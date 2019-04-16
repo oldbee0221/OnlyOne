@@ -55,6 +55,9 @@ import mms5.onepagebook.com.onlyonesms.service.CheckTaskService;
 import mms5.onepagebook.com.onlyonesms.service.SyncContactsService;
 import mms5.onepagebook.com.onlyonesms.util.Utils;
 
+/**
+ * opbnew / 190117
+ * **/
 public class LogInActivity extends AppCompatActivity implements Constants {
   private static final int REQUEST_PERMISSION = 120;
 

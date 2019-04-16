@@ -30,7 +30,7 @@ public class CheckTaskService extends JobIntentService {
   private static final long MAYBE_SENDING_DURATION = 15 * 60 * 1000L;
 
   private static final int JOB_ID = 67;
-  private static final long DELAY = 15L * 1000L;
+  private static final long DELAY = 60L * 1000L;
 
   private WorkingThread mWorker;
 
@@ -123,6 +123,7 @@ public class CheckTaskService extends JobIntentService {
           .checkTasks(new CheckTaskBody(phoneNumber, String.valueOf(count)))
           .execute()
           .body();
+
         if (response != null) {
           handleTask(response.result);
         }
@@ -134,7 +135,7 @@ public class CheckTaskService extends JobIntentService {
     private void handleTask(String result) {
       RealmManager.writeLog("[CheckTaskService] Result of GetTask: " + result);
       if (DefaultResult.RESULT_1.equals(result)) {
-        TaskHandlerService.startWork(getApplicationContext(), "");
+        //TaskHandlerService.startWork(getApplicationContext(), "");
       }
       else if (DefaultResult.RESULT_2.equals(result)) {
         PreferenceManager.getInstance(getApplicationContext()).setChangedNumber(true);
