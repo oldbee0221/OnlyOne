@@ -231,7 +231,7 @@ public class OnePageSmsReceiver extends BroadcastReceiver implements Constants {
 
     NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
     if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      notificationManager.createNotificationChannel(new NotificationChannel("onepage.channel1", "문자수신채널", NotificationManager.IMPORTANCE_DEFAULT));
+      notificationManager.createNotificationChannel(new NotificationChannel("default", "기본채널", NotificationManager.IMPORTANCE_DEFAULT));
     }
 
     notificationManager.notify(NOTIFICATION_ID, builder.build());

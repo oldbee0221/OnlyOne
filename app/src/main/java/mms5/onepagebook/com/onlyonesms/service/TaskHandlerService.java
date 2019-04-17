@@ -120,9 +120,6 @@ public class TaskHandlerService extends Service {
   private void makeForeground() {
     String msg = getString(R.string.msg_processing_sending_mms);
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
-      notificationManager.createNotificationChannel(new NotificationChannel(PushManager.CHANNEL_SERVICE_ID, "sending", NotificationManager.IMPORTANCE_DEFAULT));
-
       Notification notification = new NotificationCompat.Builder(getApplicationContext(), PushManager.CHANNEL_SERVICE_ID)
         .setSmallIcon(R.mipmap.ic_launcher)
         .setContentIntent(makeMainIntent(this))
