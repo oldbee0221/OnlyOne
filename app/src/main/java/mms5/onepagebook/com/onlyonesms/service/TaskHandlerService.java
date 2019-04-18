@@ -63,17 +63,17 @@ public class TaskHandlerService extends Service {
 
     public static void startWork(Context context, String idx) {
         RealmManager.writeLog("Service, startWork");
-    /*if (!PreferenceManager.getInstance(context).getIsTaskRunning()) {
-      PreferenceManager.getInstance(context).setIsTaskRunning(true);
-      Intent intent = new Intent(context, TaskHandlerService.class);
-      intent.putExtra(TaskHandlerService.EXTRA_IDX, idx);
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        context.startForegroundService(intent);
-      }
-      else {
-        context.startService(intent);
-      }
-    }*/
+        /*if (!PreferenceManager.getInstance(context).getIsTaskRunning()) {
+          PreferenceManager.getInstance(context).setIsTaskRunning(true);
+          Intent intent = new Intent(context, TaskHandlerService.class);
+          intent.putExtra(TaskHandlerService.EXTRA_IDX, idx);
+          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            context.startForegroundService(intent);
+          }
+          else {
+            context.startService(intent);
+          }
+        }*/
 
         Intent intent = new Intent(context, TaskHandlerService.class);
         intent.putExtra(TaskHandlerService.EXTRA_IDX, idx);
@@ -148,11 +148,11 @@ public class TaskHandlerService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         String idx = intent.getStringExtra(EXTRA_IDX);
         RealmManager.writeLog("Service, onStartCommand, idx: " + idx);
-        prepareSeding(idx);
+        prepareSending(idx);
         return START_STICKY;
     }
 
-    private void prepareSeding(final String idx) {
+    private void prepareSending(final String idx) {
         mSettings = Settings.get(getApplicationContext());
         com.klinker.android.send_message.Settings sendSettings = new com.klinker.android.send_message.Settings();
         sendSettings.setMmsc(mSettings.getMmsc());
@@ -208,11 +208,8 @@ public class TaskHandlerService extends Service {
             }
 
             removeSentMessage(getApplicationContext(), Mms.uriSent);
-
             removeSentMessage(getApplicationContext(), Mms.uriOutbox);
-
             removeSentMessage(getApplicationContext(), Mms.uriDraft);
-
 
             stopWork(getApplicationContext());
         }
