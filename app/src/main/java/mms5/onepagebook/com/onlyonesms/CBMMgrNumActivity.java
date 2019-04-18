@@ -63,7 +63,7 @@ public class CBMMgrNumActivity extends AppCompatActivity implements Constants, V
     public void onClick(View view) {
         int vid = view.getId();
 
-        switch(vid) {
+        switch (vid) {
             case R.id.rl_main_tab_1:
                 mViewPager.setCurrentItem(0);
                 break;
@@ -75,18 +75,18 @@ public class CBMMgrNumActivity extends AppCompatActivity implements Constants, V
     }
 
     private void initView() {
-        if(mFragments == null) {
+        if (mFragments == null) {
             mFragments = new ArrayList<>();
             mFragments.add(CBMMgr1Fragment.create());
             mFragments.add(CBMMgr2Fragment.create());
         }
 
-        if(mViewPager == null) {
+        if (mViewPager == null) {
             mViewPager = findViewById(R.id.view_pager);
         }
 
         mViewPager.setPageTransformer(true, new ZoomOutPageTransformer());
-        if(mViewPagerAdapter == null) {
+        if (mViewPagerAdapter == null) {
             mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), mFragments);
         }
 
@@ -110,9 +110,9 @@ public class CBMMgrNumActivity extends AppCompatActivity implements Constants, V
     }
 
     private void setMainTab(int tab) {
-        if(mMainTab == tab) return;
+        if (mMainTab == tab) return;
 
-        switch(mMainTab) {
+        switch (mMainTab) {
             case 0:
                 mVTab[0].setVisibility(View.GONE);
                 break;
@@ -121,7 +121,7 @@ public class CBMMgrNumActivity extends AppCompatActivity implements Constants, V
                 break;
         }
 
-        switch(tab) {
+        switch (tab) {
             case 0:
                 mVTab[0].setVisibility(View.VISIBLE);
                 mVTab[0].setBackgroundColor(Color.rgb(0x29, 0x65, 0xA7));

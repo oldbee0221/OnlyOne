@@ -35,7 +35,10 @@ public abstract class AppDatabase extends RoomDatabase {
     }
 
     abstract public MsgDao getMsgDao();
+
     abstract public ImageBoxDao getImageBoxDao();
+
     abstract public TelNumPermitDao getTelNumPermitDao();
+
     abstract public TelNumBlockDao getTelNumBlockDao();
 }

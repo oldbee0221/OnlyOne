@@ -73,7 +73,7 @@ public class CBMImageBoxActivity extends AppCompatActivity implements Constants,
     };
 
     private void init() {
-        if(mAdapter != null) {
+        if (mAdapter != null) {
             mAdapter.removeAll();
         }
 
@@ -129,7 +129,7 @@ public class CBMImageBoxActivity extends AppCompatActivity implements Constants,
                     }
                 });
 
-                if(CBMImageBoxActivity.this.isFinishing() == false) {
+                if (CBMImageBoxActivity.this.isFinishing() == false) {
                     builder.show();
                 }
             }
@@ -159,9 +159,9 @@ public class CBMImageBoxActivity extends AppCompatActivity implements Constants,
 
     final Handler handler = new Handler() {
         public void handleMessage(Message msg) {
-            switch(msg.what) {
+            switch (msg.what) {
                 case 100:
-                    mAdapter.remove((ImageBox)msg.obj);
+                    mAdapter.remove((ImageBox) msg.obj);
                     break;
             }
         }

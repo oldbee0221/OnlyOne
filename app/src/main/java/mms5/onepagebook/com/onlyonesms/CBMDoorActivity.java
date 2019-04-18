@@ -63,7 +63,7 @@ public class CBMDoorActivity extends AppCompatActivity implements Constants, Vie
         mRgUse.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
-                switch(checkedId) {
+                switch (checkedId) {
                     case R.id.rb_not_use:
                         PreferenceManager.getInstance(mContext).setIsUseCBMsg(false);
                         break;
@@ -78,7 +78,7 @@ public class CBMDoorActivity extends AppCompatActivity implements Constants, Vie
         mRbNotUse = findViewById(R.id.rb_not_use);
         mRbUse = findViewById(R.id.rb_use);
 
-        if(PreferenceManager.getInstance(mContext).getIsUseCBMsg()) {
+        if (PreferenceManager.getInstance(mContext).getIsUseCBMsg()) {
             mRbNotUse.setChecked(false);
             mRbUse.setChecked(true);
         } else {
@@ -94,20 +94,18 @@ public class CBMDoorActivity extends AppCompatActivity implements Constants, Vie
     public void onClick(View view) {
         int vid = view.getId();
 
-        switch(vid) {
-            case R.id.btn_cb_addr:
-            {
+        switch (vid) {
+            case R.id.btn_cb_addr: {
                 Intent i = new Intent(CBMDoorActivity.this, CBMMgrNumActivity.class);
                 startActivity(i);
             }
-                break;
+            break;
 
-            case R.id.btn_cb_reg:
-            {
+            case R.id.btn_cb_reg: {
                 Intent i = new Intent(CBMDoorActivity.this, CBMMainActivity.class);
                 startActivity(i);
             }
-                break;
+            break;
         }
     }
 }

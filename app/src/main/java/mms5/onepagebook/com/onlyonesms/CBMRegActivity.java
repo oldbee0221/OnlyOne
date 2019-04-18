@@ -103,7 +103,7 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
 
         dMsg.msgType = getIntent().getStringExtra(Constants.EXTRA_CB_MSGTYPE);
 
-        for(int i=0; i<7; i++) {
+        for (int i = 0; i < 7; i++) {
             days_week[i] = false;
         }
 
@@ -172,10 +172,10 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == RESULT_OK) {
-            switch(requestCode) {
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
                 case REQUEST_IMAGE_CAPTURE:
-                    if(rotatePhoto()) {
+                    if (rotatePhoto()) {
                         CropImage.activity(mContentUri).setGuidelines(CropImageView.Guidelines.ON).start(CBMRegActivity.this);
                     } else {
                         Message msg = new Message();
@@ -208,13 +208,13 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
                     break;
 
                 case REQUEST_CODE_MSGBOX:
-                    if(resultCode == Activity.RESULT_OK) {
+                    if (resultCode == Activity.RESULT_OK) {
                         finish();
                     }
                     break;
 
                 case REQUEST_CODE_IMGBOX:
-                    if(resultCode == Activity.RESULT_OK) {
+                    if (resultCode == Activity.RESULT_OK) {
                         mCurrentPhotoPath = data.getStringExtra(EXTRA_IMG_PATH);
                         iv_photo.setVisibility(View.VISIBLE);
                         mBmPhoto = BitmapFactory.decodeFile(mCurrentPhotoPath);
@@ -232,7 +232,7 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
     public void onClick(View view) {
         int vid = view.getId();
 
-        switch(vid) {
+        switch (vid) {
             case R.id.ll_monday:
                 setDaysWeek(0);
                 break;
@@ -262,14 +262,14 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
                 break;
 
             case R.id.tv_start:
-                if(!mAllDay) {
+                if (!mAllDay) {
                     mWhichTime = START_TIME;
                     timePickerDlg();
                 }
                 break;
 
             case R.id.tv_end:
-                if(!mAllDay) {
+                if (!mAllDay) {
                     mWhichTime = END_TIME;
                     timePickerDlg();
                 }
@@ -284,18 +284,18 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
                 onClickImageLoad();
                 break;
 
-            case R.id.ll_img_box:
-                {   Intent intent = new Intent(CBMRegActivity.this, CBMImageBoxActivity.class);
-                    startActivityForResult(intent, REQUEST_CODE_IMGBOX);
-                }
-                break;
+            case R.id.ll_img_box: {
+                Intent intent = new Intent(CBMRegActivity.this, CBMImageBoxActivity.class);
+                startActivityForResult(intent, REQUEST_CODE_IMGBOX);
+            }
+            break;
 
-            case R.id.ll_msg_box:
-                {   Intent intent = new Intent(CBMRegActivity.this, CBMMsgBoxActivity.class);
-                    intent.putExtra(Constants.EXTRA_CB_MSGTYPE, dMsg.msgType);
-                    startActivityForResult(intent, REQUEST_CODE_MSGBOX);
-                }
-                break;
+            case R.id.ll_msg_box: {
+                Intent intent = new Intent(CBMRegActivity.this, CBMMsgBoxActivity.class);
+                intent.putExtra(Constants.EXTRA_CB_MSGTYPE, dMsg.msgType);
+                startActivityForResult(intent, REQUEST_CODE_MSGBOX);
+            }
+            break;
 
             case R.id.ll_msg_save:
                 save();
@@ -307,13 +307,13 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
     @Override
     public void onTimeSet(TimePicker timePicker, int h, int m) {
         String tm;
-        if(mWhichTime == START_TIME) {
+        if (mWhichTime == START_TIME) {
             mHourS = h;
             mMinS = m;
             tm = (mHourS < 10 ? "0" : "") + mHourS + ":" + (mMinS < 10 ? "0" : "") + mMinS;
             tv_start.setText(tm);
             dMsg.startTime = tm;
-        } else if(mWhichTime == END_TIME) {
+        } else if (mWhichTime == END_TIME) {
             mHourE = h;
             mMinE = m;
             tm = (mHourE < 10 ? "0" : "") + mHourE + ":" + (mMinE < 10 ? "0" : "") + mMinE;
@@ -326,11 +326,11 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
         int vid = compoundButton.getId();
 
-        switch(vid) {
+        switch (vid) {
             case R.id.cb_all_day:
                 mAllDay = b;
 
-                if(mAllDay) {
+                if (mAllDay) {
                     tv_start.setTextColor(Color.parseColor("#66000000"));
                     tv_end.setTextColor(Color.parseColor("#66000000"));
                     dMsg.allDayYn = "Y";
@@ -342,7 +342,7 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
                 break;
 
             case R.id.cb_send_abs:
-                if(b) {
+                if (b) {
                     dMsg.sendOnAbsYn = "Y";
                 } else {
                     dMsg.sendOnAbsYn = "N";
@@ -350,7 +350,7 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
                 break;
 
             case R.id.cb_ad:
-                if(b) {
+                if (b) {
                     dMsg.adYn = "Y";
                 } else {
                     dMsg.adYn = "N";
@@ -360,7 +360,7 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
     }
 
     private void setDaysWeek(int idx) {
-        if(days_week[idx]) {
+        if (days_week[idx]) {
             days_week[idx] = false;
             tv_days_week[idx].setTextColor(Color.parseColor("#818181"));
             v_days_week[idx].setBackgroundColor(Color.parseColor("#818181"));
@@ -375,10 +375,10 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
         int hour = 0;
         int min = 0;
 
-        if(mWhichTime == START_TIME) {
+        if (mWhichTime == START_TIME) {
             hour = mHourS;
             min = mMinS;
-        } else if(mWhichTime == END_TIME) {
+        } else if (mWhichTime == END_TIME) {
             hour = mHourE;
             min = mMinE;
         }
@@ -399,7 +399,7 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
         spn_sendtype.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                dMsg.sendType = Integer.toString(position+1);
+                dMsg.sendType = Integer.toString(position + 1);
             }
 
             @Override
@@ -421,7 +421,7 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
         spn_sendoption.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                dMsg.sendOption = Integer.toString(position+1);
+                dMsg.sendOption = Integer.toString(position + 1);
             }
 
             @Override
@@ -435,24 +435,24 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
         dMsg.message1 = edt_msg1.getText().toString();
         dMsg.message2 = edt_msg2.getText().toString();
 
-        if(Utils.IsEmpty(dMsg.message1)) {
+        if (Utils.IsEmpty(dMsg.message1)) {
             Toast.makeText(getApplicationContext(), R.string.please_input_msg, Toast.LENGTH_LONG).show();
             return;
         }
 
-        if(Utils.IsEmpty(dMsg.message2)) {
+        if (Utils.IsEmpty(dMsg.message2)) {
             Toast.makeText(getApplicationContext(), R.string.please_input_msg, Toast.LENGTH_LONG).show();
             return;
         }
 
         StringBuffer sb = new StringBuffer();
-        if(days_week[0]) sb.append("월 ");
-        if(days_week[1]) sb.append("화 ");
-        if(days_week[2]) sb.append("수 ");
-        if(days_week[3]) sb.append("목 ");
-        if(days_week[4]) sb.append("금 ");
-        if(days_week[5]) sb.append("토 ");
-        if(days_week[6]) sb.append("일");
+        if (days_week[0]) sb.append("월 ");
+        if (days_week[1]) sb.append("화 ");
+        if (days_week[2]) sb.append("수 ");
+        if (days_week[3]) sb.append("목 ");
+        if (days_week[4]) sb.append("금 ");
+        if (days_week[5]) sb.append("토 ");
+        if (days_week[6]) sb.append("일");
         dMsg.dayOfWeek = sb.toString();
 
         dMsg.imgPath = mCurrentPhotoPath;
@@ -484,17 +484,17 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
         builder.setItems(options, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-               switch(i) {
-                   case 0:
-                       mPhotoGetMode = REQUEST_IMAGE_ALBUM;
-                       getPhoto();
-                       break;
+                switch (i) {
+                    case 0:
+                        mPhotoGetMode = REQUEST_IMAGE_ALBUM;
+                        getPhoto();
+                        break;
 
-                   case 1:
-                       mPhotoGetMode = REQUEST_IMAGE_CAPTURE;
-                       getPhoto();
-                       break;
-               }
+                    case 1:
+                        mPhotoGetMode = REQUEST_IMAGE_CAPTURE;
+                        getPhoto();
+                        break;
+                }
             }
         });
 
@@ -510,11 +510,11 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
     }
 
     private void getPhoto() {
-        if(mPhotoGetMode == REQUEST_IMAGE_ALBUM) {
+        if (mPhotoGetMode == REQUEST_IMAGE_ALBUM) {
             Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             startActivityForResult(intent, REQUEST_IMAGE_ALBUM);
-        } else if(mPhotoGetMode == REQUEST_IMAGE_CAPTURE) {
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        } else if (mPhotoGetMode == REQUEST_IMAGE_CAPTURE) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 dispatchTakePictureIntentEx();
             } else {
                 dispatchTakePictureIntent();
@@ -535,7 +535,7 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
 
             if (photoFile != null) {
                 mContentUri = Uri.fromFile(photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,	Uri.fromFile(photoFile));
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
                 startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
             }
         }
@@ -543,19 +543,19 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
 
     private void dispatchTakePictureIntentEx() {
         String state = Environment.getExternalStorageState();
-        if(Environment.MEDIA_MOUNTED.equals(state)) {
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            if(takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
                 File photoFile = null;
                 try {
                     photoFile = createImageFileEx();
-                } catch(IOException e) {
+                } catch (IOException e) {
                     Utils.Log("dispatchTakePictureIntentEx() " + e.toString());
                 }
 
-                if(photoFile != null) {
+                if (photoFile != null) {
                     mContentUri = FileProvider.getUriForFile(this, "com.amorepacific.apbeautytailor.fileprovider", photoFile);
-                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,	mContentUri);
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, mContentUri);
                     startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
                 }
             }
@@ -580,8 +580,8 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
     private File createImageFileEx() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/onepagebook/");
-        if(!storageDir.exists()) {
+        File storageDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/onepagebook/");
+        if (!storageDir.exists()) {
             storageDir.mkdirs();
         }
         File image = File.createTempFile(
@@ -610,7 +610,7 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
         ExifInterface exif;
         try {
             if (mCurrentPhotoPath == null) {
-                if(mContentUri == null) {
+                if (mContentUri == null) {
                     Utils.Log("rotatePhoto() - 1");
                     return false;
                 } else {
@@ -724,7 +724,7 @@ public class CBMRegActivity extends AppCompatActivity implements Constants, View
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            switch(msg.what) {
+            switch (msg.what) {
                 case REQUEST_IMAGE_CAPTURE:
                     Toast.makeText(getApplicationContext(), R.string.donot_take_photo, Toast.LENGTH_LONG).show();
                     break;

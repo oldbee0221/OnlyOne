@@ -11,7 +11,7 @@ package mms5.onepagebook.com.onlyonesms.model;
 //         "rep": ""
 //     }
 public class ReceiverInfo {
-  public String bnc; // 꼬릿말
-  public String num; // 발송번호
-  public String rep; // 치환내용
+    public String bnc; // 꼬릿말
+    public String num; // 발송번호
+    public String rep; // 치환내용
 }

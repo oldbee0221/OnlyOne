@@ -16,7 +16,7 @@ public abstract class BaseFragment extends Fragment implements Constants {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = getContext();
-        mApplication = (OnlyOneApplication)getActivity().getApplication();
+        mApplication = (OnlyOneApplication) getActivity().getApplication();
     }
 
 

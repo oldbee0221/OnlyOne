@@ -29,7 +29,7 @@ public abstract class ImgAdapter extends RecyclerView.Adapter<ImgAdapter.ViewHol
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v= LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_img, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_img, parent, false);
         return new ViewHolder(v);
     }
 
@@ -65,10 +65,10 @@ public abstract class ImgAdapter extends RecyclerView.Adapter<ImgAdapter.ViewHol
     public int add(List<ImageBox> arrayList) {
         mItems.clear();
 
-        if(arrayList == null) return 0;
+        if (arrayList == null) return 0;
 
         int size = arrayList.size();
-        for(int i=0; i<size; i++) {
+        for (int i = 0; i < size; i++) {
             mItems.add(arrayList.get(i));
         }
 
@@ -77,14 +77,14 @@ public abstract class ImgAdapter extends RecyclerView.Adapter<ImgAdapter.ViewHol
         return size;
     }
 
-    public void removeAll(){
+    public void removeAll() {
         mItems.clear();
     }
 
     public void remove(ImageBox item) {
         int size = mItems.size();
-        for(int i=0; i<size; i++) {
-            if(mItems.get(i).iid == item.iid) {
+        for (int i = 0; i < size; i++) {
+            if (mItems.get(i).iid == item.iid) {
                 mItems.remove(i);
                 break;
             }
@@ -94,7 +94,9 @@ public abstract class ImgAdapter extends RecyclerView.Adapter<ImgAdapter.ViewHol
     }
 
     public abstract void load();
+
     public abstract void onDel(ImageBox item);
+
     public abstract void onAdoption(ImageBox use);
 
     public class ViewHolder extends RecyclerView.ViewHolder {

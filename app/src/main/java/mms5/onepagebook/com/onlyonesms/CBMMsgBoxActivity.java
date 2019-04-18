@@ -75,7 +75,7 @@ public class CBMMsgBoxActivity extends AppCompatActivity implements Constants, V
     };
 
     private void init() {
-        if(mAdapter != null) {
+        if (mAdapter != null) {
             mAdapter.removeAll();
         }
 
@@ -134,7 +134,7 @@ public class CBMMsgBoxActivity extends AppCompatActivity implements Constants, V
                     }
                 });
 
-                if(CBMMsgBoxActivity.this.isFinishing() == false) {
+                if (CBMMsgBoxActivity.this.isFinishing() == false) {
                     builder.show();
                 }
             }
@@ -164,9 +164,9 @@ public class CBMMsgBoxActivity extends AppCompatActivity implements Constants, V
 
     final Handler handler = new Handler() {
         public void handleMessage(Message msg) {
-            switch(msg.what) {
+            switch (msg.what) {
                 case 100:
-                    mAdapter.remove((Msg)msg.obj);
+                    mAdapter.remove((Msg) msg.obj);
                     break;
             }
         }

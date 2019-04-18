@@ -10,13 +10,13 @@ import mms5.onepagebook.com.onlyonesms.manager.PushManager;
 import mms5.onepagebook.com.onlyonesms.manager.RealmManager;
 
 public class OnlyOneApplication extends Application {
-  @Override
-  public void onCreate() {
-    super.onCreate();
-    Fabric.with(this, new Crashlytics());
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        Fabric.with(this, new Crashlytics());
 
-    PushManager.createChannel(this);
+        PushManager.createChannel(this);
 
-    RealmManager.init(this);
-  }
+        RealmManager.init(this);
+    }
 }

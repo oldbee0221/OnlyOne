@@ -48,20 +48,19 @@ public class CBMTab1Fragment extends BaseFragment implements View.OnClickListene
     public void onClick(View view) {
         int vid = view.getId();
 
-        switch(vid) {
-            case R.id.btn_reg:
-                {
-                    Intent intent = new Intent(getActivity(), CBMRegActivity.class);
-                    intent.putExtra(Constants.EXTRA_CB_MSGTYPE, "수신");
-                    startActivity(intent);
-                }
-                break;
+        switch (vid) {
+            case R.id.btn_reg: {
+                Intent intent = new Intent(getActivity(), CBMRegActivity.class);
+                intent.putExtra(Constants.EXTRA_CB_MSGTYPE, "수신");
+                startActivity(intent);
+            }
+            break;
         }
     }
 
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-        if(b) {
+        if (b) {
 
         } else {
             new Thread(new Runnable() {
@@ -74,7 +73,7 @@ public class CBMTab1Fragment extends BaseFragment implements View.OnClickListene
                             .getMsgDao()
                             .findByTypeOnUse("수신");
 
-                    if(dMsg == null) {
+                    if (dMsg == null) {
                         Utils.Log("msg is null!");
                         Message m = handler.obtainMessage();
                         m.what = 100;
@@ -135,7 +134,7 @@ public class CBMTab1Fragment extends BaseFragment implements View.OnClickListene
                         .getMsgDao()
                         .findByTypeOnUse("수신");
 
-                if(dMsg == null) {
+                if (dMsg == null) {
                     Utils.Log("msg is null!");
                     Message m = handler.obtainMessage();
                     m.what = 100;
@@ -152,7 +151,7 @@ public class CBMTab1Fragment extends BaseFragment implements View.OnClickListene
 
     final Handler handler = new Handler() {
         public void handleMessage(Message msg) {
-            switch(msg.what) {
+            switch (msg.what) {
                 case 100:
                     ll_msg.setVisibility(View.GONE);
                     ll_no_msg.setVisibility(View.VISIBLE);
@@ -165,7 +164,7 @@ public class CBMTab1Fragment extends BaseFragment implements View.OnClickListene
                     tv_msg1.setText(dMsg.message1);
                     tv_msg2.setText(dMsg.message2);
 
-                    if(dMsg.allDayYn.equalsIgnoreCase("Y")) {
+                    if (dMsg.allDayYn.equalsIgnoreCase("Y")) {
                         tv_time.setText(getString(R.string.all_day));
                     } else {
                         StringBuffer sb = new StringBuffer();
@@ -175,7 +174,7 @@ public class CBMTab1Fragment extends BaseFragment implements View.OnClickListene
 
                     tv_week_day.setText(dMsg.dayOfWeek);
 
-                    if(Utils.IsEmpty(dMsg.imgPath)) {
+                    if (Utils.IsEmpty(dMsg.imgPath)) {
                         tv_no_image.setVisibility(View.VISIBLE);
                     } else {
                         tv_no_image.setVisibility(View.GONE);

@@ -73,7 +73,7 @@ public class CBMMgr2Fragment extends BaseFragment implements View.OnClickListene
     };
 
     private void init() {
-        if(mAdapter != null) {
+        if (mAdapter != null) {
             mAdapter.removeAll();
         }
 
@@ -117,7 +117,7 @@ public class CBMMgr2Fragment extends BaseFragment implements View.OnClickListene
                     }
                 });
 
-                if(getActivity().isFinishing() == false) {
+                if (getActivity().isFinishing() == false) {
                     builder.show();
                 }
             }
@@ -147,7 +147,7 @@ public class CBMMgr2Fragment extends BaseFragment implements View.OnClickListene
 
     final Handler handler = new Handler() {
         public void handleMessage(Message msg) {
-            switch(msg.what) {
+            switch (msg.what) {
                 case 100:
                     mAdapter.remove((TelNumPermit) msg.obj);
                     break;

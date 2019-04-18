@@ -6,6 +6,6 @@ import retrofit2.http.GET;
 import retrofit2.http.Url;
 
 public interface ImageClient {
-  @GET
-  Call<ResponseBody> downloadImage(@Url String url);
+    @GET
+    Call<ResponseBody> downloadImage(@Url String url);
 }
