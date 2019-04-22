@@ -22,8 +22,8 @@ android {
         applicationId "mms5.onepagebook.com.onlyonesms"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 51
-        versionName "1.31.18"
+        versionCode 52
+        versionName "1.31.19"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -62,6 +62,8 @@ dependencies {
 
     implementation 'com.github.bumptech.glide:glide:4.8.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
+
+    implementation 'org.apache.commons:commons-text:1.6'
 
     implementation 'android.arch.persistence.room:runtime:1.1.1'
     annotationProcessor "android.arch.persistence.room:compiler:1.1.1"

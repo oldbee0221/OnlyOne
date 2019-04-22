@@ -20,6 +20,8 @@ import com.klinker.android.send_message.ApnUtils;
 import com.klinker.android.send_message.Message;
 import com.klinker.android.send_message.Transaction;
 
+import org.apache.commons.text.StringEscapeUtils;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -327,7 +329,7 @@ public class TaskHandlerService extends Service {
                     msg.setImages(images);
                 }
                 msg.setSubject(reservation.getTitle());
-                msg.setText(reservation.getBody());
+                msg.setText(StringEscapeUtils.unescapeHtml4(reservation.getBody()).replace("\\", ""));
                 msg.setAddress(reservation.getPhoneNumber());
                 msg.setSave(false);
 
