@@ -328,7 +328,7 @@ public class TaskHandlerService extends Service {
                 if (images.length > 0) {
                     msg.setImages(images);
                 }
-                msg.setSubject(reservation.getTitle());
+                msg.setSubject(StringEscapeUtils.unescapeHtml4(reservation.getTitle()).replace("\\", ""));
                 msg.setText(StringEscapeUtils.unescapeHtml4(reservation.getBody()).replace("\\", ""));
                 msg.setAddress(reservation.getPhoneNumber());
                 msg.setSave(false);
