@@ -31,4 +31,6 @@
     <color name="color3">#707070</color>
     <color name="color4">#51b10d</color>
 
+    <color name="colorCancel">#dcdcdc</color>
+
 </resources>

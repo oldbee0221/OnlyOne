@@ -180,7 +180,7 @@ public class MainActivity extends AppCompatActivity implements Constants {
         findViewById(R.id.btn_go_callback).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, CBMDoorActivity.class);
+                Intent i = new Intent(MainActivity.this, CBMDoor2Activity.class);
                 startActivity(i);
             }
         });

@@ -50,6 +50,12 @@
     <string name="callback_msg_reg">콜백 메시지 작성</string>
     <string name="callback_msg_address">콜백 주소록 설정</string>
 
+    <string name="callback_msg_setting">콜백문자 사용설정</string>
+    <string name="use_on_text_recv">문자수신 콜백사용</string>
+    <string name="use_on_call_recv">전화수신 콜백사용</string>
+    <string name="use_on_call_send">전화발신 콜백사용</string>
+    <string name="callback_write">콜백작성</string>
+
     <string name="connect_service">접속 서비스</string>
     <string name="choose_connect_service">접속 서비스를 선택하세요</string>
     <string name="msg_please_service_point">접속 서비스를 선택해주세요</string>
@@ -80,6 +86,8 @@
     <string name="msg_save">메시지 저장</string>
     <string name="msg_box">메시지 보관함</string>
     <string name="please_input_msg">메시지를 입력해주세요</string>
+    <string name="please_input_category">분야를 입력해주세요</string>
+    <string name="please_input_title">제목을 입력해주세요</string>
     <string name="msg_setting">메시지 동작 설정</string>
     <string name="send_type_setting">발송방법설정</string>
     <string name="tab_1_type">수신 메시지</string>

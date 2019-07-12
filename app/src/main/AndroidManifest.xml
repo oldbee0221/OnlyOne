@@ -118,12 +118,27 @@
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
+            android:name=".CBMDoor2Activity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".CBMListActvitity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
             android:name=".CBMMainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
             android:name=".CBMRegActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".CBMReg2Activity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
 
