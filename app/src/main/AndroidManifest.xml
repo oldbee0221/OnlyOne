@@ -143,6 +143,11 @@
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
+            android:name=".CBMUpdateActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
             android:name=".CBMMsgBoxActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />

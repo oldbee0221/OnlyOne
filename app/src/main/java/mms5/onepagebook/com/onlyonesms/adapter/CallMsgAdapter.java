@@ -1,48 +1,59 @@
 package mms5.onepagebook.com.onlyonesms.adapter;
 
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.support.v7.widget.CardView;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 import mms5.onepagebook.com.onlyonesms.R;
-import mms5.onepagebook.com.onlyonesms.db.entity.Msg;
+import mms5.onepagebook.com.onlyonesms.base.GlideApp;
+import mms5.onepagebook.com.onlyonesms.db.entity.CallMsg;
 
-public abstract class MsgAdapter extends RecyclerView.Adapter<MsgAdapter.ViewHolder> {
+/**
+ * Created by jeonghopark on 2019-07-12.
+ */
+public abstract class CallMsgAdapter extends RecyclerView.Adapter<CallMsgAdapter.ViewHolder> {
     private Context mContext;
-    private ArrayList<Msg> mItems;
+    private ArrayList<CallMsg> mItems;
 
-    public MsgAdapter(Context context) {
+    public CallMsgAdapter(Context context) {
         mContext = context;
         mItems = new ArrayList<>();
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_msg, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_callmsg, parent, false);
         return new ViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        final Msg item = mItems.get(position);
+        final CallMsg item = mItems.get(position);
 
-        holder.mTvDate.setText(getDate(item.lastUpdateTime));
-        holder.mTvMessage1.setText(item.message1);
-        holder.mTvMessage2.setText(item.message2);
+        holder.mTvDate.setText(getDate(item.regdate));
+        holder.mTvCategory.setText(item.category);
+        holder.mTvTitle.setText(item.title);
+        holder.mTvMessage.setText(item.contents);
 
-        holder.mLayoutAdoption.setOnClickListener(new View.OnClickListener() {
+        GlideApp.with(mContext)
+                .load(new File(item.imgpath))
+                .into(holder.mIvPhoto);
+
+        holder.mLayoutUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onAdoption(item);
+                onUpdate(item);
             }
         });
 
@@ -59,7 +70,7 @@ public abstract class MsgAdapter extends RecyclerView.Adapter<MsgAdapter.ViewHol
         return mItems.size();
     }
 
-    public int add(List<Msg> arrayList) {
+    public int add(List<CallMsg> arrayList) {
         mItems.clear();
 
         if (arrayList == null) return 0;
@@ -78,10 +89,10 @@ public abstract class MsgAdapter extends RecyclerView.Adapter<MsgAdapter.ViewHol
         mItems.clear();
     }
 
-    public void remove(Msg item) {
+    public void remove(CallMsg item) {
         int size = mItems.size();
         for (int i = 0; i < size; i++) {
-            if (mItems.get(i).lastUpdateTime == item.lastUpdateTime) {
+            if (mItems.get(i).regdate == item.regdate) {
                 mItems.remove(i);
                 break;
             }
@@ -121,27 +132,30 @@ public abstract class MsgAdapter extends RecyclerView.Adapter<MsgAdapter.ViewHol
     }
 
     public abstract void load();
-
-    public abstract void onDel(Msg item);
-
-    public abstract void onAdoption(Msg use);
+    public abstract void onDel(CallMsg item);
+    public abstract void onAdoption(CallMsg use);
+    public abstract void onUpdate(CallMsg item);
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public CardView mCardView;
-        public TextView mTvMessage1;
-        public TextView mTvMessage2;
+        public TextView mTvCategory;
+        public TextView mTvTitle;
+        public TextView mTvMessage;
         public TextView mTvDate;
-        public LinearLayout mLayoutAdoption;
+        public ImageView mIvPhoto;
+        public LinearLayout mLayoutUpdate;
         public LinearLayout mLayoutDelete;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
             mCardView = itemView.findViewById(R.id.cv_base);
-            mTvMessage1 = itemView.findViewById(R.id.tv_message1);
-            mTvMessage2 = itemView.findViewById(R.id.tv_message2);
+            mTvCategory = itemView.findViewById(R.id.tv_category);
+            mTvTitle = itemView.findViewById(R.id.tv_title);
+            mTvMessage = itemView.findViewById(R.id.tv_msg);
             mTvDate = itemView.findViewById(R.id.tv_date);
-            mLayoutAdoption = itemView.findViewById(R.id.ll_adoption);
+            mIvPhoto = itemView.findViewById(R.id.iv_photo);
+            mLayoutUpdate = itemView.findViewById(R.id.ll_update);
             mLayoutDelete = itemView.findViewById(R.id.ll_delete);
         }
     }

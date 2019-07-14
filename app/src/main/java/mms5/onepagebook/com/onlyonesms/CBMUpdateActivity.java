@@ -21,6 +21,7 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -48,9 +49,9 @@ import mms5.onepagebook.com.onlyonesms.db.entity.CallMsg;
 import mms5.onepagebook.com.onlyonesms.util.Utils;
 
 /**
- * Created by jeonghopark on 2019-07-11.
+ * Created by jeonghopark on 2019-07-14.
  */
-public class CBMReg2Activity extends AppCompatActivity implements Constants, View.OnClickListener {
+public class CBMUpdateActivity  extends AppCompatActivity implements Constants, View.OnClickListener {
 
     private final int REQUEST_IMAGE_ALBUM = 201;
     private final int REQUEST_IMAGE_CAPTURE = 202;
@@ -70,6 +71,7 @@ public class CBMReg2Activity extends AppCompatActivity implements Constants, Vie
     private ImageView iv_photo, iv_delete;
     private FrameLayout fl_photo;
     private EditText edt_msg, edt_category, edt_title;
+    private Button btn_save;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -86,11 +88,29 @@ public class CBMReg2Activity extends AppCompatActivity implements Constants, Vie
         edt_category = findViewById(R.id.edt_category);
         edt_title = findViewById(R.id.edt_title);
 
-        findViewById(R.id.btn_save).setOnClickListener(this);
+
+        btn_save = findViewById(R.id.btn_save);
+        btn_save.setText(R.string.update);
+        btn_save.setOnClickListener(this);
+
+
         findViewById(R.id.btn_cancel).setOnClickListener(this);
 
         fl_photo = findViewById(R.id.fl_photo);
         fl_photo.setOnClickListener(this);
+
+        dMsg = (CallMsg)getIntent().getSerializableExtra("data");
+        edt_msg.setText(dMsg.contents);
+        edt_category.setText(dMsg.category);
+        edt_title.setText(dMsg.title);
+
+        mCurrentPhotoPath = dMsg.imgpath;
+
+        iv_delete.setVisibility(View.VISIBLE);
+        mBmPhoto = BitmapFactory.decodeFile(mCurrentPhotoPath);
+        GlideApp.with(this)
+                .load(mBmPhoto)
+                .into(iv_photo);
     }
 
     @Override
@@ -99,7 +119,7 @@ public class CBMReg2Activity extends AppCompatActivity implements Constants, Vie
             switch (requestCode) {
                 case REQUEST_IMAGE_CAPTURE:
                     if (rotatePhoto()) {
-                        CropImage.activity(mContentUri).setGuidelines(CropImageView.Guidelines.ON).start(CBMReg2Activity.this);
+                        CropImage.activity(mContentUri).setGuidelines(CropImageView.Guidelines.ON).start(CBMUpdateActivity.this);
                     } else {
                         Message msg = new Message();
                         msg.what = REQUEST_IMAGE_CAPTURE;
@@ -110,7 +130,7 @@ public class CBMReg2Activity extends AppCompatActivity implements Constants, Vie
                 case REQUEST_IMAGE_ALBUM:
                     mContentUri = data.getData();
                     mRealPath = getPath(mContentUri);
-                    CropImage.activity(mContentUri).setGuidelines(CropImageView.Guidelines.ON).start(CBMReg2Activity.this);
+                    CropImage.activity(mContentUri).setGuidelines(CropImageView.Guidelines.ON).start(CBMUpdateActivity.this);
                     break;
 
                 case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
@@ -195,12 +215,11 @@ public class CBMReg2Activity extends AppCompatActivity implements Constants, Vie
         }
 
         dMsg.imgpath = mCurrentPhotoPath;
-        dMsg.regdate = System.currentTimeMillis();
 
         new Thread(new Runnable() {
             @Override
             public void run() {
-                AppDatabase.getInstance(mContext).getCallMsgDao().insert(dMsg);
+                AppDatabase.getInstance(mContext).getCallMsgDao().update(dMsg);
                 finish();
             }
         }).start();
@@ -244,7 +263,7 @@ public class CBMReg2Activity extends AppCompatActivity implements Constants, Vie
     }
 
     private void qDeletePhoto() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(CBMReg2Activity.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(CBMUpdateActivity.this);
         builder.setCancelable(false);
 
         builder.setTitle(getString(R.string.img_delete));
@@ -268,7 +287,7 @@ public class CBMReg2Activity extends AppCompatActivity implements Constants, Vie
             }
         });
 
-        if (CBMReg2Activity.this.isFinishing() == false) {
+        if (CBMUpdateActivity.this.isFinishing() == false) {
             builder.show();
         }
     }

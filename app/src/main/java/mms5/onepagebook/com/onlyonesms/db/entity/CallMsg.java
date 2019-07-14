@@ -4,11 +4,13 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
+import java.io.Serializable;
+
 /**
  * Created by jeonghopark on 2019-07-11.
  */
 @Entity(tableName = "callmsg")
-public class CallMsg {
+public class CallMsg implements Serializable {
     @PrimaryKey
     @ColumnInfo(name = "regdate")
     public long regdate; //입력 시각 (밀리세컨드)
