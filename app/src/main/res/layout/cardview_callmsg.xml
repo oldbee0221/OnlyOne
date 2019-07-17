@@ -115,6 +115,24 @@
                         android:textSize="14sp"
                         android:text="@string/delete"/>
                 </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_send"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="12dp"
+                    android:visibility="gone">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/outline_send_black_18"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="4dp"
+                        android:textSize="14sp"
+                        android:text="@string/send"/>
+                </LinearLayout>
             </LinearLayout>
 
 

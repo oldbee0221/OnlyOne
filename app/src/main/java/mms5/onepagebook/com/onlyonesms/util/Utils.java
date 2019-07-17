@@ -176,4 +176,17 @@ public class Utils {
     editor.putInt(key, value);
     editor.commit();
   }
+
+  public static boolean GetBooleanSharedPreference(Context context, String key) {
+    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+    return prefs.getBoolean(key, false);
+  }
+
+  public static void PutSharedPreference(Context context, String key, boolean value) {
+    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+    SharedPreferences.Editor editor = prefs.edit();
+
+    editor.putBoolean(key, value);
+    editor.commit();
+  }
 }

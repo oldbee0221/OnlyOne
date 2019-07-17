@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,11 +25,9 @@ import java.util.List;
 
 import io.fabric.sdk.android.Fabric;
 import mms5.onepagebook.com.onlyonesms.adapter.CallMsgAdapter;
-import mms5.onepagebook.com.onlyonesms.adapter.MsgAdapter;
 import mms5.onepagebook.com.onlyonesms.common.Constants;
 import mms5.onepagebook.com.onlyonesms.db.AppDatabase;
 import mms5.onepagebook.com.onlyonesms.db.entity.CallMsg;
-import mms5.onepagebook.com.onlyonesms.db.entity.Msg;
 
 /**
  * Created by jeonghopark on 2019-07-11.
@@ -42,6 +41,7 @@ public class CBMListActvitity extends AppCompatActivity implements Constants, Vi
     private CallMsgAdapter mAdapter;
 
     private List<CallMsg> mMsgs;
+    private boolean mIsFromMsg;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -84,6 +84,14 @@ public class CBMListActvitity extends AppCompatActivity implements Constants, Vi
         }
 
         findViewById(R.id.btn_write).setOnClickListener(this);
+        findViewById(R.id.btn_cancel).setOnClickListener(this);
+
+        if(TextUtils.isEmpty(getIntent().getStringExtra(EXTRA_FROM_DOOR))) {
+            findViewById(R.id.btn_cancel).setVisibility(View.VISIBLE);
+            mIsFromMsg = true;
+        } else {
+            mIsFromMsg = false;
+        }
     }
 
     @Override
@@ -102,6 +110,19 @@ public class CBMListActvitity extends AppCompatActivity implements Constants, Vi
                 startActivity(i);
             }
             break;
+
+            case R.id.btn_cancel:
+                finish();
+                break;
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(mIsFromMsg) {
+            finish();
+        } else {
+            super.onBackPressed();
         }
     }
 
@@ -121,14 +142,14 @@ public class CBMListActvitity extends AppCompatActivity implements Constants, Vi
 
         mRv.setHasFixedSize(true);
         mRv.setLayoutManager(mLayoutManager);
-        mAdapter = new CallMsgAdapter(mContext) {
+        mAdapter = new CallMsgAdapter(mContext, mIsFromMsg) {
             @Override
             public void load() {
                 loadData();
             }
 
             @Override
-            public void onAdoption(final CallMsg item) {
+            public void onSend(final CallMsg item) {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -139,9 +160,15 @@ public class CBMListActvitity extends AppCompatActivity implements Constants, Vi
 
             @Override
             public void onUpdate(CallMsg item) {
-                Intent i = new Intent(CBMListActvitity.this, CBMUpdateActivity.class);
-                i.putExtra("data", item);
-                startActivity(i);
+                if(mIsFromMsg) {
+                    Intent i = new Intent(CBMListActvitity.this, CBMUpdate2Activity.class);
+                    i.putExtra("data", item);
+                    startActivity(i);
+                } else {
+                    Intent i = new Intent(CBMListActvitity.this, CBMUpdateActivity.class);
+                    i.putExtra("data", item);
+                    startActivity(i);
+                }
             }
 
             @Override

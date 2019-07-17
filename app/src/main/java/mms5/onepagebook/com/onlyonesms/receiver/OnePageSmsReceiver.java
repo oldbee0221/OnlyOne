@@ -23,6 +23,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import me.leolin.shortcutbadger.ShortcutBadger;
+import mms5.onepagebook.com.onlyonesms.CBMListActvitity;
 import mms5.onepagebook.com.onlyonesms.R;
 import mms5.onepagebook.com.onlyonesms.SteppingStoneActivity;
 import mms5.onepagebook.com.onlyonesms.api.ApiCallback;
@@ -35,6 +36,8 @@ import mms5.onepagebook.com.onlyonesms.manager.PreferenceManager;
 import mms5.onepagebook.com.onlyonesms.manager.RetrofitManager;
 import mms5.onepagebook.com.onlyonesms.model.UserInfo;
 import mms5.onepagebook.com.onlyonesms.util.Utils;
+
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 public class OnePageSmsReceiver extends BroadcastReceiver implements Constants {
     private static final String ACTION_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
@@ -149,6 +152,13 @@ public class OnePageSmsReceiver extends BroadcastReceiver implements Constants {
                         spitNotification(context, messages);
                     }
                 }
+            }
+
+            boolean check1 = Utils.GetBooleanSharedPreference(context, PREF_CHECK1);
+            if(check1) {
+                Intent it = new Intent(context, CBMListActvitity.class);
+                it.addFlags(FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(it);
             }
         }
     }

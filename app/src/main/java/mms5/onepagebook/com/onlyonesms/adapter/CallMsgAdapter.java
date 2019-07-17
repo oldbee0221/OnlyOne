@@ -25,10 +25,12 @@ import mms5.onepagebook.com.onlyonesms.db.entity.CallMsg;
 public abstract class CallMsgAdapter extends RecyclerView.Adapter<CallMsgAdapter.ViewHolder> {
     private Context mContext;
     private ArrayList<CallMsg> mItems;
+    private boolean mIsFromMsg;
 
-    public CallMsgAdapter(Context context) {
+    public CallMsgAdapter(Context context, boolean mode) {
         mContext = context;
         mItems = new ArrayList<>();
+        mIsFromMsg = mode;
     }
 
     @Override
@@ -40,6 +42,14 @@ public abstract class CallMsgAdapter extends RecyclerView.Adapter<CallMsgAdapter
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         final CallMsg item = mItems.get(position);
+
+        if (mIsFromMsg) {
+            holder.mLayoutSend.setVisibility(View.VISIBLE);
+            holder.mLayoutDelete.setVisibility(View.GONE);
+        } else {
+            holder.mLayoutSend.setVisibility(View.GONE);
+            holder.mLayoutDelete.setVisibility(View.VISIBLE);
+        }
 
         holder.mTvDate.setText(getDate(item.regdate));
         holder.mTvCategory.setText(item.category);
@@ -61,6 +71,13 @@ public abstract class CallMsgAdapter extends RecyclerView.Adapter<CallMsgAdapter
             @Override
             public void onClick(View view) {
                 onDel(item);
+            }
+        });
+
+        holder.mLayoutSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onSend(item);
             }
         });
     }
@@ -133,7 +150,7 @@ public abstract class CallMsgAdapter extends RecyclerView.Adapter<CallMsgAdapter
 
     public abstract void load();
     public abstract void onDel(CallMsg item);
-    public abstract void onAdoption(CallMsg use);
+    public abstract void onSend(CallMsg use);
     public abstract void onUpdate(CallMsg item);
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -145,6 +162,7 @@ public abstract class CallMsgAdapter extends RecyclerView.Adapter<CallMsgAdapter
         public ImageView mIvPhoto;
         public LinearLayout mLayoutUpdate;
         public LinearLayout mLayoutDelete;
+        public LinearLayout mLayoutSend;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -157,6 +175,7 @@ public abstract class CallMsgAdapter extends RecyclerView.Adapter<CallMsgAdapter
             mIvPhoto = itemView.findViewById(R.id.iv_photo);
             mLayoutUpdate = itemView.findViewById(R.id.ll_update);
             mLayoutDelete = itemView.findViewById(R.id.ll_delete);
+            mLayoutSend = itemView.findViewById(R.id.ll_send);
         }
     }
 }

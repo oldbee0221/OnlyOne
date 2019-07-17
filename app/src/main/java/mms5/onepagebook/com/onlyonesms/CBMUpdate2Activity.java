@@ -49,9 +49,9 @@ import mms5.onepagebook.com.onlyonesms.db.entity.CallMsg;
 import mms5.onepagebook.com.onlyonesms.util.Utils;
 
 /**
- * Created by jeonghopark on 2019-07-14.
+ * Created by jeonghopark on 2019-07-17.
  */
-public class CBMUpdateActivity extends AppCompatActivity implements Constants, View.OnClickListener {
+public class CBMUpdate2Activity extends AppCompatActivity implements Constants, View.OnClickListener {
 
     private final int REQUEST_IMAGE_ALBUM = 201;
     private final int REQUEST_IMAGE_CAPTURE = 202;
@@ -77,7 +77,7 @@ public class CBMUpdateActivity extends AppCompatActivity implements Constants, V
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Answers(), new Crashlytics());
-        setContentView(R.layout.activity_cbm_reg2);
+        setContentView(R.layout.activity_cbm_update2);
 
         mContext = getApplicationContext();
 
@@ -95,6 +95,7 @@ public class CBMUpdateActivity extends AppCompatActivity implements Constants, V
 
 
         findViewById(R.id.btn_cancel).setOnClickListener(this);
+        findViewById(R.id.btn_send).setOnClickListener(this);
 
         fl_photo = findViewById(R.id.fl_photo);
         fl_photo.setOnClickListener(this);
@@ -119,7 +120,7 @@ public class CBMUpdateActivity extends AppCompatActivity implements Constants, V
             switch (requestCode) {
                 case REQUEST_IMAGE_CAPTURE:
                     if (rotatePhoto()) {
-                        CropImage.activity(mContentUri).setGuidelines(CropImageView.Guidelines.ON).start(CBMUpdateActivity.this);
+                        CropImage.activity(mContentUri).setGuidelines(CropImageView.Guidelines.ON).start(CBMUpdate2Activity.this);
                     } else {
                         Message msg = new Message();
                         msg.what = REQUEST_IMAGE_CAPTURE;
@@ -130,7 +131,7 @@ public class CBMUpdateActivity extends AppCompatActivity implements Constants, V
                 case REQUEST_IMAGE_ALBUM:
                     mContentUri = data.getData();
                     mRealPath = getPath(mContentUri);
-                    CropImage.activity(mContentUri).setGuidelines(CropImageView.Guidelines.ON).start(CBMUpdateActivity.this);
+                    CropImage.activity(mContentUri).setGuidelines(CropImageView.Guidelines.ON).start(CBMUpdate2Activity.this);
                     break;
 
                 case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
@@ -182,6 +183,9 @@ public class CBMUpdateActivity extends AppCompatActivity implements Constants, V
 
             case R.id.btn_cancel:
                 finish();
+                break;
+
+            case R.id.btn_send:
                 break;
 
             case R.id.fl_photo:
@@ -263,7 +267,7 @@ public class CBMUpdateActivity extends AppCompatActivity implements Constants, V
     }
 
     private void qDeletePhoto() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(CBMUpdateActivity.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(CBMUpdate2Activity.this);
         builder.setCancelable(false);
 
         builder.setTitle(getString(R.string.img_delete));
@@ -287,7 +291,7 @@ public class CBMUpdateActivity extends AppCompatActivity implements Constants, V
             }
         });
 
-        if (CBMUpdateActivity.this.isFinishing() == false) {
+        if (CBMUpdate2Activity.this.isFinishing() == false) {
             builder.show();
         }
     }
@@ -516,3 +520,4 @@ public class CBMUpdateActivity extends AppCompatActivity implements Constants, V
         }
     };
 }
+

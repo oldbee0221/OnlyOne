@@ -15,6 +15,7 @@ import android.text.TextUtils;
 import com.klinker.android.send_message.MmsReceivedReceiver;
 
 import me.leolin.shortcutbadger.ShortcutBadger;
+import mms5.onepagebook.com.onlyonesms.CBMListActvitity;
 import mms5.onepagebook.com.onlyonesms.R;
 import mms5.onepagebook.com.onlyonesms.SteppingStoneActivity;
 import mms5.onepagebook.com.onlyonesms.api.ApiCallback;
@@ -27,6 +28,8 @@ import mms5.onepagebook.com.onlyonesms.manager.PreferenceManager;
 import mms5.onepagebook.com.onlyonesms.manager.RetrofitManager;
 import mms5.onepagebook.com.onlyonesms.model.UserInfo;
 import mms5.onepagebook.com.onlyonesms.util.Utils;
+
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 public class OneMmsReceivedReceiver extends MmsReceivedReceiver implements Constants {
     //private static final String FRAG_01 = "01";
@@ -70,6 +73,13 @@ public class OneMmsReceivedReceiver extends MmsReceivedReceiver implements Const
                     }
                 }
                 curPdu.close();
+            }
+
+            boolean check1 = Utils.GetBooleanSharedPreference(context, PREF_CHECK1);
+            if(check1) {
+                Intent it = new Intent(context, CBMListActvitity.class);
+                it.addFlags(FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(it);
             }
         } catch (Exception ignored) {
         }
