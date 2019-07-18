@@ -1,9 +1,10 @@
 package mms5.onepagebook.com.onlyonesms;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -20,6 +21,10 @@ import android.view.View;
 
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.answers.Answers;
+import com.klinker.android.send_message.ApnUtils;
+import com.klinker.android.send_message.Transaction;
+
+import org.apache.commons.text.StringEscapeUtils;
 
 import java.util.List;
 
@@ -28,6 +33,8 @@ import mms5.onepagebook.com.onlyonesms.adapter.CallMsgAdapter;
 import mms5.onepagebook.com.onlyonesms.common.Constants;
 import mms5.onepagebook.com.onlyonesms.db.AppDatabase;
 import mms5.onepagebook.com.onlyonesms.db.entity.CallMsg;
+import mms5.onepagebook.com.onlyonesms.util.Settings;
+import mms5.onepagebook.com.onlyonesms.util.Utils;
 
 /**
  * Created by jeonghopark on 2019-07-11.
@@ -42,6 +49,10 @@ public class CBMListActvitity extends AppCompatActivity implements Constants, Vi
 
     private List<CallMsg> mMsgs;
     private boolean mIsFromMsg;
+
+    private Transaction mSendTransaction;
+    private Settings mSettings;
+    private CallMsg mMsgForSending;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -150,17 +161,15 @@ public class CBMListActvitity extends AppCompatActivity implements Constants, Vi
 
             @Override
             public void onSend(final CallMsg item) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-
-                    }
-                }).start();
+                mMsgForSending = item;
+                prepareSending();
             }
 
             @Override
             public void onUpdate(CallMsg item) {
-                if(mIsFromMsg) {
+                mMsgForSending = item;
+                prepareSending();
+                /*if(mIsFromMsg) {
                     Intent i = new Intent(CBMListActvitity.this, CBMUpdate2Activity.class);
                     i.putExtra("data", item);
                     startActivity(i);
@@ -168,7 +177,7 @@ public class CBMListActvitity extends AppCompatActivity implements Constants, Vi
                     Intent i = new Intent(CBMListActvitity.this, CBMUpdateActivity.class);
                     i.putExtra("data", item);
                     startActivity(i);
-                }
+                }*/
             }
 
             @Override
@@ -240,4 +249,82 @@ public class CBMListActvitity extends AppCompatActivity implements Constants, Vi
             }
         }
     };
+
+
+    private void prepareSending() {
+        mSettings = Settings.get(getApplicationContext());
+        com.klinker.android.send_message.Settings sendSettings = new com.klinker.android.send_message.Settings();
+        sendSettings.setMmsc(mSettings.getMmsc());
+        sendSettings.setProxy(mSettings.getMmsProxy());
+        sendSettings.setPort(mSettings.getMmsPort());
+        sendSettings.setUseSystemSending(true);
+        mSendTransaction = new Transaction(getApplicationContext(), sendSettings);
+
+        ApnUtils.initDefaultApns(getApplicationContext(), new ApnUtils.OnApnFinishedListener() {
+            @Override
+            public void onFinished() {
+                mSettings = Settings.get(getApplicationContext(), true);
+                com.klinker.android.send_message.Settings sendSettings = new com.klinker.android.send_message.Settings();
+                sendSettings.setMmsc(mSettings.getMmsc());
+                sendSettings.setProxy(mSettings.getMmsProxy());
+                sendSettings.setPort(mSettings.getMmsPort());
+                sendSettings.setUseSystemSending(true);
+
+                mSendTransaction = new Transaction(getApplicationContext(), sendSettings);
+
+                Utils.Log("SendMsgTask 1");
+                Utils.Log("SendMsgTask " + mMsgForSending.imgpath);
+                Utils.Log("SendMsgTask " + mMsgForSending.title);
+                Utils.Log("SendMsgTask " + mMsgForSending.contents);
+
+                com.klinker.android.send_message.Message msg = new com.klinker.android.send_message.Message();
+                if (!TextUtils.isEmpty(mMsgForSending.imgpath)) {
+                    msg.setImage(BitmapFactory.decodeFile(mMsgForSending.imgpath));
+                }
+                msg.setSubject(StringEscapeUtils.unescapeHtml4(mMsgForSending.title).replace("\\", ""));
+                msg.setText(StringEscapeUtils.unescapeHtml4(mMsgForSending.contents).replace("\\", ""));
+                msg.setAddress("01081433749");
+                msg.setSave(false);
+
+                mSendTransaction.sendNewMessage(msg, Transaction.NO_THREAD_ID);
+                Utils.Log("SendMsgTask 2");
+
+                //new SendMsgTask().execute();
+            }
+        });
+    }
+
+    private class SendMsgTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... voids) {
+            Utils.Log("SendMsgTask 1");
+            Utils.Log("SendMsgTask " + mMsgForSending.imgpath);
+            Utils.Log("SendMsgTask " + mMsgForSending.title);
+            Utils.Log("SendMsgTask " + mMsgForSending.contents);
+
+            com.klinker.android.send_message.Message msg = new com.klinker.android.send_message.Message();
+            if (!TextUtils.isEmpty(mMsgForSending.imgpath)) {
+                msg.setImage(BitmapFactory.decodeFile(mMsgForSending.imgpath));
+            }
+            msg.setSubject(StringEscapeUtils.unescapeHtml4(mMsgForSending.title).replace("\\", ""));
+            msg.setText(StringEscapeUtils.unescapeHtml4(mMsgForSending.contents).replace("\\", ""));
+            msg.setAddress("01081433749");
+            msg.setSave(false);
+
+            mSendTransaction.sendNewMessage(msg, Transaction.NO_THREAD_ID);
+            Utils.Log("SendMsgTask 2");
+
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+        }
+    }
 }
