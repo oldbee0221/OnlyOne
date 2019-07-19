@@ -3,7 +3,9 @@ package mms5.onepagebook.com.onlyonesms;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,6 +20,7 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.answers.Answers;
@@ -26,6 +29,7 @@ import com.klinker.android.send_message.Transaction;
 
 import org.apache.commons.text.StringEscapeUtils;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 
 import io.fabric.sdk.android.Fabric;
@@ -40,6 +44,8 @@ import mms5.onepagebook.com.onlyonesms.util.Utils;
  * Created by jeonghopark on 2019-07-11.
  */
 public class CBMListActvitity extends AppCompatActivity implements Constants, View.OnClickListener {
+    private final int HANDLER_SEND = 301;
+
     private Context mContext;
 
     private SwipeRefreshLayout mSrl;
@@ -53,6 +59,7 @@ public class CBMListActvitity extends AppCompatActivity implements Constants, Vi
     private Transaction mSendTransaction;
     private Settings mSettings;
     private CallMsg mMsgForSending;
+    private String mSndNumber;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -97,11 +104,16 @@ public class CBMListActvitity extends AppCompatActivity implements Constants, Vi
         findViewById(R.id.btn_write).setOnClickListener(this);
         findViewById(R.id.btn_cancel).setOnClickListener(this);
 
-        if(TextUtils.isEmpty(getIntent().getStringExtra(EXTRA_FROM_DOOR))) {
+        Intent intent = getIntent();
+
+        if(TextUtils.isEmpty(intent.getStringExtra(EXTRA_FROM_DOOR))) {
             findViewById(R.id.btn_cancel).setVisibility(View.VISIBLE);
             mIsFromMsg = true;
+            mSndNumber = intent.getStringExtra(EXTRA_SND_NUM);
+            Utils.Log("CBMListActivity mSndNumber => " + mSndNumber);
         } else {
             mIsFromMsg = false;
+            mSndNumber = "";
         }
     }
 
@@ -161,23 +173,24 @@ public class CBMListActvitity extends AppCompatActivity implements Constants, Vi
 
             @Override
             public void onSend(final CallMsg item) {
-                mMsgForSending = item;
-                prepareSending();
+                if(!TextUtils.isEmpty(mSndNumber)) {
+                    mMsgForSending = item;
+                    prepareSending();
+                }
             }
 
             @Override
             public void onUpdate(CallMsg item) {
-                mMsgForSending = item;
-                prepareSending();
-                /*if(mIsFromMsg) {
+                if(mIsFromMsg) {
                     Intent i = new Intent(CBMListActvitity.this, CBMUpdate2Activity.class);
+                    i.putExtra(EXTRA_SND_NUM, mSndNumber);
                     i.putExtra("data", item);
                     startActivity(i);
                 } else {
                     Intent i = new Intent(CBMListActvitity.this, CBMUpdateActivity.class);
                     i.putExtra("data", item);
                     startActivity(i);
-                }*/
+                }
             }
 
             @Override
@@ -246,6 +259,10 @@ public class CBMListActvitity extends AppCompatActivity implements Constants, Vi
                 case 100:
                     mAdapter.remove((CallMsg) msg.obj);
                     break;
+
+                case HANDLER_SEND:
+                    Toast.makeText(getApplicationContext(), R.string.sended_msg, Toast.LENGTH_LONG).show();
+                    break;
             }
         }
     };
@@ -272,26 +289,41 @@ public class CBMListActvitity extends AppCompatActivity implements Constants, Vi
 
                 mSendTransaction = new Transaction(getApplicationContext(), sendSettings);
 
-                Utils.Log("SendMsgTask 1");
-                Utils.Log("SendMsgTask " + mMsgForSending.imgpath);
-                Utils.Log("SendMsgTask " + mMsgForSending.title);
-                Utils.Log("SendMsgTask " + mMsgForSending.contents);
-
-                com.klinker.android.send_message.Message msg = new com.klinker.android.send_message.Message();
-                if (!TextUtils.isEmpty(mMsgForSending.imgpath)) {
-                    msg.setImage(BitmapFactory.decodeFile(mMsgForSending.imgpath));
-                }
-                msg.setSubject(StringEscapeUtils.unescapeHtml4(mMsgForSending.title).replace("\\", ""));
-                msg.setText(StringEscapeUtils.unescapeHtml4(mMsgForSending.contents).replace("\\", ""));
-                msg.setAddress("01081433749");
-                msg.setSave(false);
-
-                mSendTransaction.sendNewMessage(msg, Transaction.NO_THREAD_ID);
-                Utils.Log("SendMsgTask 2");
-
-                //new SendMsgTask().execute();
+                new SendMsgTask().execute();
             }
         });
+    }
+
+    private Bitmap resize(Context context, String path, int resize) {
+        Bitmap resizeBitmap = null;
+
+        Uri uri = Uri.parse("file://" + path);
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        try {
+            BitmapFactory.decodeStream(context.getContentResolver().openInputStream(uri), null, options); // 1번
+
+            int width = options.outWidth;
+            int height = options.outHeight;
+            int samplesize = 1;
+
+            while (true) {//2번
+                if (width / 2 < resize || height / 2 < resize)
+                    break;
+                width /= 2;
+                height /= 2;
+                samplesize *= 2;
+            }
+
+            options.inSampleSize = samplesize;
+            Bitmap bitmap = BitmapFactory.decodeStream(context.getContentResolver().openInputStream(uri), null, options); //3번
+            resizeBitmap=bitmap;
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return resizeBitmap;
     }
 
     private class SendMsgTask extends AsyncTask<Void, Void, Void> {
@@ -304,11 +336,11 @@ public class CBMListActvitity extends AppCompatActivity implements Constants, Vi
 
             com.klinker.android.send_message.Message msg = new com.klinker.android.send_message.Message();
             if (!TextUtils.isEmpty(mMsgForSending.imgpath)) {
-                msg.setImage(BitmapFactory.decodeFile(mMsgForSending.imgpath));
+                msg.setImage(resize(mContext, mMsgForSending.imgpath, 640));
             }
             msg.setSubject(StringEscapeUtils.unescapeHtml4(mMsgForSending.title).replace("\\", ""));
             msg.setText(StringEscapeUtils.unescapeHtml4(mMsgForSending.contents).replace("\\", ""));
-            msg.setAddress("01081433749");
+            msg.setAddress(mSndNumber);
             msg.setSave(false);
 
             mSendTransaction.sendNewMessage(msg, Transaction.NO_THREAD_ID);
@@ -325,6 +357,10 @@ public class CBMListActvitity extends AppCompatActivity implements Constants, Vi
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+
+            Message msg = new Message();
+            msg.what = HANDLER_SEND;
+            handler.sendMessage(msg);
         }
     }
 }

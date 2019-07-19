@@ -32,11 +32,12 @@ import mms5.onepagebook.com.onlyonesms.util.Utils;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 public class OneMmsReceivedReceiver extends MmsReceivedReceiver implements Constants {
-    //private static final String FRAG_01 = "01";
-    //private static final String FRAG_NUMBER = "입력하신 수신번호";
 
     @Override
     public void onMessageReceived(Context context, Uri messageUri) {
+        Utils.Log("onMessageReceived");
+        String sndPhoneNum = "";
+
         try {
             Cursor curPdu = context.getContentResolver().query(Uri.parse("content://mms"), null, null, null, null);
             if (curPdu != null) {
@@ -47,6 +48,7 @@ public class OneMmsReceivedReceiver extends MmsReceivedReceiver implements Const
                     if (curAddr != null) {
                         if (curAddr.moveToNext()) {
                             String address = curAddr.getString(curAddr.getColumnIndex("address"));
+                            sndPhoneNum = address;
                             Cursor curPart = context.getContentResolver().query(Uri.parse("content://mms/part"), null, null, null, null);
 
                             if (curPart != null) {
@@ -75,11 +77,15 @@ public class OneMmsReceivedReceiver extends MmsReceivedReceiver implements Const
                 curPdu.close();
             }
 
-            boolean check1 = Utils.GetBooleanSharedPreference(context, PREF_CHECK1);
-            if(check1) {
-                Intent it = new Intent(context, CBMListActvitity.class);
-                it.addFlags(FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(it);
+            boolean dv = Utils.GetBooleanSharedPreference(context, PREF_DEFAULT_YN);
+            if(dv) {
+                boolean check1 = Utils.GetBooleanSharedPreference(context, PREF_CHECK1);
+                if (check1) {
+                    Intent it = new Intent(context, CBMListActvitity.class);
+                    it.putExtra(EXTRA_SND_NUM, sndPhoneNum);
+                    it.addFlags(FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(it);
+                }
             }
         } catch (Exception ignored) {
         }

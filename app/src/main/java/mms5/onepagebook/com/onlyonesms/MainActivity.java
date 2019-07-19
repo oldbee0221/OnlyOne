@@ -226,13 +226,15 @@ public class MainActivity extends AppCompatActivity implements Constants {
     }
 
     private void setViewBySetting() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && !Telephony.Sms.getDefaultSmsPackage(MainActivity.this)
-                .equals(getPackageName())) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
+                && !Telephony.Sms.getDefaultSmsPackage(MainActivity.this).equals(getPackageName())) {
             mBtnShowDialog.setVisibility(View.VISIBLE);
             mTextDefaultApp.setVisibility(View.GONE);
+            Utils.PutSharedPreference(mContext, PREF_DEFAULT_YN, false);
         } else {
             mBtnShowDialog.setVisibility(View.GONE);
             mTextDefaultApp.setVisibility(View.VISIBLE);
+            Utils.PutSharedPreference(mContext, PREF_DEFAULT_YN, true);
         }
     }
 

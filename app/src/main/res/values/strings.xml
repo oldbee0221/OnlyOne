@@ -105,6 +105,8 @@
     <string name="callback_permit_number">발송허용 번호</string>
     <string name="telnum_delete">전화번호 삭제</string>
     <string name="q_telnum_delete">해당 전화번호를 삭제하시겠습니까?</string>
+    <string name="sended_msg">메시지를 보냈습니다</string>
+    <string name="updated_msg">메시지를 수정했습니다</string>
 
     <string name="monday">월</string>
     <string name="tuesday">화</string>

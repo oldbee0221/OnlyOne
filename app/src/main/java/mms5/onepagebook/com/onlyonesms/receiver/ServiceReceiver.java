@@ -17,10 +17,16 @@ import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 public class ServiceReceiver extends BroadcastReceiver implements Constants {
     private static String mLastState;
     private static boolean mIsRinging = false;
+    private static String mPhoneNumberIn;
+    private static String mPhoneNumberOut;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         Utils.Log("onReceive: 1");
+
+        if(Intent.ACTION_NEW_OUTGOING_CALL.equals(intent.getAction())) {
+            mPhoneNumberOut = intent.getExtras().getString(Intent.EXTRA_PHONE_NUMBER);
+        }
 
         String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
 
@@ -32,21 +38,27 @@ public class ServiceReceiver extends BroadcastReceiver implements Constants {
 
         if(TelephonyManager.EXTRA_STATE_RINGING.equals(state)) {
             mIsRinging = true;
+            mPhoneNumberIn = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
         } else if(TelephonyManager.EXTRA_STATE_IDLE.equals(state)) {
-            if(mIsRinging) {
-               mIsRinging = false;
-                boolean check2 = Utils.GetBooleanSharedPreference(context, PREF_CHECK2);
-                if(check2) {
-                    Intent it = new Intent(context, CBMListActvitity.class);
-                    it.addFlags(FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(it);
-                }
-            } else {
-                boolean check3 = Utils.GetBooleanSharedPreference(context, PREF_CHECK3);
-                if(check3) {
-                    Intent it = new Intent(context, CBMListActvitity.class);
-                    it.addFlags(FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(it);
+            boolean dv = Utils.GetBooleanSharedPreference(context, PREF_DEFAULT_YN);
+            if(dv) {
+                if (mIsRinging) {
+                    mIsRinging = false;
+                    boolean check2 = Utils.GetBooleanSharedPreference(context, PREF_CHECK2);
+                    if (check2) {
+                        Intent it = new Intent(context, CBMListActvitity.class);
+                        it.putExtra(EXTRA_SND_NUM, mPhoneNumberIn);
+                        it.addFlags(FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(it);
+                    }
+                } else {
+                    boolean check3 = Utils.GetBooleanSharedPreference(context, PREF_CHECK3);
+                    if (check3) {
+                        Intent it = new Intent(context, CBMListActvitity.class);
+                        it.addFlags(FLAG_ACTIVITY_NEW_TASK);
+                        it.putExtra(EXTRA_SND_NUM, mPhoneNumberOut);
+                        context.startActivity(it);
+                    }
                 }
             }
         }

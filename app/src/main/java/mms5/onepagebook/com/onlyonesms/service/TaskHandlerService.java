@@ -1,8 +1,6 @@
 package mms5.onepagebook.com.onlyonesms.service;
 
 import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;

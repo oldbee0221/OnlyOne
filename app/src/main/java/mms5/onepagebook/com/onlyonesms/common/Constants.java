@@ -1,16 +1,18 @@
 package mms5.onepagebook.com.onlyonesms.common;
 
 public interface Constants {
-    boolean LOG_VISIBLE = true;
+    boolean LOG_VISIBLE = false;
     String EXTRA_RCV_TEL_NUM = "EXTRA_RCV_TEL_NUM";
     String EXTRA_CB_MSGTYPE = "onlyonesms.extra.cbwhen";
     String EXTRA_IMG_PATH = "onlyonesms.extra.imgpath";
     String EXTRA_FROM_DOOR = "onlyonesms.extra.from.door";
+    String EXTRA_SND_NUM = "onlyonesms.extra.snd.num";
 
     String PREF_BADGE_CNT = "onlyonesms.pref.bc";
     String PREF_CHECK1 = "onlyonesms.pref.chk1";
     String PREF_CHECK2 = "onlyonesms.pref.chk2";
     String PREF_CHECK3 = "onlyonesms.pref.chk3";
+    String PREF_DEFAULT_YN = "onlyonesms.pref.default";
 
     String FRAG_01 = "01";
     String FRAG_S1 = "번으로 변경";

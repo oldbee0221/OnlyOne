@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -20,6 +21,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,8 +31,12 @@ import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.answers.Answers;
+import com.klinker.android.send_message.ApnUtils;
+import com.klinker.android.send_message.Transaction;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
+
+import org.apache.commons.text.StringEscapeUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -46,6 +52,7 @@ import mms5.onepagebook.com.onlyonesms.base.GlideApp;
 import mms5.onepagebook.com.onlyonesms.common.Constants;
 import mms5.onepagebook.com.onlyonesms.db.AppDatabase;
 import mms5.onepagebook.com.onlyonesms.db.entity.CallMsg;
+import mms5.onepagebook.com.onlyonesms.util.Settings;
 import mms5.onepagebook.com.onlyonesms.util.Utils;
 
 /**
@@ -56,6 +63,8 @@ public class CBMUpdate2Activity extends AppCompatActivity implements Constants, 
     private final int REQUEST_IMAGE_ALBUM = 201;
     private final int REQUEST_IMAGE_CAPTURE = 202;
     private final int REQUEST_IMAGE_CROP = 203;
+    private final int HANDLER_UPDATE = 300;
+    private final int HANDLER_SEND = 301;
 
     private Context mContext;
 
@@ -72,6 +81,9 @@ public class CBMUpdate2Activity extends AppCompatActivity implements Constants, 
     private FrameLayout fl_photo;
     private EditText edt_msg, edt_category, edt_title;
     private Button btn_save;
+    private String mSndNumber;
+    private Transaction mSendTransaction;
+    private Settings mSettings;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -80,6 +92,8 @@ public class CBMUpdate2Activity extends AppCompatActivity implements Constants, 
         setContentView(R.layout.activity_cbm_update2);
 
         mContext = getApplicationContext();
+
+        mSndNumber = getIntent().getStringExtra(EXTRA_SND_NUM);
 
         iv_photo = findViewById(R.id.iv_photo);
         iv_delete = findViewById(R.id.iv_delete);
@@ -186,6 +200,7 @@ public class CBMUpdate2Activity extends AppCompatActivity implements Constants, 
                 break;
 
             case R.id.btn_send:
+                prepareSending();
                 break;
 
             case R.id.fl_photo:
@@ -516,8 +531,112 @@ public class CBMUpdate2Activity extends AppCompatActivity implements Constants, 
                 case REQUEST_IMAGE_CAPTURE:
                     Toast.makeText(getApplicationContext(), R.string.donot_take_photo, Toast.LENGTH_LONG).show();
                     break;
+
+                case HANDLER_SEND:
+                    Toast.makeText(getApplicationContext(), R.string.sended_msg, Toast.LENGTH_LONG).show();
+                    break;
+
+                case HANDLER_UPDATE:
+                    Toast.makeText(getApplicationContext(), R.string.updated_msg, Toast.LENGTH_LONG).show();
+                    break;
             }
         }
     };
+
+    private void prepareSending() {
+        mSettings = Settings.get(getApplicationContext());
+        com.klinker.android.send_message.Settings sendSettings = new com.klinker.android.send_message.Settings();
+        sendSettings.setMmsc(mSettings.getMmsc());
+        sendSettings.setProxy(mSettings.getMmsProxy());
+        sendSettings.setPort(mSettings.getMmsPort());
+        sendSettings.setUseSystemSending(true);
+        mSendTransaction = new Transaction(getApplicationContext(), sendSettings);
+
+        ApnUtils.initDefaultApns(getApplicationContext(), new ApnUtils.OnApnFinishedListener() {
+            @Override
+            public void onFinished() {
+                mSettings = Settings.get(getApplicationContext(), true);
+                com.klinker.android.send_message.Settings sendSettings = new com.klinker.android.send_message.Settings();
+                sendSettings.setMmsc(mSettings.getMmsc());
+                sendSettings.setProxy(mSettings.getMmsProxy());
+                sendSettings.setPort(mSettings.getMmsPort());
+                sendSettings.setUseSystemSending(true);
+
+                mSendTransaction = new Transaction(getApplicationContext(), sendSettings);
+
+                new SendMsgTask().execute();
+            }
+        });
+    }
+
+    private Bitmap resize(Context context, String path, int resize) {
+        Bitmap resizeBitmap = null;
+
+        Uri uri = Uri.parse("file://" + path);
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        try {
+            BitmapFactory.decodeStream(context.getContentResolver().openInputStream(uri), null, options); // 1번
+
+            int width = options.outWidth;
+            int height = options.outHeight;
+            int samplesize = 1;
+
+            while (true) {//2번
+                if (width / 2 < resize || height / 2 < resize)
+                    break;
+                width /= 2;
+                height /= 2;
+                samplesize *= 2;
+            }
+
+            options.inSampleSize = samplesize;
+            Bitmap bitmap = BitmapFactory.decodeStream(context.getContentResolver().openInputStream(uri), null, options); //3번
+            resizeBitmap=bitmap;
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return resizeBitmap;
+    }
+
+    private class SendMsgTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... voids) {
+            Utils.Log("SendMsgTask 1");
+            Utils.Log("SendMsgTask " + dMsg.imgpath);
+            Utils.Log("SendMsgTask " + dMsg.title);
+            Utils.Log("SendMsgTask " + dMsg.contents);
+
+            com.klinker.android.send_message.Message msg = new com.klinker.android.send_message.Message();
+            if (!TextUtils.isEmpty(dMsg.imgpath)) {
+                msg.setImage(resize(mContext, dMsg.imgpath, 640));
+            }
+            msg.setSubject(StringEscapeUtils.unescapeHtml4(dMsg.title).replace("\\", ""));
+            msg.setText(StringEscapeUtils.unescapeHtml4(dMsg.contents).replace("\\", ""));
+            msg.setAddress(mSndNumber);
+            msg.setSave(false);
+
+            mSendTransaction.sendNewMessage(msg, Transaction.NO_THREAD_ID);
+            Utils.Log("SendMsgTask 2");
+
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+            Message msg = new Message();
+            msg.what = HANDLER_SEND;
+            mHandler.sendMessage(msg);
+        }
+    }
 }
 

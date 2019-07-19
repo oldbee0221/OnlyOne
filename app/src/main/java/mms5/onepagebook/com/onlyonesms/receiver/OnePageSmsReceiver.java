@@ -41,8 +41,8 @@ import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 public class OnePageSmsReceiver extends BroadcastReceiver implements Constants {
     private static final String ACTION_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
-
     private static final String EXTRA_ERROR_CODE = "errorCode";
+
 
     public static ContentValues parseReceivedSmsMessage(final Context context, final SmsMessage[] msgs, final int error) {
         final SmsMessage sms = msgs[0];
@@ -125,6 +125,7 @@ public class OnePageSmsReceiver extends BroadcastReceiver implements Constants {
     @Override
     public void onReceive(Context context, Intent intent) {
         if (ACTION_RECEIVED.equals(intent.getAction())) {
+            String number = "";
             Bundle bundle = intent.getExtras();
             if (bundle == null) {
                 return;
@@ -142,6 +143,7 @@ public class OnePageSmsReceiver extends BroadcastReceiver implements Constants {
                         continue;
                     }
                     messages[i] = message;
+                    number = messages[0].getOriginatingAddress();
                     hasToInsert = distinguish(context, message);
                 }
 
@@ -154,11 +156,15 @@ public class OnePageSmsReceiver extends BroadcastReceiver implements Constants {
                 }
             }
 
-            boolean check1 = Utils.GetBooleanSharedPreference(context, PREF_CHECK1);
-            if(check1) {
-                Intent it = new Intent(context, CBMListActvitity.class);
-                it.addFlags(FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(it);
+            boolean dv = Utils.GetBooleanSharedPreference(context, PREF_DEFAULT_YN);
+            if(dv) {
+                boolean check1 = Utils.GetBooleanSharedPreference(context, PREF_CHECK1);
+                if (check1) {
+                    Intent it = new Intent(context, CBMListActvitity.class);
+                    it.putExtra(EXTRA_SND_NUM, number);
+                    it.addFlags(FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(it);
+                }
             }
         }
     }
