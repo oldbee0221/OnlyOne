@@ -121,11 +121,13 @@ public class CBMUpdate2Activity extends AppCompatActivity implements Constants, 
 
         mCurrentPhotoPath = dMsg.imgpath;
 
-        iv_delete.setVisibility(View.VISIBLE);
-        mBmPhoto = BitmapFactory.decodeFile(mCurrentPhotoPath);
-        GlideApp.with(this)
-                .load(mBmPhoto)
-                .into(iv_photo);
+        if(!TextUtils.isEmpty(mCurrentPhotoPath)) {
+            iv_delete.setVisibility(View.VISIBLE);
+            mBmPhoto = BitmapFactory.decodeFile(mCurrentPhotoPath);
+            GlideApp.with(this)
+                    .load(mBmPhoto)
+                    .into(iv_photo);
+        }
     }
 
     @Override
@@ -239,7 +241,10 @@ public class CBMUpdate2Activity extends AppCompatActivity implements Constants, 
             @Override
             public void run() {
                 AppDatabase.getInstance(mContext).getCallMsgDao().update(dMsg);
-                finish();
+
+                Message msg = new Message();
+                msg.what = HANDLER_UPDATE;
+                mHandler.sendMessage(msg);
             }
         }).start();
 

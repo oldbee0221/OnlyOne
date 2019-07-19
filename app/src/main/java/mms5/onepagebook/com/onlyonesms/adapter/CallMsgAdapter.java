@@ -3,6 +3,7 @@ package mms5.onepagebook.com.onlyonesms.adapter;
 import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,9 +57,11 @@ public abstract class CallMsgAdapter extends RecyclerView.Adapter<CallMsgAdapter
         holder.mTvTitle.setText(item.title);
         holder.mTvMessage.setText(item.contents);
 
-        GlideApp.with(mContext)
-                .load(new File(item.imgpath))
-                .into(holder.mIvPhoto);
+        if(!TextUtils.isEmpty((item.imgpath))) {
+            GlideApp.with(mContext)
+                    .load(new File(item.imgpath))
+                    .into(holder.mIvPhoto);
+        }
 
         holder.mLayoutUpdate.setOnClickListener(new View.OnClickListener() {
             @Override

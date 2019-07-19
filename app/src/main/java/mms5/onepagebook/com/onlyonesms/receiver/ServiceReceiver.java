@@ -23,41 +23,44 @@ public class ServiceReceiver extends BroadcastReceiver implements Constants {
     @Override
     public void onReceive(Context context, Intent intent) {
         Utils.Log("onReceive: 1");
+        String action = intent.getAction();
 
-        if(Intent.ACTION_NEW_OUTGOING_CALL.equals(intent.getAction())) {
+        if(action.equals(Intent.ACTION_NEW_OUTGOING_CALL)) {
             mPhoneNumberOut = intent.getExtras().getString(Intent.EXTRA_PHONE_NUMBER);
-        }
+            Utils.Log("onReceive: 3 mPhoneNumberOut => " + mPhoneNumberOut);
+        } else if(action.equals("android.intent.action.PHONE_STATE")) {
+            String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
 
-        String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
+            if(state.equals(mLastState)) {
+                return;
+            } else {
+                mLastState = state;
+            }
 
-        if(state.equals(mLastState)) {
-            return;
-        } else {
-            mLastState = state;
-        }
-
-        if(TelephonyManager.EXTRA_STATE_RINGING.equals(state)) {
-            mIsRinging = true;
-            mPhoneNumberIn = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
-        } else if(TelephonyManager.EXTRA_STATE_IDLE.equals(state)) {
-            boolean dv = Utils.GetBooleanSharedPreference(context, PREF_DEFAULT_YN);
-            if(dv) {
-                if (mIsRinging) {
-                    mIsRinging = false;
-                    boolean check2 = Utils.GetBooleanSharedPreference(context, PREF_CHECK2);
-                    if (check2) {
-                        Intent it = new Intent(context, CBMListActvitity.class);
-                        it.putExtra(EXTRA_SND_NUM, mPhoneNumberIn);
-                        it.addFlags(FLAG_ACTIVITY_NEW_TASK);
-                        context.startActivity(it);
-                    }
-                } else {
-                    boolean check3 = Utils.GetBooleanSharedPreference(context, PREF_CHECK3);
-                    if (check3) {
-                        Intent it = new Intent(context, CBMListActvitity.class);
-                        it.addFlags(FLAG_ACTIVITY_NEW_TASK);
-                        it.putExtra(EXTRA_SND_NUM, mPhoneNumberOut);
-                        context.startActivity(it);
+            if(TelephonyManager.EXTRA_STATE_RINGING.equals(state)) {
+                mIsRinging = true;
+                mPhoneNumberIn = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
+            } else if(TelephonyManager.EXTRA_STATE_IDLE.equals(state)) {
+                boolean dv = Utils.GetBooleanSharedPreference(context, PREF_DEFAULT_YN);
+                if(dv) {
+                    if (mIsRinging) {
+                        mIsRinging = false;
+                        boolean check2 = Utils.GetBooleanSharedPreference(context, PREF_CHECK2);
+                        if (check2) {
+                            Intent it = new Intent(context, CBMListActvitity.class);
+                            it.putExtra(EXTRA_SND_NUM, mPhoneNumberIn);
+                            it.addFlags(FLAG_ACTIVITY_NEW_TASK);
+                            context.startActivity(it);
+                        }
+                    } else {
+                        boolean check3 = Utils.GetBooleanSharedPreference(context, PREF_CHECK3);
+                        if (check3) {
+                            Utils.Log("onReceive: 2 mPhoneNumberOut => " + mPhoneNumberOut);
+                            Intent it = new Intent(context, CBMListActvitity.class);
+                            it.addFlags(FLAG_ACTIVITY_NEW_TASK);
+                            it.putExtra(EXTRA_SND_NUM, mPhoneNumberOut);
+                            context.startActivity(it);
+                        }
                     }
                 }
             }

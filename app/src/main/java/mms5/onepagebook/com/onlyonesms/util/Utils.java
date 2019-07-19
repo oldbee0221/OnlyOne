@@ -47,6 +47,10 @@ public class Utils {
       permissionToRequest.add(Manifest.permission.CAMERA);
     }
 
+    if (checkNoPermission(context, Manifest.permission.PROCESS_OUTGOING_CALLS)) {
+      permissionToRequest.add(Manifest.permission.PROCESS_OUTGOING_CALLS);
+    }
+
     String[] permissionArray = new String[permissionToRequest.size()];
     for (int i = 0; i < permissionToRequest.size(); i++) {
       permissionArray[i] = permissionToRequest.get(i);

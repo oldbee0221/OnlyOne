@@ -20,6 +20,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -106,11 +107,13 @@ public class CBMUpdateActivity extends AppCompatActivity implements Constants, V
 
         mCurrentPhotoPath = dMsg.imgpath;
 
-        iv_delete.setVisibility(View.VISIBLE);
-        mBmPhoto = BitmapFactory.decodeFile(mCurrentPhotoPath);
-        GlideApp.with(this)
-                .load(mBmPhoto)
-                .into(iv_photo);
+        if(!TextUtils.isEmpty(mCurrentPhotoPath)) {
+            iv_delete.setVisibility(View.VISIBLE);
+            mBmPhoto = BitmapFactory.decodeFile(mCurrentPhotoPath);
+            GlideApp.with(this)
+                    .load(mBmPhoto)
+                    .into(iv_photo);
+        }
     }
 
     @Override

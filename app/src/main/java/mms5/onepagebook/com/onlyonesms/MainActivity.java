@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements Constants {
 
                 NotificationManagerCompat.from(MainActivity.this).cancel(NOTIFICATION_ID);
 
-                boolean isWorking = false;
+                boolean isWorking;
                 Intent intent = new Intent(Intent.ACTION_MAIN);
                 intent.setComponent(new ComponentName("com.android.mms", "com.android.mms.ui.ConversationList"));
                 isWorking = tryActivityIntent(mContext, intent);
