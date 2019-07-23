@@ -140,7 +140,7 @@ public class OnePageMmsReceiver extends BroadcastReceiver implements Constants {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
                 && Telephony.Sms.getDefaultSmsPackage(_context).equals(_context.getPackageName())) {
-            spitNotification(_context, msg);
+            //spitNotification(_context, msg);
         }
 
         if(mRecvMillis + 2000 < System.currentTimeMillis()) {

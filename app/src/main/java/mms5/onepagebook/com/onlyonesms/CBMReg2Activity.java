@@ -319,7 +319,7 @@ public class CBMReg2Activity extends AppCompatActivity implements Constants, Vie
                 }
 
                 if (photoFile != null) {
-                    mContentUri = FileProvider.getUriForFile(this, "com.amorepacific.apbeautytailor.fileprovider", photoFile);
+                    mContentUri = FileProvider.getUriForFile(this, "mms5.onepagebook.com.onlyonesms.fileprovider", photoFile);
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, mContentUri);
                     startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
                 }

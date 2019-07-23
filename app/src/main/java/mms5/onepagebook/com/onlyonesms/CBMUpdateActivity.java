@@ -341,7 +341,7 @@ public class CBMUpdateActivity extends AppCompatActivity implements Constants, V
                 }
 
                 if (photoFile != null) {
-                    mContentUri = FileProvider.getUriForFile(this, "com.amorepacific.apbeautytailor.fileprovider", photoFile);
+                    mContentUri = FileProvider.getUriForFile(this, "mms5.onepagebook.com.onlyonesms.fileprovider", photoFile);
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, mContentUri);
                     startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
                 }

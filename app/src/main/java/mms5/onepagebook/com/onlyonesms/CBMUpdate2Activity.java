@@ -52,6 +52,7 @@ import mms5.onepagebook.com.onlyonesms.base.GlideApp;
 import mms5.onepagebook.com.onlyonesms.common.Constants;
 import mms5.onepagebook.com.onlyonesms.db.AppDatabase;
 import mms5.onepagebook.com.onlyonesms.db.entity.CallMsg;
+import mms5.onepagebook.com.onlyonesms.dialog.ProgressDialog;
 import mms5.onepagebook.com.onlyonesms.util.Settings;
 import mms5.onepagebook.com.onlyonesms.util.Utils;
 
@@ -84,6 +85,8 @@ public class CBMUpdate2Activity extends AppCompatActivity implements Constants, 
     private String mSndNumber;
     private Transaction mSendTransaction;
     private Settings mSettings;
+
+    private ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -128,6 +131,8 @@ public class CBMUpdate2Activity extends AppCompatActivity implements Constants, 
                     .load(mBmPhoto)
                     .into(iv_photo);
         }
+
+        mProgressDialog = new ProgressDialog(CBMUpdate2Activity.this);
     }
 
     @Override
@@ -362,7 +367,7 @@ public class CBMUpdate2Activity extends AppCompatActivity implements Constants, 
                 }
 
                 if (photoFile != null) {
-                    mContentUri = FileProvider.getUriForFile(this, "com.amorepacific.apbeautytailor.fileprovider", photoFile);
+                    mContentUri = FileProvider.getUriForFile(this, "mms5.onepagebook.com.onlyonesms.fileprovider", photoFile);
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, mContentUri);
                     startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
                 }
@@ -549,6 +554,8 @@ public class CBMUpdate2Activity extends AppCompatActivity implements Constants, 
     };
 
     private void prepareSending() {
+        mProgressDialog.show();
+
         mSettings = Settings.get(getApplicationContext());
         com.klinker.android.send_message.Settings sendSettings = new com.klinker.android.send_message.Settings();
         sendSettings.setMmsc(mSettings.getMmsc());
@@ -637,6 +644,8 @@ public class CBMUpdate2Activity extends AppCompatActivity implements Constants, 
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+
+            mProgressDialog.dismiss();
 
             Message msg = new Message();
             msg.what = HANDLER_SEND;

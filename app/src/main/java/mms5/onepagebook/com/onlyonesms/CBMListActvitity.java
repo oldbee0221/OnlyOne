@@ -37,6 +37,7 @@ import mms5.onepagebook.com.onlyonesms.adapter.CallMsgAdapter;
 import mms5.onepagebook.com.onlyonesms.common.Constants;
 import mms5.onepagebook.com.onlyonesms.db.AppDatabase;
 import mms5.onepagebook.com.onlyonesms.db.entity.CallMsg;
+import mms5.onepagebook.com.onlyonesms.dialog.ProgressDialog;
 import mms5.onepagebook.com.onlyonesms.util.Settings;
 import mms5.onepagebook.com.onlyonesms.util.Utils;
 
@@ -60,6 +61,8 @@ public class CBMListActvitity extends AppCompatActivity implements Constants, Vi
     private Settings mSettings;
     private CallMsg mMsgForSending;
     private String mSndNumber;
+
+    private ProgressDialog mProgressDialog;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -115,6 +118,8 @@ public class CBMListActvitity extends AppCompatActivity implements Constants, Vi
             mIsFromMsg = false;
             mSndNumber = "";
         }
+
+        mProgressDialog = new ProgressDialog(CBMListActvitity.this);
     }
 
     @Override
@@ -269,6 +274,8 @@ public class CBMListActvitity extends AppCompatActivity implements Constants, Vi
 
 
     private void prepareSending() {
+        mProgressDialog.show();
+
         mSettings = Settings.get(getApplicationContext());
         com.klinker.android.send_message.Settings sendSettings = new com.klinker.android.send_message.Settings();
         sendSettings.setMmsc(mSettings.getMmsc());
@@ -357,6 +364,8 @@ public class CBMListActvitity extends AppCompatActivity implements Constants, Vi
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+
+            mProgressDialog.dismiss();
 
             Message msg = new Message();
             msg.what = HANDLER_SEND;
