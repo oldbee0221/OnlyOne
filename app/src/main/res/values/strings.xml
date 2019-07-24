@@ -49,6 +49,7 @@
     <string name="not_use">미사용</string>
     <string name="callback_msg_reg">콜백 메시지 작성</string>
     <string name="callback_msg_address">콜백 주소록 설정</string>
+    <string name="confirm">확인</string>
 
     <string name="callback_msg_setting">콜백문자 사용설정</string>
     <string name="use_on_text_recv">문자수신 콜백사용</string>

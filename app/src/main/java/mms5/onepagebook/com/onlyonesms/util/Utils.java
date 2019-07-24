@@ -51,6 +51,10 @@ public class Utils {
       permissionToRequest.add(Manifest.permission.PROCESS_OUTGOING_CALLS);
     }
 
+    if (checkNoPermission(context, Manifest.permission.READ_CALL_LOG)) {
+      permissionToRequest.add(Manifest.permission.READ_CALL_LOG);
+    }
+
     String[] permissionArray = new String[permissionToRequest.size()];
     for (int i = 0; i < permissionToRequest.size(); i++) {
       permissionArray[i] = permissionToRequest.get(i);

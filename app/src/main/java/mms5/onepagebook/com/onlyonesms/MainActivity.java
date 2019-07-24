@@ -230,11 +230,9 @@ public class MainActivity extends AppCompatActivity implements Constants {
                 && !Telephony.Sms.getDefaultSmsPackage(MainActivity.this).equals(getPackageName())) {
             mBtnShowDialog.setVisibility(View.VISIBLE);
             mTextDefaultApp.setVisibility(View.GONE);
-            Utils.PutSharedPreference(mContext, PREF_DEFAULT_YN, false);
         } else {
             mBtnShowDialog.setVisibility(View.GONE);
             mTextDefaultApp.setVisibility(View.VISIBLE);
-            Utils.PutSharedPreference(mContext, PREF_DEFAULT_YN, true);
         }
     }
 

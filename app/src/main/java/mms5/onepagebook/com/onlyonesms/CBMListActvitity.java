@@ -1,5 +1,6 @@
 package mms5.onepagebook.com.onlyonesms;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -20,7 +21,7 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.answers.Answers;
@@ -46,6 +47,7 @@ import mms5.onepagebook.com.onlyonesms.util.Utils;
  */
 public class CBMListActvitity extends AppCompatActivity implements Constants, View.OnClickListener {
     private final int HANDLER_SEND = 301;
+    private final int REQ_UPDATE = 500;
 
     private Context mContext;
 
@@ -114,6 +116,7 @@ public class CBMListActvitity extends AppCompatActivity implements Constants, Vi
             mIsFromMsg = true;
             mSndNumber = intent.getStringExtra(EXTRA_SND_NUM);
             Utils.Log("CBMListActivity mSndNumber => " + mSndNumber);
+            ((TextView)findViewById(R.id.tv_snd_number)).setText(mSndNumber);
         } else {
             mIsFromMsg = false;
             mSndNumber = "";
@@ -142,6 +145,18 @@ public class CBMListActvitity extends AppCompatActivity implements Constants, Vi
             case R.id.btn_cancel:
                 finish();
                 break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        Utils.Log("requestCode ==> " + requestCode + ", resultCode ==> " + resultCode);
+        if(requestCode == REQ_UPDATE) {
+            if(resultCode == Activity.RESULT_OK) {
+                finish();
+            }
         }
     }
 
@@ -190,7 +205,7 @@ public class CBMListActvitity extends AppCompatActivity implements Constants, Vi
                     Intent i = new Intent(CBMListActvitity.this, CBMUpdate2Activity.class);
                     i.putExtra(EXTRA_SND_NUM, mSndNumber);
                     i.putExtra("data", item);
-                    startActivity(i);
+                    startActivityForResult(i, REQ_UPDATE);
                 } else {
                     Intent i = new Intent(CBMListActvitity.this, CBMUpdateActivity.class);
                     i.putExtra("data", item);
@@ -240,6 +255,26 @@ public class CBMListActvitity extends AppCompatActivity implements Constants, Vi
         mAdapter.load();
     }
 
+    private void showFinDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(CBMListActvitity.this);
+        builder.setCancelable(false);
+
+        builder.setTitle(getString(R.string.app_name));
+        builder.setMessage(getString(R.string.sended_msg));
+
+        builder.setPositiveButton(getString(R.string.confirm), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int arg1) {
+                dialog.dismiss();
+                finish();
+            }
+        });
+
+        if (CBMListActvitity.this.isFinishing() == false) {
+            builder.show();
+        }
+    }
+
     private void loadData() {
         new Thread(new Runnable() {
             @Override
@@ -266,7 +301,7 @@ public class CBMListActvitity extends AppCompatActivity implements Constants, Vi
                     break;
 
                 case HANDLER_SEND:
-                    Toast.makeText(getApplicationContext(), R.string.sended_msg, Toast.LENGTH_LONG).show();
+                    showFinDialog();
                     break;
             }
         }

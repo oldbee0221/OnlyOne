@@ -77,8 +77,9 @@ public class OneMmsReceivedReceiver extends MmsReceivedReceiver implements Const
                 curPdu.close();
             }
 
-            boolean dv = Utils.GetBooleanSharedPreference(context, PREF_DEFAULT_YN);
-            if(dv) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
+                    && Telephony.Sms.getDefaultSmsPackage(context).equals(context.getPackageName())) {
+
                 boolean check1 = Utils.GetBooleanSharedPreference(context, PREF_CHECK1);
                 if (check1) {
                     Intent it = new Intent(context, CBMListActvitity.class);

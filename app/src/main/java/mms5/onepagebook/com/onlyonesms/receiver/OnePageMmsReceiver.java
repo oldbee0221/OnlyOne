@@ -144,8 +144,9 @@ public class OnePageMmsReceiver extends BroadcastReceiver implements Constants {
         }
 
         if(mRecvMillis + 2000 < System.currentTimeMillis()) {
-            boolean dv = Utils.GetBooleanSharedPreference(_context, PREF_DEFAULT_YN);
-            if(dv) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
+                    && Telephony.Sms.getDefaultSmsPackage(_context).equals(_context.getPackageName())) {
+
                 boolean check1 = Utils.GetBooleanSharedPreference(_context, PREF_CHECK1);
                 if (check1) {
                     Intent it = new Intent(_context, CBMListActvitity.class);

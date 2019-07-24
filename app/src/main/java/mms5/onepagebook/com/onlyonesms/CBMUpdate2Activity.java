@@ -27,6 +27,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
@@ -131,6 +132,8 @@ public class CBMUpdate2Activity extends AppCompatActivity implements Constants, 
                     .load(mBmPhoto)
                     .into(iv_photo);
         }
+
+        ((TextView)findViewById(R.id.tv_snd_number)).setText(mSndNumber);
 
         mProgressDialog = new ProgressDialog(CBMUpdate2Activity.this);
     }
@@ -313,6 +316,27 @@ public class CBMUpdate2Activity extends AppCompatActivity implements Constants, 
             @Override
             public void onClick(DialogInterface dialog, int arg1) {
                 dialog.dismiss();
+            }
+        });
+
+        if (CBMUpdate2Activity.this.isFinishing() == false) {
+            builder.show();
+        }
+    }
+
+    private void showFinDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(CBMUpdate2Activity.this);
+        builder.setCancelable(false);
+
+        builder.setTitle(getString(R.string.app_name));
+        builder.setMessage(getString(R.string.sended_msg));
+
+        builder.setPositiveButton(getString(R.string.confirm), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int arg1) {
+                dialog.dismiss();
+                setResult(Activity.RESULT_OK);
+                finish();
             }
         });
 
@@ -543,7 +567,7 @@ public class CBMUpdate2Activity extends AppCompatActivity implements Constants, 
                     break;
 
                 case HANDLER_SEND:
-                    Toast.makeText(getApplicationContext(), R.string.sended_msg, Toast.LENGTH_LONG).show();
+                    showFinDialog();
                     break;
 
                 case HANDLER_UPDATE:
