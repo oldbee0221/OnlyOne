@@ -108,6 +108,8 @@ public class CBMListActvitity extends AppCompatActivity implements Constants, Vi
 
         findViewById(R.id.btn_write).setOnClickListener(this);
         findViewById(R.id.btn_cancel).setOnClickListener(this);
+        findViewById(R.id.iv_back).setOnClickListener(this);
+        findViewById(R.id.iv_clear).setOnClickListener(this);
 
         Intent intent = getIntent();
 
@@ -116,7 +118,6 @@ public class CBMListActvitity extends AppCompatActivity implements Constants, Vi
             mIsFromMsg = true;
             mSndNumber = intent.getStringExtra(EXTRA_SND_NUM);
             Utils.Log("CBMListActivity mSndNumber => " + mSndNumber);
-            ((TextView)findViewById(R.id.tv_snd_number)).setText(mSndNumber);
         } else {
             mIsFromMsg = false;
             mSndNumber = "";
@@ -144,6 +145,14 @@ public class CBMListActvitity extends AppCompatActivity implements Constants, Vi
 
             case R.id.btn_cancel:
                 finish();
+                break;
+
+            case R.id.iv_back:
+                finish();
+                break;
+
+            case R.id.iv_clear:
+                finishAffinity();
                 break;
         }
     }

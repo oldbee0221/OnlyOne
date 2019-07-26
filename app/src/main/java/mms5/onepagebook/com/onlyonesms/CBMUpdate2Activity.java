@@ -114,6 +114,8 @@ public class CBMUpdate2Activity extends AppCompatActivity implements Constants, 
 
         findViewById(R.id.btn_cancel).setOnClickListener(this);
         findViewById(R.id.btn_send).setOnClickListener(this);
+        findViewById(R.id.iv_back).setOnClickListener(this);
+        findViewById(R.id.iv_clear).setOnClickListener(this);
 
         fl_photo = findViewById(R.id.fl_photo);
         fl_photo.setOnClickListener(this);
@@ -132,8 +134,6 @@ public class CBMUpdate2Activity extends AppCompatActivity implements Constants, 
                     .load(mBmPhoto)
                     .into(iv_photo);
         }
-
-        ((TextView)findViewById(R.id.tv_snd_number)).setText(mSndNumber);
 
         mProgressDialog = new ProgressDialog(CBMUpdate2Activity.this);
     }
@@ -219,6 +219,14 @@ public class CBMUpdate2Activity extends AppCompatActivity implements Constants, 
                 } else {
                     qDeletePhoto();
                 }
+                break;
+
+            case R.id.iv_back:
+                finish();
+                break;
+
+            case R.id.iv_clear:
+                finishAffinity();
                 break;
         }
     }

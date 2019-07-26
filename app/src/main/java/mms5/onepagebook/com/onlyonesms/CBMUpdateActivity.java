@@ -96,6 +96,8 @@ public class CBMUpdateActivity extends AppCompatActivity implements Constants, V
 
 
         findViewById(R.id.btn_cancel).setOnClickListener(this);
+        findViewById(R.id.iv_back).setOnClickListener(this);
+        findViewById(R.id.iv_clear).setOnClickListener(this);
 
         fl_photo = findViewById(R.id.fl_photo);
         fl_photo.setOnClickListener(this);
@@ -193,6 +195,14 @@ public class CBMUpdateActivity extends AppCompatActivity implements Constants, V
                 } else {
                     qDeletePhoto();
                 }
+                break;
+
+            case R.id.iv_back:
+                finish();
+                break;
+
+            case R.id.iv_clear:
+                finishAffinity();
                 break;
         }
     }

@@ -88,6 +88,8 @@ public class CBMReg2Activity extends AppCompatActivity implements Constants, Vie
 
         findViewById(R.id.btn_save).setOnClickListener(this);
         findViewById(R.id.btn_cancel).setOnClickListener(this);
+        findViewById(R.id.iv_back).setOnClickListener(this);
+        findViewById(R.id.iv_clear).setOnClickListener(this);
 
         fl_photo = findViewById(R.id.fl_photo);
         fl_photo.setOnClickListener(this);
@@ -170,6 +172,14 @@ public class CBMReg2Activity extends AppCompatActivity implements Constants, Vie
                 } else {
                     qDeletePhoto();
                 }
+                break;
+
+            case R.id.iv_back:
+                finish();
+                break;
+
+            case R.id.iv_clear:
+                finishAffinity();
                 break;
         }
     }

@@ -65,6 +65,8 @@ public class CBMDoor2Activity extends AppCompatActivity implements Constants, Vi
         }
 
         findViewById(R.id.btn_cb_reg).setOnClickListener(this);
+        findViewById(R.id.iv_back).setOnClickListener(this);
+        findViewById(R.id.iv_clear).setOnClickListener(this);
 
         mCheckBox1 = findViewById(R.id.check1);
         mCheckBox2 = findViewById(R.id.check2);
@@ -90,6 +92,14 @@ public class CBMDoor2Activity extends AppCompatActivity implements Constants, Vi
                 startActivity(i);
             }
             break;
+
+            case R.id.iv_back:
+                finish();
+                break;
+
+            case R.id.iv_clear:
+                finishAffinity();
+                break;
         }
     }
 
