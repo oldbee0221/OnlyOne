@@ -82,10 +82,12 @@ public class OneMmsReceivedReceiver extends MmsReceivedReceiver implements Const
 
                 boolean check1 = Utils.GetBooleanSharedPreference(context, PREF_CHECK1);
                 if (check1) {
-                    Intent it = new Intent(context, CBMListActvitity.class);
-                    it.putExtra(EXTRA_SND_NUM, sndPhoneNum);
-                    it.addFlags(FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(it);
+                    if(Utils.Is010PhoneNumber(sndPhoneNum)) {
+                        Intent it = new Intent(context, CBMListActvitity.class);
+                        it.putExtra(EXTRA_SND_NUM, sndPhoneNum);
+                        it.addFlags(FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(it);
+                    }
                 }
             }
         } catch (Exception ignored) {

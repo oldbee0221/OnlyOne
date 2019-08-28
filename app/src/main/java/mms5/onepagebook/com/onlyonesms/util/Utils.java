@@ -197,4 +197,14 @@ public class Utils {
     editor.putBoolean(key, value);
     editor.commit();
   }
+
+  public static boolean Is010PhoneNumber(String str) {
+    if(str == null) return false;
+    String val = str.trim();
+    if(val.length() == 0) return false;
+
+    if(val.substring(0, 3).equals("010")) return true;
+
+    return false;
+  }
 }

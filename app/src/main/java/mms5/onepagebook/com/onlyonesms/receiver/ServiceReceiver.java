@@ -51,7 +51,7 @@ public class ServiceReceiver extends BroadcastReceiver implements Constants {
                         mIsRinging = false;
                         boolean check2 = Utils.GetBooleanSharedPreference(context, PREF_CHECK2);
                         if (check2) {
-                            if(!TextUtils.isEmpty(mPhoneNumberIn)) {
+                            if(Utils.Is010PhoneNumber(mPhoneNumberIn)) {
                                 Intent it = new Intent(context, CBMListActvitity.class);
                                 it.putExtra(EXTRA_SND_NUM, mPhoneNumberIn);
                                 it.addFlags(FLAG_ACTIVITY_NEW_TASK);
@@ -61,7 +61,7 @@ public class ServiceReceiver extends BroadcastReceiver implements Constants {
                     } else {
                         boolean check3 = Utils.GetBooleanSharedPreference(context, PREF_CHECK3);
                         if (check3) {
-                            if(!TextUtils.isEmpty(mPhoneNumberOut)) {
+                            if(Utils.Is010PhoneNumber(mPhoneNumberOut)) {
                                 Utils.Log("onReceive: 2 mPhoneNumberOut => " + mPhoneNumberOut);
                                 Intent it = new Intent(context, CBMListActvitity.class);
                                 it.addFlags(FLAG_ACTIVITY_NEW_TASK);

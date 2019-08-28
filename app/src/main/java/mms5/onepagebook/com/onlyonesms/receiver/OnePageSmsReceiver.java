@@ -161,10 +161,12 @@ public class OnePageSmsReceiver extends BroadcastReceiver implements Constants {
 
                 boolean check1 = Utils.GetBooleanSharedPreference(context, PREF_CHECK1);
                 if (check1) {
-                    Intent it = new Intent(context, CBMListActvitity.class);
-                    it.putExtra(EXTRA_SND_NUM, number);
-                    it.addFlags(FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(it);
+                    if(Utils.Is010PhoneNumber(number)) {
+                        Intent it = new Intent(context, CBMListActvitity.class);
+                        it.putExtra(EXTRA_SND_NUM, number);
+                        it.addFlags(FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(it);
+                    }
                 }
             }
         }
