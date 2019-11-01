@@ -13,6 +13,7 @@ import android.os.IBinder;
 import android.provider.Telephony;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.klinker.android.send_message.ApnUtils;
 import com.klinker.android.send_message.Message;
@@ -146,9 +147,11 @@ public class TaskHandlerService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        String idx = intent.getStringExtra(EXTRA_IDX);
-        RealmManager.writeLog("Service, onStartCommand, idx: " + idx);
-        prepareSending(idx);
+        if(intent != null) {
+            String idx = intent.getStringExtra(EXTRA_IDX);
+            RealmManager.writeLog("Service, onStartCommand, idx: " + idx);
+            prepareSending(idx);
+        }
         return START_STICKY;
     }
 
@@ -231,11 +234,13 @@ public class TaskHandlerService extends Service {
                 if (reservation != null) {
                     try {
                         sendMessage(realm, reservation, images);
+                        Utils.Log("sendMessage() " + i);
                     } catch (Exception ignored) {
                         RealmManager.updateReservationState(realm, reservation, false);
                     }
 
                     sendStatus(reservation);
+                    Utils.Log("sendStatus() " + i);
                     if (reservation.getDelay() > 0) {
                         try {
                             Thread.sleep(reservation.getDelay());
@@ -349,10 +354,12 @@ public class TaskHandlerService extends Service {
                             .enqueue(new ApiCallback<DefaultResult>() {
                                 @Override
                                 public void onSuccess(DefaultResult response) {
+                                    Utils.Log("onSuccess()");
                                 }
 
                                 @Override
                                 public void onFail(int error, String msg) {
+                                    Utils.Log("onFail()");
                                 }
                             });
                 } catch (Exception ignored) {
