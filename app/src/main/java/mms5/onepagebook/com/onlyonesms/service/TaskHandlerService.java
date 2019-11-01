@@ -234,13 +234,13 @@ public class TaskHandlerService extends Service {
                 if (reservation != null) {
                     try {
                         sendMessage(realm, reservation, images);
-                        Log.d("Pumpkin", "sendMessage() " + i);
+                        Utils.Log("sendMessage() " + i);
                     } catch (Exception ignored) {
                         RealmManager.updateReservationState(realm, reservation, false);
                     }
 
                     sendStatus(reservation);
-                    Log.d("Pumpkin", "sendStatus() " + i);
+                    Utils.Log("sendStatus() " + i);
                     if (reservation.getDelay() > 0) {
                         try {
                             Thread.sleep(reservation.getDelay());
@@ -354,12 +354,12 @@ public class TaskHandlerService extends Service {
                             .enqueue(new ApiCallback<DefaultResult>() {
                                 @Override
                                 public void onSuccess(DefaultResult response) {
-                                    Log.d("Pumpkin", "onSuccess()");
+                                    Utils.Log("onSuccess()");
                                 }
 
                                 @Override
                                 public void onFail(int error, String msg) {
-                                    Log.d("Pumpkin", "onFail()");
+                                    Utils.Log("onFail()");
                                 }
                             });
                 } catch (Exception ignored) {

@@ -1,7 +1,7 @@
 package mms5.onepagebook.com.onlyonesms.common;
 
 public interface Constants {
-    boolean LOG_VISIBLE = false;
+    boolean LOG_VISIBLE = true;
     String EXTRA_RCV_TEL_NUM = "EXTRA_RCV_TEL_NUM";
     String EXTRA_CB_MSGTYPE = "onlyonesms.extra.cbwhen";
     String EXTRA_IMG_PATH = "onlyonesms.extra.imgpath";
