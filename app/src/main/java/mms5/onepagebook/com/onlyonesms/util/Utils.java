@@ -14,7 +14,9 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import mms5.onepagebook.com.onlyonesms.common.Constants;
 
@@ -107,23 +109,13 @@ public class Utils {
   @SuppressLint("HardwareIds")
   public static String getPhoneNumber(Context context) {
     TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-    if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+    if (ActivityCompat.checkSelfPermission(context,
+            Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
       return "";
     }
-
-    if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED) {
-      return "";
-    }
-
-    if(telephonyManager == null) {
-      return "";
-    }
-
-    @SuppressLint("MissingPermission") String phoneNumber = telephonyManager.getLine1Number();
-    if(TextUtils.isEmpty(phoneNumber)) {
-      return "";
-    }
-
+    String phoneNumber = telephonyManager == null || TextUtils.isEmpty(telephonyManager.getLine1Number()) ?
+            "" :
+            telephonyManager.getLine1Number();
     if (phoneNumber.startsWith("+82")) {
       phoneNumber = "0" + phoneNumber.substring(3);
     }
@@ -182,6 +174,19 @@ public class Utils {
     }
   }
 
+  public static String GetStringSharedPreference(Context context, String key) {
+    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+    return prefs.getString(key, "");
+  }
+
+  public static void PutSharedPreference(Context context, String key, String value) {
+    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+    SharedPreferences.Editor editor = prefs.edit();
+
+    editor.putString(key, value);
+    editor.commit();
+  }
+
   public static int GetIntSharedPreference(Context context, String key) {
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
     return prefs.getInt(key, 0);
@@ -216,5 +221,13 @@ public class Utils {
     if(val.substring(0, 3).equals("010")) return true;
 
     return false;
+  }
+
+  public static String getDateStr() {
+    long now = System.currentTimeMillis();
+    Date date = new Date(now);
+    SimpleDateFormat sdfNow = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+    return sdfNow.format(date);
   }
 }

@@ -6,6 +6,7 @@ import mms5.onepagebook.com.onlyonesms.api.body.GettingTaskBody;
 import mms5.onepagebook.com.onlyonesms.api.body.ReportSendingResultBody;
 import mms5.onepagebook.com.onlyonesms.api.body.SendingChangedNumberBody;
 import mms5.onepagebook.com.onlyonesms.api.body.SendingStatusBody;
+import mms5.onepagebook.com.onlyonesms.api.body.SendingStatusBodyEnd;
 import mms5.onepagebook.com.onlyonesms.api.body.ServiceListBody;
 import mms5.onepagebook.com.onlyonesms.api.body.SignInBody;
 import mms5.onepagebook.com.onlyonesms.api.body.SyncContactBody;
@@ -55,4 +56,8 @@ public interface Client {
     @FormUrlEncoded
     @POST("/mms/service_list.php")
     Call<ServiceList> serviceList(@FieldMap ServiceListBody body);
+
+    @FormUrlEncoded
+    @POST("/mms/receive_status_end.php")
+    Call<DefaultResult> sendSendingStatusEnd(@FieldMap SendingStatusBodyEnd body);
 }

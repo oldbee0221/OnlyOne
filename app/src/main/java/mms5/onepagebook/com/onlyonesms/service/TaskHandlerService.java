@@ -1,5 +1,6 @@
 package mms5.onepagebook.com.onlyonesms.service;
 
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -37,7 +38,9 @@ import mms5.onepagebook.com.onlyonesms.api.Client;
 import mms5.onepagebook.com.onlyonesms.api.body.GettingTaskBody;
 import mms5.onepagebook.com.onlyonesms.api.body.ReportSendingResultBody;
 import mms5.onepagebook.com.onlyonesms.api.body.SendingStatusBody;
+import mms5.onepagebook.com.onlyonesms.api.body.SendingStatusBodyEnd;
 import mms5.onepagebook.com.onlyonesms.api.response.DefaultResult;
+import mms5.onepagebook.com.onlyonesms.common.Constants;
 import mms5.onepagebook.com.onlyonesms.manager.BusManager;
 import mms5.onepagebook.com.onlyonesms.manager.PreferenceManager;
 import mms5.onepagebook.com.onlyonesms.manager.PushManager;
@@ -45,10 +48,11 @@ import mms5.onepagebook.com.onlyonesms.manager.RealmManager;
 import mms5.onepagebook.com.onlyonesms.manager.RetrofitManager;
 import mms5.onepagebook.com.onlyonesms.model.Reservation;
 import mms5.onepagebook.com.onlyonesms.model.Task;
+import mms5.onepagebook.com.onlyonesms.receiver.AlarmReceiver;
 import mms5.onepagebook.com.onlyonesms.util.Settings;
 import mms5.onepagebook.com.onlyonesms.util.Utils;
 
-public class TaskHandlerService extends Service {
+public class TaskHandlerService extends Service implements Constants {
     private static final String EXTRA_IDX = "mms5.onepagebook.com.onlyonesms.service.extra.idx";
     private static final long MAYBE_SENDING_DURATION = 15 * 60 * 1000L;
 
@@ -202,11 +206,13 @@ public class TaskHandlerService extends Service {
                 }
             } catch (IOException e) {
                 e.printStackTrace();
+                RealmManager.writeLog("[TaskHandlerService] run()1 exception " + e.getMessage());
             }
 
             try {
                 Thread.sleep(MAYBE_SENDING_DURATION);
             } catch (InterruptedException e) {
+                RealmManager.writeLog("[TaskHandlerService] run()2 exception " + e.getMessage());
                 e.printStackTrace();
             }
 
@@ -219,8 +225,25 @@ public class TaskHandlerService extends Service {
 
         private void handleTask(Task task) {
             if (TextUtils.isEmpty(task.reqid)) {
+                RealmManager.writeLog("[TaskHandlerService] handleTask() isEmpty");
                 return;
             }
+
+            Context context = getApplicationContext();
+            Intent my_intent = new Intent(context, AlarmReceiver.class);
+            AlarmManager alarm_manager = (AlarmManager) getSystemService(ALARM_SERVICE);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, my_intent,
+                    PendingIntent.FLAG_UPDATE_CURRENT);
+
+            // 알람셋팅
+            alarm_manager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+3600000,
+                    pendingIntent);
+
+            StringBuffer sbIdx = new StringBuffer();
+            StringBuffer sbSendNumber = new StringBuffer();
+            StringBuffer sbPhoneNumber = new StringBuffer();
+            StringBuffer sbIsSent = new StringBuffer();
+            StringBuffer sbEndTime = new StringBuffer();
 
             Realm realm = Realm.getDefaultInstance();
             completeFailTask(realm);
@@ -234,22 +257,81 @@ public class TaskHandlerService extends Service {
                 if (reservation != null) {
                     try {
                         sendMessage(realm, reservation, images);
-                        Utils.Log("sendMessage() " + i);
+                        //RealmManager.writeLog("[TaskHandlerService] sendMessage() " + i);
                     } catch (Exception ignored) {
                         RealmManager.updateReservationState(realm, reservation, false);
+                        //RealmManager.writeLog("[TaskHandlerService] handleTask()1 exception " + ignored.getMessage());
                     }
 
-                    sendStatus(reservation);
-                    Utils.Log("sendStatus() " + i);
+                    //sendStatus(reservation);
+                    boolean flag = false;
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT &&
+                            !Telephony.Sms.getDefaultSmsPackage(context).equals(context.getPackageName())) {
+                        flag = true;
+                    }
+
+                    String sendNum = Utils.getPhoneNumber(context);
+
+                    if(i == 0) {
+                        sbIdx.append(reservation.getIdx());
+                        sbPhoneNumber.append(reservation.getPhoneNumber());
+                        sbSendNumber.append(sendNum);
+                        sbEndTime.append(Utils.getDateStr());
+
+                        if (reservation.isSent()) {
+                            sbIsSent.append("0");
+                        } else {
+                            if(flag) {
+                                sbIsSent.append("-1");
+                            } else {
+                                sbIsSent.append("1");
+                            }
+                        }
+                    } else {
+                        sbIdx.append(",").append(reservation.getIdx());
+                        sbPhoneNumber.append(",").append(reservation.getPhoneNumber());
+                        sbSendNumber.append(",").append(sendNum);
+                        sbEndTime.append(",").append(Utils.getDateStr());
+
+                        if (reservation.isSent()) {
+                            sbIsSent.append(",").append("0");
+                        } else {
+                            if(flag) {
+                                sbIsSent.append(",").append("-1");
+                            } else {
+                                sbIsSent.append(",").append("1");
+                            }
+                        }
+                    }
+
+                    Utils.PutSharedPreference(context, PREF_IDX, sbIdx.toString());
+                    Utils.PutSharedPreference(context, PREF_PN, sbPhoneNumber.toString());
+                    Utils.PutSharedPreference(context, PREF_SN, sbSendNumber.toString());
+                    Utils.PutSharedPreference(context, PREF_ET, sbEndTime.toString());
+                    Utils.PutSharedPreference(context, PREF_SENT, sbIsSent.toString());
+
                     if (reservation.getDelay() > 0) {
                         try {
                             Thread.sleep(reservation.getDelay());
                         } catch (InterruptedException e) {
                             e.printStackTrace();
+                            //RealmManager.writeLog("[TaskHandlerService] handleTask()2 exception " + e.getMessage());
                         }
                     }
                 }
             }
+
+            sendStatusEnd(sbIdx.toString(),
+                    sbSendNumber.toString(),
+                    sbPhoneNumber.toString(),
+                    sbIsSent.toString(),
+                    sbEndTime.toString());
+
+            Utils.PutSharedPreference(context, PREF_IDX, "");
+            Utils.PutSharedPreference(context, PREF_PN, "");
+            Utils.PutSharedPreference(context, PREF_SN, "");
+            Utils.PutSharedPreference(context, PREF_ET, "");
+            Utils.PutSharedPreference(context, PREF_SENT, "");
 
             for (Bitmap image : images) {
                 if (!image.isRecycled()) {
@@ -315,6 +397,7 @@ public class TaskHandlerService extends Service {
                 }
             } catch (IOException e) {
                 e.printStackTrace();
+                RealmManager.writeLog("[TaskHandlerService] completeTask() - " + e.getMessage());
             }
         }
 
@@ -354,16 +437,43 @@ public class TaskHandlerService extends Service {
                             .enqueue(new ApiCallback<DefaultResult>() {
                                 @Override
                                 public void onSuccess(DefaultResult response) {
-                                    Utils.Log("onSuccess()");
+                                    RealmManager.writeLog("[TaskHandlerService] sendStatus() - onSuccess");
                                 }
 
                                 @Override
                                 public void onFail(int error, String msg) {
-                                    Utils.Log("onFail()");
+                                    RealmManager.writeLog("[TaskHandlerService] sendStatus() - onFail : " + msg + "[" + error + "]");
                                 }
                             });
                 } catch (Exception ignored) {
                 }
+            }
+        }
+
+        private void sendStatusEnd(String idx,
+                                   String sendNumber,
+                                   String phoneNumber,
+                                   String isSent,
+                                   String endTime) {
+            try {
+                RetrofitManager.retrofit(getApplicationContext()).create(Client.class)
+                        .sendSendingStatusEnd(new SendingStatusBodyEnd(idx,
+                                sendNumber,
+                                phoneNumber,
+                                isSent,
+                                endTime))
+                        .enqueue(new ApiCallback<DefaultResult>() {
+                            @Override
+                            public void onSuccess(DefaultResult response) {
+                                RealmManager.writeLog("[TaskHandlerService] sendStatus() - onSuccess");
+                            }
+
+                            @Override
+                            public void onFail(int error, String msg) {
+                                RealmManager.writeLog("[TaskHandlerService] sendStatus() - onFail : " + msg + "[" + error + "]");
+                            }
+                        });
+            } catch (Exception ignored) {
             }
         }
 

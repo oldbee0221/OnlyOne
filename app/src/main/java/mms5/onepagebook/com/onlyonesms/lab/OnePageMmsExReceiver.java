@@ -1,4 +1,4 @@
-package mms5.onepagebook.com.onlyonesms.receiver;
+package mms5.onepagebook.com.onlyonesms.lab;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;

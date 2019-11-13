@@ -13,6 +13,12 @@ public interface Constants {
     String PREF_CHECK2 = "onlyonesms.pref.chk2";
     String PREF_CHECK3 = "onlyonesms.pref.chk3";
 
+    String PREF_IDX = "onlyonesms.pref.idx";
+    String PREF_PN = "onlyonesms.pref.pn";
+    String PREF_SN = "onlyonesms.pref.sn";
+    String PREF_ET = "onlyonesms.pref.et";
+    String PREF_SENT = "onlyonesms.pref.sent";
+
     String FRAG_01 = "01";
     String FRAG_S1 = "번으로 변경";
     String FRAG_S2 = "유효하지 않은 번호";

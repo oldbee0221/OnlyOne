@@ -237,6 +237,11 @@
             </intent-filter>
         </receiver>
 
+        <receiver android:name=".receiver.AlarmReceiver" />
+
+        <service android:name=".service.SendResultService"
+            android:enabled="true"/>
+
         <service
             android:name=".service.HeadlessSmsSendService"
             android:exported="true"
