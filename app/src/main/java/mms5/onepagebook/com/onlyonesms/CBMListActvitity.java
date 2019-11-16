@@ -55,6 +55,7 @@ public class CBMListActvitity extends AppCompatActivity implements Constants, Vi
     private RecyclerView mRv;
     private LinearLayoutManager mLayoutManager;
     private CallMsgAdapter mAdapter;
+    private TextView mTvPhoneNumber;
 
     private List<CallMsg> mMsgs;
     private boolean mIsFromMsg;
@@ -96,6 +97,8 @@ public class CBMListActvitity extends AppCompatActivity implements Constants, Vi
 
         mContext = getApplicationContext();
 
+        mTvPhoneNumber = findViewById(R.id.tv_phonenum);
+
         mSrl = findViewById(R.id.srl_base);
         mSrl.setOnRefreshListener(onRefresh);
         mRv = findViewById(R.id.rv_base);
@@ -117,6 +120,7 @@ public class CBMListActvitity extends AppCompatActivity implements Constants, Vi
             findViewById(R.id.btn_cancel).setVisibility(View.VISIBLE);
             mIsFromMsg = true;
             mSndNumber = intent.getStringExtra(EXTRA_SND_NUM);
+            mTvPhoneNumber.setText(makePhonenum(mSndNumber));
             Utils.Log("CBMListActivity mSndNumber => " + mSndNumber);
         } else {
             mIsFromMsg = false;
@@ -186,6 +190,16 @@ public class CBMListActvitity extends AppCompatActivity implements Constants, Vi
             }
         }
     };
+
+    private String makePhonenum(String p) {
+        if(p.length() == 11) {
+            return p.substring(0,3) + "-" + p.substring(3,7) + "-" + p.substring(7,11);
+        } else if(p.length() == 10) {
+            return p.substring(0,3) + "-" + p.substring(3,6) + "-" + p.substring(6,10);
+        } else {
+            return p;
+        }
+    }
 
     private void init() {
         if (mAdapter != null) {
