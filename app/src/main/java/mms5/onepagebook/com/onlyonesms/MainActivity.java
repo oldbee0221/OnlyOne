@@ -61,6 +61,8 @@ public class MainActivity extends AppCompatActivity implements Constants {
     private String mRcvTelNum;
     private Context mContext;
 
+    private boolean isBackground = false;
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (HAS_TO_SHOW_LOGS) {
@@ -86,12 +88,12 @@ public class MainActivity extends AppCompatActivity implements Constants {
         super.onResume();
         BusManager.getInstance().register(this);
 
-        int badgeCnt = Utils.GetIntSharedPreference(getApplicationContext(), PREF_BADGE_CNT);
-        if (badgeCnt > 0) {
-            mTextGoToMsgBox.setVisibility(View.VISIBLE);
-        } else {
-            mTextGoToMsgBox.setVisibility(View.GONE);
+        if (isBackground) {
+            Utils.PutSharedPreference(getApplicationContext(), PREF_BADGE_CNT, 0);
+            Utils.removeBadge(this);
+            isBackground = false;
         }
+        mTextGoToMsgBox.setVisibility(View.VISIBLE);
 
         new Handler().postDelayed(new Runnable() {
             public void run() {
@@ -104,6 +106,7 @@ public class MainActivity extends AppCompatActivity implements Constants {
     protected void onPause() {
         super.onPause();
         BusManager.getInstance().unregister(this);
+        isBackground = true;
     }
 
     @Override

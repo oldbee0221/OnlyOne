@@ -19,6 +19,7 @@ import mms5.onepagebook.com.onlyonesms.api.Client;
 import mms5.onepagebook.com.onlyonesms.api.body.CheckTaskBody;
 import mms5.onepagebook.com.onlyonesms.api.body.GettingStatisticsBody;
 import mms5.onepagebook.com.onlyonesms.api.response.DefaultResult;
+import mms5.onepagebook.com.onlyonesms.common.Constants;
 import mms5.onepagebook.com.onlyonesms.manager.PreferenceManager;
 import mms5.onepagebook.com.onlyonesms.manager.RealmManager;
 import mms5.onepagebook.com.onlyonesms.manager.RetrofitManager;
@@ -135,7 +136,8 @@ public class CheckTaskService extends JobIntentService {
         private void handleTask(String result) {
             RealmManager.writeLog("[CheckTaskService] Result of GetTask: " + result);
             if (DefaultResult.RESULT_1.equals(result)) {
-                TaskHandlerService.startWork(getApplicationContext(), "");
+//                TaskHandlerService.startWork(getApplicationContext(), "");
+                TaskHandlerService.getInstance(getApplicationContext()).onStartCommand("");
             } else if (DefaultResult.RESULT_2.equals(result)) {
                 PreferenceManager.getInstance(getApplicationContext()).setChangedNumber(true);
             } else if (DefaultResult.RESULT_3.equals(result)) {

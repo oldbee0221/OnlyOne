@@ -18,7 +18,7 @@ import mms5.onepagebook.com.onlyonesms.db.entity.Msg;
 import mms5.onepagebook.com.onlyonesms.db.entity.TelNumBlock;
 import mms5.onepagebook.com.onlyonesms.db.entity.TelNumPermit;
 
-@Database(version = 2, entities = {Msg.class, ImageBox.class, TelNumBlock.class, TelNumPermit.class, CallMsg.class})
+@Database(version = 2, entities = {Msg.class, ImageBox.class, TelNumBlock.class, TelNumPermit.class, CallMsg.class}, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static final String DB_NAME = "olnyonessm.db";

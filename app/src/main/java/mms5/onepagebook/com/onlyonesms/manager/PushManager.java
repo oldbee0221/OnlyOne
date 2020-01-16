@@ -18,6 +18,7 @@ import mms5.onepagebook.com.onlyonesms.R;
 
 public class PushManager {
     public static final String CHANNEL_SERVICE_ID = "mms5.onepagebook.com.onlyonesms.service.TaskHandlerService";
+    public static final String CHANNEL_SERVICE_CHANNEL = "mms5.onepagebook.com.onlyonesms.service.TaskHandlerService.Channel";
 
     public static void createChannel(Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

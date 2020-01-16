@@ -1,5 +1,13 @@
 package mms5.onepagebook.com.onlyonesms.service;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
+import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
@@ -10,6 +18,7 @@ import com.google.firebase.messaging.RemoteMessage;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import mms5.onepagebook.com.onlyonesms.LogInActivity;
 import mms5.onepagebook.com.onlyonesms.R;
 import mms5.onepagebook.com.onlyonesms.api.ApiCallback;
 import mms5.onepagebook.com.onlyonesms.api.Client;
@@ -24,6 +33,8 @@ import mms5.onepagebook.com.onlyonesms.model.UserInfo;
 import mms5.onepagebook.com.onlyonesms.util.Utils;
 
 public class MessagingService extends FirebaseMessagingService {
+    long m_pushTime = 0;
+    int m_nBack = 0;
     @Override
     public void onNewToken(String newToken) {
         super.onNewToken(newToken);
@@ -87,9 +98,85 @@ public class MessagingService extends FirebaseMessagingService {
         Log.i(getString(R.string.app_name), "sendType: " + sendType);
         Log.i(getString(R.string.app_name), "idx: " + idx);
 
-        TaskHandlerService.startWork(getApplicationContext(), idx);
+        TaskHandlerService.getInstance(getApplicationContext()).onStartCommand(idx);
+//        long cur = System.currentTimeMillis();
+//        if (m_pushTime == 0) {
+//            TaskHandlerService.getInstance(getApplicationContext()).onStartCommand(idx);
+//            m_pushTime = cur;
+//            m_nBack = 0;
+//        } else {
+//            if ((cur - m_pushTime) > 5000) {
+//                TaskHandlerService.getInstance(getApplicationContext()).onStartCommand(idx);
+//                m_nBack = 0;
+//                m_pushTime = cur;
+//            } else {
+//                m_nBack ++;
+//                try {
+//                    Thread.sleep(5000 * m_nBack);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//                Log.e("Push Time:" , cur + " :: " + m_pushTime);
+//                TaskHandlerService.getInstance(getApplicationContext()).onStartCommand(idx);
+//            }
+//        }
+
+        // 2020-01-02 푸시가 여러건 쌓이도록 수정. by blas.
+        showNoti();
     }
 
+    private void showNoti() {
+        String msg = getString(R.string.msg_processing_sending_mms);
+
+        int notificationId = (int)(Math.random() * 10000) + 1;
+        String channelId = PushManager.CHANNEL_SERVICE_ID + notificationId;
+        String channelName = PushManager.CHANNEL_SERVICE_CHANNEL +  + notificationId;
+        int importance = NotificationManager.IMPORTANCE_DEFAULT;
+
+        Intent intent = new Intent(getApplicationContext(), LogInActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        PendingIntent pendingIntent =  PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel mChannel = new NotificationChannel(
+                    channelId, channelName, importance);
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.createNotificationChannel(mChannel);
+            long when = System.currentTimeMillis();
+
+//            Notification notification = new NotificationCompat.Builder(getApplicationContext(), channelId )
+//                    .setSmallIcon(R.mipmap.ic_launcher)
+//                    .setContentIntent(pendingIntent)
+//                    .setPriority(NotificationCompat.PRIORITY_MIN)
+//                    .setAutoCancel(false)
+//                    .setContentTitle(getString(R.string.app_name))
+//                    .setContentText(msg)
+//                    .build();
+//
+//            startForeground(notificationId, notification);
+
+            Notification.Builder mBuilder = new Notification.Builder(this, channelId)
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setWhen(when)
+                    .setContentTitle(getString(R.string.app_name))
+                    .setContentText(msg)
+                    .setAutoCancel(true)
+                    .setContentIntent(pendingIntent);
+
+            notificationManager.notify(notificationId, mBuilder.build());
+        } else {
+            Notification notification = new NotificationCompat.Builder(getApplicationContext())
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setContentIntent(pendingIntent)
+                    .setPriority(NotificationCompat.PRIORITY_MIN)
+                    .setAutoCancel(false)
+                    .setContentTitle(getString(R.string.app_name))
+                    .setContentText(msg)
+                    .build();
+
+            startForeground(notificationId, notification);
+        }
+    }
     private void signIn(final String id, final String pw, final String token) {
         final PreferenceManager mPrefManager = PreferenceManager.getInstance(getApplicationContext());
         final String phoneNumber = Utils.getPhoneNumber(this);

@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "665610795264-v7m9l57sebdth2hfa6l3ltue96lm299l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "mms5.onepagebook.com.onlyonesms",
+            "certificate_hash": "0f41bc0fe1825a0367a0a9976f9eeb4214dcdbd6"
+          }
+        },
+        {
+          "client_id": "665610795264-hc5h39c16igiqt5nm3b8g65cpa16k6js.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "mms5.onepagebook.com.onlyonesms",
+            "certificate_hash": "f59b2a9c106c3f3630bd4a1b81bffa298f0b112e"
+          }
+        },
+        {
           "client_id": "665610795264-bb4fs9h2sqdd8obomgti862kqsak902g.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -33,20 +49,13 @@
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 2,
           "other_platform_oauth_client": [
             {
               "client_id": "665610795264-q1csbh5n4ard96tsj8hsfluplebmvdol.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
-        },
-        "ads_service": {
-          "status": 2
         }
       }
     }

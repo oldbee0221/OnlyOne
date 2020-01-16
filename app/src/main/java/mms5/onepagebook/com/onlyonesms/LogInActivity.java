@@ -136,6 +136,9 @@ public class LogInActivity extends AppCompatActivity implements Constants {
         mFlagMsgBox = false;
         mResumeCnt = 0;
 
+        Utils.PutSharedPreference(getApplicationContext(), PREF_BADGE_CNT, 0);
+        Utils.removeBadge(this);
+
         if (!Utils.IsEmpty(mRcvTelNum)) {
             mFlagMsgBox = true;
             goToAnotherApp();

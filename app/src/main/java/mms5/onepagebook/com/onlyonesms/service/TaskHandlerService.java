@@ -1,18 +1,14 @@
 package mms5.onepagebook.com.onlyonesms.service;
 
 import android.app.AlarmManager;
-import android.app.Notification;
 import android.app.PendingIntent;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
-import android.os.IBinder;
 import android.provider.Telephony;
-import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -32,7 +28,6 @@ import io.realm.RealmResults;
 import me.everything.providers.android.telephony.Mms;
 import mms5.onepagebook.com.onlyonesms.LogInActivity;
 import mms5.onepagebook.com.onlyonesms.MainActivity;
-import mms5.onepagebook.com.onlyonesms.R;
 import mms5.onepagebook.com.onlyonesms.api.ApiCallback;
 import mms5.onepagebook.com.onlyonesms.api.Client;
 import mms5.onepagebook.com.onlyonesms.api.body.GettingTaskBody;
@@ -42,8 +37,6 @@ import mms5.onepagebook.com.onlyonesms.api.body.SendingStatusBodyEnd;
 import mms5.onepagebook.com.onlyonesms.api.response.DefaultResult;
 import mms5.onepagebook.com.onlyonesms.common.Constants;
 import mms5.onepagebook.com.onlyonesms.manager.BusManager;
-import mms5.onepagebook.com.onlyonesms.manager.PreferenceManager;
-import mms5.onepagebook.com.onlyonesms.manager.PushManager;
 import mms5.onepagebook.com.onlyonesms.manager.RealmManager;
 import mms5.onepagebook.com.onlyonesms.manager.RetrofitManager;
 import mms5.onepagebook.com.onlyonesms.model.Reservation;
@@ -52,7 +45,9 @@ import mms5.onepagebook.com.onlyonesms.receiver.AlarmReceiver;
 import mms5.onepagebook.com.onlyonesms.util.Settings;
 import mms5.onepagebook.com.onlyonesms.util.Utils;
 
-public class TaskHandlerService extends Service implements Constants {
+import static android.content.Context.ALARM_SERVICE;
+
+public class TaskHandlerService implements Constants {
     private static final String EXTRA_IDX = "mms5.onepagebook.com.onlyonesms.service.extra.idx";
     private static final long MAYBE_SENDING_DURATION = 15 * 60 * 1000L;
 
@@ -63,7 +58,24 @@ public class TaskHandlerService extends Service implements Constants {
     private Settings mSettings;
     private Realm mRealm = null;
 
-    public TaskHandlerService() {
+    private Context m_context;
+
+    private static volatile TaskHandlerService instance;
+
+    private boolean isSendMMS = false;
+
+    private ArrayList<String> m_arrMMS = new ArrayList<>();
+
+    public static synchronized TaskHandlerService getInstance(Context context) {
+        if (instance == null) {
+            instance = new TaskHandlerService(context);
+        }
+        return instance;
+    }
+
+    public TaskHandlerService(Context context) {
+        mRealm = Realm.getDefaultInstance();
+        m_context = context;
     }
 
     public static void startWork(Context context, String idx) {
@@ -83,15 +95,30 @@ public class TaskHandlerService extends Service implements Constants {
         Intent intent = new Intent(context, TaskHandlerService.class);
         intent.putExtra(TaskHandlerService.EXTRA_IDX, idx);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Log.e("TaskHandlerService", "startHandlerService");
             context.startForegroundService(intent);
         } else {
             context.startService(intent);
         }
     }
 
-    public static void stopWork(Context context) {
+    public void stopWork(Context context) {
         RealmManager.writeLog("Service, stopWork");
-        context.stopService(new Intent(context, TaskHandlerService.class));
+//        context.stopService(new Intent(context, TaskHandlerService.class));
+        Log.e("Send Message Size :: ", "" + m_arrMMS.size());
+        if (m_arrMMS.size() > 0) {
+            m_arrMMS.remove(0);
+        } else {
+            isSendMMS = false;
+            return;
+        }
+
+        if (m_arrMMS.size() > 0) {
+            prepareSending(m_arrMMS.get(0));
+        } else {
+            isSendMMS = false;
+            return;
+        }
     }
 
     private static PendingIntent makeMainIntent(Context context) {
@@ -100,85 +127,55 @@ public class TaskHandlerService extends Service implements Constants {
         return PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        makeForeground();
-        mRealm = Realm.getDefaultInstance();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void destroy() {
         if (mRealm != null && !mRealm.isClosed()) {
             mRealm.close();
         }
-        PreferenceManager.getInstance(getApplicationContext()).setIsTaskRunning(false);
-        stopForeground(true);
     }
 
-    private void makeForeground() {
-        String msg = getString(R.string.msg_processing_sending_mms);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            Notification notification = new NotificationCompat.Builder(getApplicationContext(), PushManager.CHANNEL_SERVICE_ID)
-                    .setSmallIcon(R.mipmap.ic_launcher)
-                    .setContentIntent(makeMainIntent(this))
-                    .setPriority(NotificationCompat.PRIORITY_MIN)
-                    .setAutoCancel(false)
-                    .setContentTitle(getString(R.string.app_name))
-                    .setContentText(msg)
-                    .build();
 
-            startForeground(FOREGROUND_NOTIFICATION_ID, notification);
-        } else {
-            Notification notification = new NotificationCompat.Builder(getApplicationContext())
-                    .setSmallIcon(R.mipmap.ic_launcher)
-                    .setContentIntent(makeMainIntent(this))
-                    .setPriority(NotificationCompat.PRIORITY_MIN)
-                    .setAutoCancel(false)
-                    .setContentTitle(getString(R.string.app_name))
-                    .setContentText(msg)
-                    .build();
-
-            startForeground(FOREGROUND_NOTIFICATION_ID, notification);
+    public void onStartCommand(String idx) {
+        RealmManager.writeLog("Service, onStartCommand, idx: " + idx);
+        Log.e("Send Message :: ", idx);
+        m_arrMMS.add(idx);
+        if (!isSendMMS) {
+            sendMMS();
         }
     }
 
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        if(intent != null) {
-            String idx = intent.getStringExtra(EXTRA_IDX);
-            RealmManager.writeLog("Service, onStartCommand, idx: " + idx);
-            prepareSending(idx);
+    private void sendMMS() {
+        isSendMMS = true;
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
-        return START_STICKY;
+        prepareSending(m_arrMMS.get(0));
     }
 
     private void prepareSending(final String idx) {
-        mSettings = Settings.get(getApplicationContext());
+        mSettings = Settings.get(m_context);
+        mSettings = Settings.get(m_context);
         com.klinker.android.send_message.Settings sendSettings = new com.klinker.android.send_message.Settings();
         sendSettings.setMmsc(mSettings.getMmsc());
         sendSettings.setProxy(mSettings.getMmsProxy());
         sendSettings.setPort(mSettings.getMmsPort());
         sendSettings.setUseSystemSending(true);
-        mSendTransaction = new Transaction(getApplicationContext(), sendSettings);
+        mSendTransaction = new Transaction(m_context, sendSettings);
 
-        ApnUtils.initDefaultApns(getApplicationContext(), new ApnUtils.OnApnFinishedListener() {
+//        new WorkingThread(idx).start();
+        ApnUtils.initDefaultApns(m_context, new ApnUtils.OnApnFinishedListener() {
             @Override
             public void onFinished() {
-                mSettings = Settings.get(getApplicationContext(), true);
+                mSettings = Settings.get(m_context, true);
                 com.klinker.android.send_message.Settings sendSettings = new com.klinker.android.send_message.Settings();
                 sendSettings.setMmsc(mSettings.getMmsc());
                 sendSettings.setProxy(mSettings.getMmsProxy());
                 sendSettings.setPort(mSettings.getMmsPort());
                 sendSettings.setUseSystemSending(true);
 
-                mSendTransaction = new Transaction(getApplicationContext(), sendSettings);
+                mSendTransaction = new Transaction(m_context, sendSettings);
 
                 new WorkingThread(idx).start();
             }
@@ -195,9 +192,9 @@ public class TaskHandlerService extends Service implements Constants {
         @Override
         public void run() {
             try {
-                Task response = RetrofitManager.retrofit(getApplicationContext())
+                Task response = RetrofitManager.retrofit(m_context)
                         .create(Client.class)
-                        .getTasks(new GettingTaskBody(Utils.getPhoneNumber(getApplicationContext()), mIdx))
+                        .getTasks(new GettingTaskBody(Utils.getPhoneNumber(m_context), mIdx))
                         .execute()
                         .body();
 
@@ -211,16 +208,17 @@ public class TaskHandlerService extends Service implements Constants {
 
             try {
                 Thread.sleep(MAYBE_SENDING_DURATION);
+//                Thread.sleep(1);
             } catch (InterruptedException e) {
                 RealmManager.writeLog("[TaskHandlerService] run()2 exception " + e.getMessage());
                 e.printStackTrace();
             }
 
-            removeSentMessage(getApplicationContext(), Mms.uriSent);
-            removeSentMessage(getApplicationContext(), Mms.uriOutbox);
-            removeSentMessage(getApplicationContext(), Mms.uriDraft);
+            removeSentMessage(m_context, Mms.uriSent);
+            removeSentMessage(m_context, Mms.uriOutbox);
+            removeSentMessage(m_context, Mms.uriDraft);
 
-            stopWork(getApplicationContext());
+            stopWork(m_context);
         }
 
         private void handleTask(Task task) {
@@ -229,14 +227,14 @@ public class TaskHandlerService extends Service implements Constants {
                 return;
             }
 
-            Context context = getApplicationContext();
+            Context context = m_context;
             Intent my_intent = new Intent(context, AlarmReceiver.class);
-            AlarmManager alarm_manager = (AlarmManager) getSystemService(ALARM_SERVICE);
+            AlarmManager alarm_manager = (AlarmManager) m_context.getSystemService(ALARM_SERVICE);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, my_intent,
                     PendingIntent.FLAG_UPDATE_CURRENT);
 
             // 알람셋팅
-            alarm_manager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+3600000,
+            alarm_manager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 3600000,
                     pendingIntent);
 
             StringBuffer sbIdx = new StringBuffer();
@@ -247,7 +245,7 @@ public class TaskHandlerService extends Service implements Constants {
 
             Realm realm = Realm.getDefaultInstance();
             completeFailTask(realm);
-            Bitmap[] images = task.imageBitmaps(getApplicationContext());
+            Bitmap[] images = task.imageBitmaps(m_context);
 
             RealmManager.addReservations(realm, task);
 
@@ -265,14 +263,14 @@ public class TaskHandlerService extends Service implements Constants {
 
                     //sendStatus(reservation);
                     boolean flag = false;
-                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT &&
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT &&
                             !Telephony.Sms.getDefaultSmsPackage(context).equals(context.getPackageName())) {
                         flag = true;
                     }
 
                     String sendNum = Utils.getPhoneNumber(context);
 
-                    if(i == 0) {
+                    if (i == 0) {
                         sbIdx.append(reservation.getIdx());
                         sbPhoneNumber.append(reservation.getPhoneNumber());
                         sbSendNumber.append(sendNum);
@@ -281,7 +279,7 @@ public class TaskHandlerService extends Service implements Constants {
                         if (reservation.isSent()) {
                             sbIsSent.append("0");
                         } else {
-                            if(flag) {
+                            if (flag) {
                                 sbIsSent.append("-1");
                             } else {
                                 sbIsSent.append("1");
@@ -296,7 +294,7 @@ public class TaskHandlerService extends Service implements Constants {
                         if (reservation.isSent()) {
                             sbIsSent.append(",").append("0");
                         } else {
-                            if(flag) {
+                            if (flag) {
                                 sbIsSent.append(",").append("-1");
                             } else {
                                 sbIsSent.append(",").append("1");
@@ -385,7 +383,7 @@ public class TaskHandlerService extends Service implements Constants {
             errorList = errorList.replace("[", "");
             errorList = errorList.replace("]", "");
             try {
-                DefaultResult response = RetrofitManager.retrofit(getApplicationContext())
+                DefaultResult response = RetrofitManager.retrofit(m_context)
                         .create(Client.class)
                         .reportSendingResult(new ReportSendingResultBody(reqId, errorList))
                         .execute()
@@ -405,7 +403,7 @@ public class TaskHandlerService extends Service implements Constants {
             int currentHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
             if (START_HOUR <= currentHour && currentHour < reservation.getExpiredTime()) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT &&
-                        !Telephony.Sms.getDefaultSmsPackage(getApplicationContext()).equals(getPackageName())) {
+                        !Telephony.Sms.getDefaultSmsPackage(m_context).equals(m_context.getPackageName())) {
                     RealmManager.updateReservationState(realm, reservation, false);
                     return;
                 }
@@ -417,9 +415,10 @@ public class TaskHandlerService extends Service implements Constants {
                 msg.setSubject(StringEscapeUtils.unescapeHtml4(reservation.getTitle()).replace("\\", ""));
                 msg.setText(StringEscapeUtils.unescapeHtml4(reservation.getBody()).replace("\\", ""));
                 msg.setAddress(reservation.getPhoneNumber());
-                msg.setSave(false);
+                msg.setSave(true);
 
                 mSendTransaction.sendNewMessage(msg, Transaction.NO_THREAD_ID);
+                Log.e("TaskHandlerService", "sendMsgNew");
                 RealmManager.updateReservationState(realm, reservation, true);
             } else {
                 RealmManager.updateReservationState(realm, reservation, false);
@@ -429,8 +428,8 @@ public class TaskHandlerService extends Service implements Constants {
         private void sendStatus(Reservation reservation) {
             if (!TextUtils.isEmpty(reservation.getIdx())) {
                 try {
-                    RetrofitManager.retrofit(getApplicationContext()).create(Client.class)
-                            .sendSendingStatus(new SendingStatusBody(getApplicationContext(),
+                    RetrofitManager.retrofit(m_context).create(Client.class)
+                            .sendSendingStatus(new SendingStatusBody(m_context,
                                     reservation.getIdx(),
                                     reservation.getPhoneNumber(),
                                     reservation.isSent()))
@@ -456,7 +455,7 @@ public class TaskHandlerService extends Service implements Constants {
                                    String isSent,
                                    String endTime) {
             try {
-                RetrofitManager.retrofit(getApplicationContext()).create(Client.class)
+                RetrofitManager.retrofit(m_context).create(Client.class)
                         .sendSendingStatusEnd(new SendingStatusBodyEnd(idx,
                                 sendNumber,
                                 phoneNumber,
@@ -466,11 +465,13 @@ public class TaskHandlerService extends Service implements Constants {
                             @Override
                             public void onSuccess(DefaultResult response) {
                                 RealmManager.writeLog("[TaskHandlerService] sendStatus() - onSuccess");
+                                Log.e("TaskHandlerService", "onSuccess");
                             }
 
                             @Override
                             public void onFail(int error, String msg) {
                                 RealmManager.writeLog("[TaskHandlerService] sendStatus() - onFail : " + msg + "[" + error + "]");
+                                Log.e("TaskHandlerService", "onFail" + msg);
                             }
                         });
             } catch (Exception ignored) {

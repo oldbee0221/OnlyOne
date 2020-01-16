@@ -2,7 +2,10 @@ package mms5.onepagebook.com.onlyonesms.util;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.NotificationManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
@@ -122,8 +125,7 @@ public class Utils {
 
     phoneNumber = phoneNumber.replace("-", "");
     phoneNumber = phoneNumber.replace(" ", "");
-
-    return phoneNumber;
+	return phoneNumber;
   }
 
   public static boolean hasUsim(Context context) {
@@ -229,5 +231,22 @@ public class Utils {
     SimpleDateFormat sdfNow = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     return sdfNow.format(date);
+  }
+
+  public static void removeBadge(Context context) {
+    int badgeCount = 0;
+    Intent intent = new Intent("android.intent.action.BADGE_COUNT_UPDATE");
+    intent.putExtra("badge_count", badgeCount);
+
+    intent.putExtra("badge_count_package_name", ((Activity)context).getComponentName().getPackageName());
+    intent.putExtra("badge_count_class_name", ((Activity)context).getComponentName().getClassName());
+//    //앱의  패키지 명
+//    intent.putExtra("badge_count_package_name","mms5.onepagebook.com.onlyonesms");
+//    // AndroidManifest.xml에 정의된 메인 activity 명
+//    intent.putExtra("badge_count_class_name", "mms5.onepagebook.com.onlyonesms.LogInActivity");
+    context.sendBroadcast(intent);
+
+    NotificationManager notificationManager = (NotificationManager) context.getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+    notificationManager.cancelAll();
   }
 }
