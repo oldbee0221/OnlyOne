@@ -64,20 +64,6 @@ public class OneMmsReceivedReceiver extends MmsReceivedReceiver implements Const
                                             spitNotification(context, message1);
                                         }
                                     }
-//                                    for (int i = 0; i < curPart.getColumnCount(); i++) {
-//                                        String message = curPart.getString(i);
-//                                        if (message.length() > 100) {
-//                                            uploadSms(context, address, message);
-//                                            if (checkMsg(message)) {
-//                                                context.getContentResolver().delete(messageUri, null, null);
-//                                            } else {
-//                                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
-//                                                        && Telephony.Sms.getDefaultSmsPackage(context).equals(context.getPackageName())) {
-//                                                    spitNotification(context, message);
-//                                                }
-//                                            }
-//                                        }
-//                                    }
                                 }
                                 curPart.close();
                             }
