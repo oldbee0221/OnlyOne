@@ -16,8 +16,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.telephony.SmsManager;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -182,6 +180,7 @@ public class MainActivity extends AppCompatActivity implements Constants {
             @Override
             public void onClick(View v) {
                 Utils.PutSharedPreference(mContext, PREF_AUTOLOGIN, 0);
+                mPrefManager.clear(getClass().getSimpleName());
                 startActivity(new Intent(MainActivity.this, LogInActivity.class));
                 finish();
             }

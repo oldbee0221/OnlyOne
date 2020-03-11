@@ -64,8 +64,14 @@ public class HomeActivity extends AppCompatActivity {
         }
 
         @JavascriptInterface
-        public void goOnlyOneApp() {
-            startActivity(new Intent(HomeActivity.this, LogInActivity.class));
+        public void goOnlyOneApp(String id) {
+            Intent intent = new Intent(HomeActivity.this, LogInActivity.class);
+            if(Utils.IsEmpty(id)) {
+                intent.putExtra("ID", "");
+            } else {
+                intent.putExtra("ID", id);
+            }
+            startActivity(intent);
         }
 
         @JavascriptInterface

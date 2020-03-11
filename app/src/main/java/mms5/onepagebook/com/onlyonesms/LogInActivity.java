@@ -66,6 +66,7 @@ public class LogInActivity extends AppCompatActivity implements Constants {
     private int mResumeCnt;
 
     private Context mContext;
+    private String mID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +75,7 @@ public class LogInActivity extends AppCompatActivity implements Constants {
         setContentView(R.layout.activity_log_in);
 
         mContext = getApplicationContext();
+        mID = getIntent().getStringExtra("ID");
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -138,6 +140,10 @@ public class LogInActivity extends AppCompatActivity implements Constants {
             finish();
         } else if (!requestPermissions(Utils.checkPermission(this))) {
             showAgreePopupAndAutoLogin();
+        }
+
+        if(!Utils.IsEmpty(mID)) {
+            signInWithoutPw(mID);
         }
     }
 
@@ -256,6 +262,8 @@ public class LogInActivity extends AppCompatActivity implements Constants {
                     UserInfo userInfo = GsonManager.getGson().fromJson(userJson, UserInfo.class);
                     if (!TextUtils.isEmpty(userInfo.id) && !TextUtils.isEmpty(userInfo.pw)) {
                         signIn(userInfo.id, userInfo.pw);
+                    } else if (!TextUtils.isEmpty(userInfo.id) && TextUtils.isEmpty(userInfo.pw)) {
+                        signInWithoutPw(userInfo.id);
                     } else {
                         mPrefManager.clear(getClass().getSimpleName());
                     }
@@ -324,6 +332,68 @@ public class LogInActivity extends AppCompatActivity implements Constants {
                             mProgress.setVisibility(View.GONE);
 
                             handleLogInResult(response.result, new UserInfo(id, pw), token);
+                        }
+
+                        @Override
+                        public void onFail(int error, String msg) {
+                            Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+                            mBtnLogIn.setEnabled(true);
+                            mProgress.setVisibility(View.GONE);
+                        }
+                    });
+        }
+    }
+
+    private void signInWithoutPw(final String id) {
+        mBtnLogIn.setEnabled(false);
+        mProgress.setVisibility(View.VISIBLE);
+
+        final String phoneNumber = Utils.getPhoneNumber(this);
+        final String version = Utils.getAppVersion(this);
+        final String telecom = Utils.getTelecom(this);
+        final String model = Utils.getDeviceModel();
+
+        if (TextUtils.isEmpty(PreferenceManager.getInstance(this).getToken())) {
+            FirebaseInstanceId.getInstance().getInstanceId()
+                    .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                            if (!task.isSuccessful()) {
+                                return;
+                            }
+
+                            final String token = task.getResult().getToken();
+                            RetrofitManager.retrofit(getApplicationContext()).create(Client.class)
+                                    .signInWithoutPw(new SignInBody(id, "", phoneNumber, telecom, model, version, token))
+                                    .enqueue(new ApiCallback<DefaultResult>() {
+                                        @Override
+                                        public void onSuccess(DefaultResult response) {
+                                            mBtnLogIn.setEnabled(true);
+                                            mProgress.setVisibility(View.GONE);
+
+                                            handleLogInResult(response.result, new UserInfo(id, ""), token);
+                                        }
+
+                                        @Override
+                                        public void onFail(int error, String msg) {
+                                            Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+                                            mBtnLogIn.setEnabled(true);
+                                            mProgress.setVisibility(View.GONE);
+                                        }
+                                    });
+                        }
+                    });
+        } else {
+            final String token = PreferenceManager.getInstance(this).getToken();
+            RetrofitManager.retrofit(getApplicationContext()).create(Client.class)
+                    .signInWithoutPw(new SignInBody(id, "", phoneNumber, telecom, model, version, token))
+                    .enqueue(new ApiCallback<DefaultResult>() {
+                        @Override
+                        public void onSuccess(DefaultResult response) {
+                            mBtnLogIn.setEnabled(true);
+                            mProgress.setVisibility(View.GONE);
+
+                            handleLogInResult(response.result, new UserInfo(id, ""), token);
                         }
 
                         @Override

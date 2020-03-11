@@ -73,7 +73,8 @@
                 android:textColor="@android:color/white"
                 android:textSize="14sp"
                 android:layout_alignParentLeft="true"
-                android:layout_marginLeft="16dp"/>
+                android:layout_marginLeft="16dp"
+                android:background="@drawable/box_text"/>
 
             <TextView
                 android:id="@+id/tv_phone_change"
@@ -83,7 +84,8 @@
                 android:textSize="14sp"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="16dp"
-                android:text="@string/phone_change"/>
+                android:text="@string/phone_change"
+                android:background="@drawable/box_text"/>
         </RelativeLayout>
 
     </LinearLayout>
