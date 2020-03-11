@@ -30,26 +30,6 @@ public class CBMDoor2Activity extends AppCompatActivity implements Constants, Vi
     private CheckBox mCheckBox3;
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        if (MainActivity.HAS_TO_SHOW_LOGS) {
-            getMenuInflater().inflate(R.menu.menu_scrolling, menu);
-        }
-        return MainActivity.HAS_TO_SHOW_LOGS;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (MainActivity.HAS_TO_SHOW_LOGS) {
-            if (item.getItemId() == R.id.action_logs) {
-                startActivity(new Intent(this, LogActivity.class));
-                return true;
-            }
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Answers(), new Crashlytics());
@@ -65,8 +45,8 @@ public class CBMDoor2Activity extends AppCompatActivity implements Constants, Vi
         }
 
         findViewById(R.id.btn_cb_reg).setOnClickListener(this);
-        findViewById(R.id.iv_back).setOnClickListener(this);
-        findViewById(R.id.iv_clear).setOnClickListener(this);
+        findViewById(R.id.iv_home).setOnClickListener(this);
+        findViewById(R.id.iv_menu).setOnClickListener(this);
 
         mCheckBox1 = findViewById(R.id.check1);
         mCheckBox2 = findViewById(R.id.check2);
@@ -93,12 +73,12 @@ public class CBMDoor2Activity extends AppCompatActivity implements Constants, Vi
             }
             break;
 
-            case R.id.iv_back:
-                finish();
+            case R.id.iv_menu:
+                startActivity(new Intent(CBMDoor2Activity.this, LogActivity.class));
                 break;
 
-            case R.id.iv_clear:
-                finishAffinity();
+            case R.id.iv_home:
+                finish();
                 break;
         }
     }

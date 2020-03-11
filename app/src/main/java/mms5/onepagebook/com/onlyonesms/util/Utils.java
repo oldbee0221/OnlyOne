@@ -191,7 +191,7 @@ public class Utils {
 
   public static int GetIntSharedPreference(Context context, String key) {
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-    return prefs.getInt(key, 0);
+    return prefs.getInt(key, -1);
   }
 
   public static void PutSharedPreference(Context context, String key, int value) {

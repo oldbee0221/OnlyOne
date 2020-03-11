@@ -64,6 +64,26 @@
                 android:textSize="15sp" />
 
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="24dp"
+                android:text="@string/connect_service"
+                android:textColor="@color/colorPrimary"
+                android:textSize="17sp" />
+
+            <Spinner
+                android:id="@+id/spn_service"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_spinner"/>
+
+
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/login_btn"
                 android:layout_width="match_parent"

@@ -96,8 +96,8 @@ public class CBMUpdateActivity extends AppCompatActivity implements Constants, V
 
 
         findViewById(R.id.btn_cancel).setOnClickListener(this);
-        findViewById(R.id.iv_back).setOnClickListener(this);
-        findViewById(R.id.iv_clear).setOnClickListener(this);
+        findViewById(R.id.iv_menu).setOnClickListener(this);
+        findViewById(R.id.iv_home).setOnClickListener(this);
 
         fl_photo = findViewById(R.id.fl_photo);
         fl_photo.setOnClickListener(this);
@@ -197,12 +197,12 @@ public class CBMUpdateActivity extends AppCompatActivity implements Constants, V
                 }
                 break;
 
-            case R.id.iv_back:
-                finish();
+            case R.id.iv_menu:
+                startActivity(new Intent(CBMUpdateActivity.this, LogActivity.class));
                 break;
 
-            case R.id.iv_clear:
-                finishAffinity();
+            case R.id.iv_home:
+                finish();
                 break;
         }
     }

@@ -4,7 +4,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'io.fabric.tools:gradle:1.+'
+        classpath 'io.fabric.tools:gradle:1.28.0'
     }
 }
 apply plugin: 'com.android.application'
@@ -16,14 +16,16 @@ repositories {
 
 apply plugin: 'realm-android'
 
+def projectName = 'onlyone'
+
 android {
     compileSdkVersion 27
     defaultConfig {
         applicationId "mms5.onepagebook.com.onlyonesms"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 65
-        versionName "1.32.2"
+        versionCode 67
+        versionName "1.32.4"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -39,6 +41,19 @@ android {
         // Or, if you prefer, you can continue to check for errors in release builds,
         // but continue the build even when errors are found:
         abortOnError false
+    }
+
+    applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            def apkName = projectName
+
+            if (!variant.getFlavorName().isEmpty()) apkName += "-" + variant.getFlavorName()
+            if (variant.buildType.name == "release") apkName += "-" + variant.buildType.name
+
+            apkName += "-" + Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"), Locale.KOREA).getTime().format('yyyyMMdd-HHmm')
+            apkName += ".apk"
+            output.outputFileName = apkName
+        }
     }
 }
 
