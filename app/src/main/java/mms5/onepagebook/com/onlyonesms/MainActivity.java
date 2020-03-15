@@ -44,7 +44,7 @@ import mms5.onepagebook.com.onlyonesms.model.UserInfo;
 import mms5.onepagebook.com.onlyonesms.util.Utils;
 
 public class MainActivity extends AppCompatActivity implements Constants {
-    public static final boolean HAS_TO_SHOW_LOGS = false;
+    public static boolean HAS_TO_SHOW_LOGS = false;
     private static final int REQUEST_DEFAULT_APP = 12;
     private static final int REQUEST_PERMISSION = 120;
 

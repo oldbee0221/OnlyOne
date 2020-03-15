@@ -134,6 +134,13 @@
     <string name="saturday">토</string>
     <string name="sunday">일</string>
 
+    <string name="log_title">로그수집 안내</string>
+    <string name="log_guide">PC-폰 문자발송시스템에서는 폰사용, 통신환경에 따라 발송오류가 자주 발생합니다\n\n이렇게 문자발송이 실패한 경우 로그자료를 다운받아 조사하여 어떤 오류였는지 확인하여 해결할 수 있습니다.\n\n하지만 로그수집은 폰의 저장공간을 사용하므로 가끔 저장된 로그자료를 삭제해야 합니다.</string>
+    <string name="log_send">로그 보내기</string>
+    <string name="log_delete">로그 삭제하기</string>
+    <string name="log_on">로그기능 ON</string>
+    <string name="log_off">로그기능 OFF</string>
+
     <string-array name="send_types">
         <item>메시지 바로 전송</item>
         <item>확인 후 전송</item>
