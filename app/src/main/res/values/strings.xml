@@ -10,11 +10,11 @@
     <string name="title_sub">스마트폰 문자를 PC와 연동해 발송하는</string>
     <string name="title_main">온리원문자 APP</string>
     <string name="auto_login">자동 로그인</string>
-    <string name="privacy_policy"><u>개인정보리방침</u></string>
+    <string name="privacy_policy"><u>개인정보처리방침</u></string>
     <string name="msg_please_type_id">아이디를 입력해주세요.</string>
     <string name="msg_please_type_pw">비밀번호를 입력해주세요.</string>
 
-    <string name="login_guide1">온라인문자앱 로그인 안내</string>
+    <string name="login_guide1">온리원문자앱 로그인 안내</string>
     <string name="login_guide2">1.아이디 : 소유폰ID와 추가폰ID 중 선택하세요.</string>
     <string name="login_guide3">* 소유폰ID : 내가 가입한 계정의 로그인 ID</string>
     <string name="login_guide4">* 추가폰ID : 타인 계정에 문자만 추가할 경우, 타인 계정의 로그인 ID</string>
@@ -53,7 +53,7 @@
     <string name="go_to_another_sms_app">내 문자 작성</string>
     <string name="msg_processing_sending_mms">문자를 보내는 중입니다.</string>
     <string name="u_can_use_this_app">온리원문자앱을 사용하실 수 있습니다.</string>
-    <string name="phone_change">휴대폰등록변경</string>
+    <string name="phone_change">발송계정변경</string>
 
     <string name="callback_msg_service">콜백문자 서비스</string>
     <string name="msg_box_confirm">내 문자 확인</string>

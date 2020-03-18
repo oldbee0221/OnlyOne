@@ -24,14 +24,15 @@ android {
         applicationId "mms5.onepagebook.com.onlyonesms"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 68
-        versionName "1.32.5"
+        versionCode 70
+        versionName "1.32.7"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
             minifyEnabled false
+            debuggable false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }

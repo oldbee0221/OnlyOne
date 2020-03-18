@@ -117,8 +117,11 @@ public class LogInActivity extends AppCompatActivity implements Constants {
         int autoLogin = Utils.GetIntSharedPreference(getApplicationContext(), PREF_AUTOLOGIN);
         if(autoLogin == -1) {
             Utils.PutSharedPreference(getApplicationContext(), PREF_AUTOLOGIN, 1);
+            mCbAutoLogin.setChecked(true);
         } else if(autoLogin == 0) {
             mCbAutoLogin.setChecked(false);
+        } else if(autoLogin == 1) {
+            mCbAutoLogin.setChecked(true);
         }
 
         hideKeyBoard();

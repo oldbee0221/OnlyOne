@@ -179,7 +179,7 @@ public class MainActivity extends AppCompatActivity implements Constants {
         findViewById(R.id.tv_phone_change).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Utils.PutSharedPreference(mContext, PREF_AUTOLOGIN, 0);
+                Utils.PutSharedPreference(mContext, PREF_AUTOLOGIN, 1);
                 mPrefManager.clear(getClass().getSimpleName());
                 startActivity(new Intent(MainActivity.this, LogInActivity.class));
                 finish();
