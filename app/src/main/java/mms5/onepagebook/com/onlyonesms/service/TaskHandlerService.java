@@ -80,7 +80,7 @@ public class TaskHandlerService implements Constants {
     }
 
     public static void startWork(Context context, String idx) {
-        RealmManager.writeLog("Service, startWork");
+        RealmManager.writeLog("[TaskHandlerService], startWork");
         /*if (!PreferenceManager.getInstance(context).getIsTaskRunning()) {
           PreferenceManager.getInstance(context).setIsTaskRunning(true);
           Intent intent = new Intent(context, TaskHandlerService.class);
@@ -104,7 +104,7 @@ public class TaskHandlerService implements Constants {
     }
 
     public void stopWork(Context context) {
-        RealmManager.writeLog("Service, stopWork");
+        RealmManager.writeLog("[TaskHandlerService], stopWork");
 //        context.stopService(new Intent(context, TaskHandlerService.class));
         Log.e("Send Message Size :: ", "" + m_arrMMS.size());
         if (m_arrMMS.size() > 0) {
@@ -137,7 +137,7 @@ public class TaskHandlerService implements Constants {
 
 
     public void onStartCommand(String idx) {
-        RealmManager.writeLog("Service, onStartCommand, idx: " + idx);
+        RealmManager.writeLog("[TaskHandlerService], onStartCommand, idx: " + idx);
         Log.e("Send Message :: ", idx);
         m_arrMMS.add(idx);
         if (!isSendMMS) {
@@ -313,7 +313,7 @@ public class TaskHandlerService implements Constants {
                             Thread.sleep(reservation.getDelay());
                         } catch (InterruptedException e) {
                             e.printStackTrace();
-                            //RealmManager.writeLog("[TaskHandlerService] handleTask()2 exception " + e.getMessage());
+                            RealmManager.writeLog("[TaskHandlerService] handleTask()2 exception " + e.getMessage());
                         }
                     }
                 }
@@ -349,6 +349,8 @@ public class TaskHandlerService implements Constants {
         }
 
         private void completeFailTask(Realm realm) {
+            RealmManager.writeLog("[TaskHandlerService] completeFailTask ");
+
             HashMap<String, ArrayList<String>> errorListMap = notSentReservations(realm);
             for (String reqId : errorListMap.keySet()) {
                 ArrayList<String> errorList = errorListMap.get(reqId);
@@ -379,6 +381,8 @@ public class TaskHandlerService implements Constants {
         }
 
         private void completeTask(Realm realm, final String reqId, ArrayList<String> notSentNumbers) {
+            RealmManager.writeLog("[TaskHandlerService] completeTask ");
+
             String errorList = notSentNumbers.size() > 0 ? notSentNumbers.toString() : "";
             errorList = errorList.replace("[", "");
             errorList = errorList.replace("]", "");
@@ -395,7 +399,7 @@ public class TaskHandlerService implements Constants {
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-                RealmManager.writeLog("[TaskHandlerService] completeTask() - " + e.getMessage());
+                RealmManager.writeLog("[TaskHandlerService] completeTask() e - " + e.getMessage());
             }
         }
 
@@ -422,6 +426,7 @@ public class TaskHandlerService implements Constants {
                 Log.e("TaskHandlerService", "sendMsgNew");
                 RealmManager.updateReservationState(realm, reservation, true);
             } else {
+                RealmManager.writeLog("[CheckTaskService] sendMessage fail ");
                 RealmManager.updateReservationState(realm, reservation, false);
             }
         }

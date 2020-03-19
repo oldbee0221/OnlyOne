@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -11,6 +12,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.ContactsContract;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -57,6 +59,7 @@ public class CBMListActvitity extends AppCompatActivity implements Constants, Vi
     private LinearLayoutManager mLayoutManager;
     private CallMsgAdapter mAdapter;
     private TextView mTvPhoneNumber;
+    private TextView mTvName;
     private LinearLayout mLayoutPhoneNumber;
 
     private List<CallMsg> mMsgs;
@@ -80,6 +83,7 @@ public class CBMListActvitity extends AppCompatActivity implements Constants, Vi
         mContext = getApplicationContext();
 
         mTvPhoneNumber = findViewById(R.id.tv_phonenum);
+        mTvName = findViewById(R.id.tv_name);
         mLayoutPhoneNumber = findViewById(R.id.ll_phonenum);
 
         mSrl = findViewById(R.id.srl_base);
@@ -105,6 +109,7 @@ public class CBMListActvitity extends AppCompatActivity implements Constants, Vi
             mIsFromMsg = true;
             mSndNumber = intent.getStringExtra(EXTRA_SND_NUM);
             mTvPhoneNumber.setText(makePhonenum(mSndNumber));
+            mTvName.setText(getDisplayName(mSndNumber));
             Utils.Log("CBMListActivity mSndNumber => " + mSndNumber);
         } else {
             mLayoutPhoneNumber.setVisibility(View.GONE);
@@ -414,5 +419,22 @@ public class CBMListActvitity extends AppCompatActivity implements Constants, Vi
             msg.what = HANDLER_SEND;
             handler.sendMessage(msg);
         }
+    }
+
+    private String getDisplayName(String tel) {
+        String name = "";
+
+        Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(tel));
+        String[] projection = new String[] { ContactsContract.PhoneLookup.DISPLAY_NAME };
+
+        Cursor cursor = getBaseContext().getContentResolver().query(uri, projection, null, null, null);
+        if(cursor != null) {
+            if(cursor.moveToFirst()) {
+                name = cursor.getString(0);
+            }
+            cursor.close();
+        }
+
+        return name;
     }
 }

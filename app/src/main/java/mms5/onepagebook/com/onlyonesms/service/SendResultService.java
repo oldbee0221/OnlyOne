@@ -36,6 +36,8 @@ public class SendResultService extends Service implements Constants {
         Context context = getApplicationContext();
         String idx = Utils.GetStringSharedPreference(context, PREF_IDX);
 
+        RealmManager.writeLog("[SendResultService] onStartCommand start idx => " + idx);
+
         if(!Utils.IsEmpty(idx)) {
             String sn = Utils.GetStringSharedPreference(context, PREF_SN);
             String pn = Utils.GetStringSharedPreference(context, PREF_PN);
@@ -49,6 +51,8 @@ public class SendResultService extends Service implements Constants {
             Utils.PutSharedPreference(context, PREF_SN, "");
             Utils.PutSharedPreference(context, PREF_ET, "");
             Utils.PutSharedPreference(context, PREF_SENT, "");
+
+            RealmManager.writeLog("[SendResultService] onStartCommand end idx => " + idx);
         }
 
         return START_NOT_STICKY;

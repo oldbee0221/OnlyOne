@@ -38,7 +38,7 @@
         3. 본 어플 사용을 중단하실 때는 환경설정>애플리케이션 관리에서 삭제하시면 됩니다.</string>
     <string name="desc1">온리원문자 어플을 설치해주셔서 감사합니다.</string>
     <string name="desc2">문자량 : 온리원문자 앱에서 오늘/이달 발송된 문자량을 의미합니다.</string>
-    <string name="desc3">휴대폰변경 : 온리원문자에 사용할 휴대폰을 변경하고 싶으면 [휴대폰등록변경] 클릭 후 새 계정으로 다시 로그인하세요.</string>
+    <string name="desc3">계정변경 : 다른 계정에서 발송하려면 우측 상단에 있는 [발송계정변경] 클릭 후 새 계정으로 다시 로그인하세요.</string>
     <string name="desc4">유의사항 : 휴대폰등록변경시 발송했던 문자량 데이터가 초기화되어 추가발송될 수 있으니 유의하세요.</string>
     <string name="label_today_sms_count">오늘 발송 문자량</string>
     <string name="label_month_sms_count">이달 발송 문자량</string>
@@ -55,7 +55,7 @@
     <string name="u_can_use_this_app">온리원문자앱을 사용하실 수 있습니다.</string>
     <string name="phone_change">발송계정변경</string>
 
-    <string name="callback_msg_service">콜백문자 서비스</string>
+    <string name="callback_msg_service">콜백문자 이용</string>
     <string name="msg_box_confirm">내 문자 확인</string>
     <string name="use_check">사용여부</string>
     <string name="use">사용</string>
@@ -63,7 +63,7 @@
     <string name="callback_msg_reg">콜백 메시지 작성</string>
     <string name="callback_msg_address">콜백 주소록 설정</string>
     <string name="confirm">확인</string>
-    <string name="iam_service">명함 서비스</string>
+    <string name="iam_service">아이엠 이용</string>
 
     <string name="callback_msg_setting">콜백문자 사용설정</string>
     <string name="use_on_text_recv">문자수신 콜백사용</string>

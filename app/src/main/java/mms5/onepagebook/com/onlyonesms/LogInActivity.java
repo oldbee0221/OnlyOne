@@ -14,8 +14,7 @@ import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
@@ -132,7 +131,7 @@ public class LogInActivity extends AppCompatActivity implements Constants {
         Utils.PutSharedPreference(getApplicationContext(), PREF_BADGE_CNT, 0);
         Utils.removeBadge(this);
 
-        if (!Utils.IsEmpty(mRcvTelNum)) {
+        if (!Utils.IsEmpty(mRcvTelNum) && !mRcvTelNum.contains("onlyone")) {
             mFlagMsgBox = true;
             goToAnotherApp();
             return;

@@ -81,6 +81,14 @@ public class LogActivity extends AppCompatActivity {
             }
         });
 
+        findViewById(R.id.tv_title).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(LogActivity.this, HomeActivity.class));
+                finishAffinity();
+            }
+        });
+
         showAgree();
     }
 
