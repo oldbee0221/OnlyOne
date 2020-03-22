@@ -143,10 +143,6 @@ public class LogInActivity extends AppCompatActivity implements Constants {
         } else if (!requestPermissions(Utils.checkPermission(this))) {
             showAgreePopupAndAutoLogin();
         }
-
-        if(!Utils.IsEmpty(mID)) {
-            signInWithoutPw(mID);
-        }
     }
 
     @Override
@@ -244,6 +240,12 @@ public class LogInActivity extends AppCompatActivity implements Constants {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     mPrefManager.setAgreeWithPolicy(true);
+
+                    if(!Utils.IsEmpty(mID)) {
+                        signInWithoutPw(mID);
+                    } else {
+                        autoLogin();
+                    }
                 }
             });
             ab.setNegativeButton(getString(R.string.term_cancel), new DialogInterface.OnClickListener() {
@@ -254,8 +256,16 @@ public class LogInActivity extends AppCompatActivity implements Constants {
                 }
             });
             ab.show();
+        } else {
+            if(!Utils.IsEmpty(mID)) {
+                signInWithoutPw(mID);
+            } else {
+                autoLogin();
+            }
         }
+    }
 
+    private void autoLogin() {
         // Auto login
         String userJson = mPrefManager.getUseJson();
         if(Utils.GetIntSharedPreference(mContext, PREF_AUTOLOGIN) == 1) {

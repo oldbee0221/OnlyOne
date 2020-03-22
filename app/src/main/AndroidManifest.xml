@@ -175,7 +175,8 @@
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
             tools:ignore="LockedOrientationActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
 
         <activity
             android:name=".CBMUpdateActivity"
