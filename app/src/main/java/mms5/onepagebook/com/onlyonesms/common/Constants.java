@@ -18,6 +18,7 @@ public interface Constants {
     String PREF_SN = "onlyonesms.pref.sn";
     String PREF_ET = "onlyonesms.pref.et";
     String PREF_SENT = "onlyonesms.pref.sent";
+    String PREF_AUTOLOGIN = "onlyonesms.pref.autologin";
 
     String FRAG_01 = "01";
     String FRAG_S1 = "번으로 변경";

@@ -102,9 +102,11 @@ public class SyncContactsService extends JobIntentService {
 
             try {
                 String phoneNumber = Utils.getPhoneNumber(getApplicationContext());
+                String id = Utils.GetStringSharedPreference(getApplicationContext(), "ID");
+
                 DefaultResult response = RetrofitManager.retrofit(getApplicationContext())
                         .create(Client.class)
-                        .syncContacts(new SyncContactBody(phoneNumber, contactsByGroup))
+                        .syncContacts(new SyncContactBody(phoneNumber, contactsByGroup, id))
                         .execute()
                         .body();
 

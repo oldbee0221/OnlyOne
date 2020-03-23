@@ -1,13 +1,25 @@
 <resources>
-    <string name="app_name">온리원문자</string>
+    <string name="app_name">온리원셀링</string>
+    <string name="app_name_munja">온리원문자</string>
     <string name="notification_channel_alarm_description">온리원문자 알림 채널입니다.</string>
     <string name="default_notification_channel_id">mms5.onepagebook.com.onlyonesms.manager.PushManager.alarm</string>
     <string name="label_id">아이디</string>
     <string name="label_pw">비밀번호</string>
     <string name="label_login">로그인</string>
     <string name="label_sign_up">회원가입</string>
+    <string name="title_sub">스마트폰 문자를 PC와 연동해 발송하는</string>
+    <string name="title_main">온리원문자 APP</string>
+    <string name="auto_login">자동 로그인</string>
+    <string name="privacy_policy"><u>개인정보처리방침</u></string>
     <string name="msg_please_type_id">아이디를 입력해주세요.</string>
     <string name="msg_please_type_pw">비밀번호를 입력해주세요.</string>
+
+    <string name="login_guide1">온리원문자앱 로그인 안내</string>
+    <string name="login_guide2">1.아이디 : 소유폰ID와 추가폰ID 중 선택하세요.</string>
+    <string name="login_guide3">* 소유폰ID : 내가 가입한 계정의 로그인 ID</string>
+    <string name="login_guide4">* 추가폰ID : 타인 계정에 문자만 추가할 경우, 타인 계정의 로그인 ID</string>
+    <string name="login_guide5">2.비밀번호 : 해당 계정의 PW를 입력하세요.</string>
+
     <string name="term_cancel">취소</string>
     <string name="term_agree">동의합니다.</string>
     <string name="msg_no_usim">해당폰은 USIM이 없어 사용할수 없습니다.\n만약 정상적으로 개통된 폰이라면 다시 실행해 주세요.</string>
@@ -25,9 +37,9 @@
         2. 오늘 발송문자량과 이달 발송문자량은 본 어플을 통해 발송된 문자량 입니다.\n
         3. 본 어플 사용을 중단하실 때는 환경설정>애플리케이션 관리에서 삭제하시면 됩니다.</string>
     <string name="desc1">온리원문자 어플을 설치해주셔서 감사합니다.</string>
-    <string name="desc2">이 페이지가 보이면 휴대폰에 문자앱 설치가 정상적으로 완료된 것입니다.</string>
-    <string name="desc3">오늘 발송문자량과 이달 발송문자량은 본 어플을 통해 발송된 문자량 입니다.</string>
-    <string name="desc4">본 어플 사용을 중단하실 때는 환경설정>애플리케이션 관리에서 삭제하시면 됩니다.</string>
+    <string name="desc2">문자량 : 온리원문자 앱에서 오늘/이달 발송된 문자량을 의미합니다.</string>
+    <string name="desc3">계정변경 : 다른 계정에서 발송하려면 우측 상단에 있는 [발송계정변경] 클릭 후 새 계정으로 다시 로그인하세요.</string>
+    <string name="desc4">유의사항 : 휴대폰등록변경시 발송했던 문자량 데이터가 초기화되어 추가발송될 수 있으니 유의하세요.</string>
     <string name="label_today_sms_count">오늘 발송 문자량</string>
     <string name="label_month_sms_count">이달 발송 문자량</string>
     <string name="label_phone_number">휴대폰 번호</string>
@@ -38,18 +50,20 @@
     <string name="term_not_allow">변경하지 않음</string>
     <string name="term_making_default">기본 문자 앱으로 바꾸기</string>
     <string name="mgs_default_app">현재 기본 앱입니다.</string>
-    <string name="go_to_another_sms_app">내 폰 문자 작성하기</string>
+    <string name="go_to_another_sms_app">내 문자 작성</string>
     <string name="msg_processing_sending_mms">문자를 보내는 중입니다.</string>
     <string name="u_can_use_this_app">온리원문자앱을 사용하실 수 있습니다.</string>
+    <string name="phone_change">발송계정변경</string>
 
-    <string name="callback_msg_service">콜백문자 서비스</string>
-    <string name="msg_box_confirm">내 폰 문자 확인하기</string>
+    <string name="callback_msg_service">콜백문자 이용</string>
+    <string name="msg_box_confirm">내 문자 확인</string>
     <string name="use_check">사용여부</string>
     <string name="use">사용</string>
     <string name="not_use">미사용</string>
     <string name="callback_msg_reg">콜백 메시지 작성</string>
     <string name="callback_msg_address">콜백 주소록 설정</string>
     <string name="confirm">확인</string>
+    <string name="iam_service">아이엠 이용</string>
 
     <string name="callback_msg_setting">콜백문자 사용설정</string>
     <string name="use_on_text_recv">문자수신 콜백사용</string>
@@ -57,6 +71,9 @@
     <string name="use_on_call_send">전화발신 콜백사용</string>
     <string name="callback_write">콜백작성</string>
     <string name="callback_cancel">발송취소</string>
+
+    <string name="callback_title_sub">통화가 끝난 후 선택적으로 나를 알리는</string>
+    <string name="callback_title_main">온리원콜백</string>
 
     <string name="connect_service">접속 서비스</string>
     <string name="choose_connect_service">접속 서비스를 선택하세요</string>
@@ -116,6 +133,13 @@
     <string name="friday">금</string>
     <string name="saturday">토</string>
     <string name="sunday">일</string>
+
+    <string name="log_title">로그수집 안내</string>
+    <string name="log_guide">PC-폰 문자발송시스템에서는 폰사용, 통신환경에 따라 발송오류가 자주 발생합니다\n\n이렇게 문자발송이 실패한 경우 로그자료를 다운받아 조사하여 어떤 오류였는지 확인하여 해결할 수 있습니다.\n\n하지만 로그수집은 폰의 저장공간을 사용하므로 가끔 저장된 로그자료를 삭제해야 합니다.</string>
+    <string name="log_send">로그 보내기</string>
+    <string name="log_delete">로그 삭제하기</string>
+    <string name="log_on">로그기능 ON</string>
+    <string name="log_off">로그기능 OFF</string>
 
     <string-array name="send_types">
         <item>메시지 바로 전송</item>

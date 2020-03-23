@@ -21,7 +21,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O){
             this.context.startForegroundService(service_intent);
-        }else{
+        } else {
             this.context.startService(service_intent);
         }
     }

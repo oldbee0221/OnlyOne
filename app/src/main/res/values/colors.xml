@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#2965A7</color>
-    <color name="colorPrimaryDark">#2965A7</color>
-    <color name="colorAccent">#2965A7</color>
+    <color name="colorPrimary">#002060</color>
+    <color name="colorPrimaryDark">#002060</color>
+    <color name="colorAccent">#002060</color>
     <color name="text_primary">#000000</color>
+
+    <color name="callback_primary">#7030a0</color>
 
     <color name="brownish_grey">#616161</color>
     <color name="black_10">#212121</color>

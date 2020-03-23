@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -11,6 +12,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.ContactsContract;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +23,7 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
@@ -56,6 +59,8 @@ public class CBMListActvitity extends AppCompatActivity implements Constants, Vi
     private LinearLayoutManager mLayoutManager;
     private CallMsgAdapter mAdapter;
     private TextView mTvPhoneNumber;
+    private TextView mTvName;
+    private LinearLayout mLayoutPhoneNumber;
 
     private List<CallMsg> mMsgs;
     private boolean mIsFromMsg;
@@ -68,26 +73,6 @@ public class CBMListActvitity extends AppCompatActivity implements Constants, Vi
     private ProgressDialog mProgressDialog;
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        if (MainActivity.HAS_TO_SHOW_LOGS) {
-            getMenuInflater().inflate(R.menu.menu_scrolling, menu);
-        }
-        return MainActivity.HAS_TO_SHOW_LOGS;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (MainActivity.HAS_TO_SHOW_LOGS) {
-            if (item.getItemId() == R.id.action_logs) {
-                startActivity(new Intent(this, LogActivity.class));
-                return true;
-            }
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Answers(), new Crashlytics());
@@ -98,6 +83,8 @@ public class CBMListActvitity extends AppCompatActivity implements Constants, Vi
         mContext = getApplicationContext();
 
         mTvPhoneNumber = findViewById(R.id.tv_phonenum);
+        mTvName = findViewById(R.id.tv_name);
+        mLayoutPhoneNumber = findViewById(R.id.ll_phonenum);
 
         mSrl = findViewById(R.id.srl_base);
         mSrl.setOnRefreshListener(onRefresh);
@@ -111,18 +98,21 @@ public class CBMListActvitity extends AppCompatActivity implements Constants, Vi
 
         findViewById(R.id.btn_write).setOnClickListener(this);
         findViewById(R.id.btn_cancel).setOnClickListener(this);
-        findViewById(R.id.iv_back).setOnClickListener(this);
-        findViewById(R.id.iv_clear).setOnClickListener(this);
+        findViewById(R.id.iv_home).setOnClickListener(this);
+        findViewById(R.id.iv_menu).setOnClickListener(this);
 
         Intent intent = getIntent();
 
         if(TextUtils.isEmpty(intent.getStringExtra(EXTRA_FROM_DOOR))) {
             findViewById(R.id.btn_cancel).setVisibility(View.VISIBLE);
+            mLayoutPhoneNumber.setVisibility(View.VISIBLE);
             mIsFromMsg = true;
             mSndNumber = intent.getStringExtra(EXTRA_SND_NUM);
             mTvPhoneNumber.setText(makePhonenum(mSndNumber));
+            mTvName.setText(getDisplayName(mSndNumber));
             Utils.Log("CBMListActivity mSndNumber => " + mSndNumber);
         } else {
+            mLayoutPhoneNumber.setVisibility(View.GONE);
             mIsFromMsg = false;
             mSndNumber = "";
         }
@@ -151,12 +141,12 @@ public class CBMListActvitity extends AppCompatActivity implements Constants, Vi
                 finish();
                 break;
 
-            case R.id.iv_back:
-                finish();
+            case R.id.iv_menu:
+                startActivity(new Intent(CBMListActvitity.this, LogActivity.class));
                 break;
 
-            case R.id.iv_clear:
-                finishAffinity();
+            case R.id.iv_home:
+                finish();
                 break;
         }
     }
@@ -429,5 +419,22 @@ public class CBMListActvitity extends AppCompatActivity implements Constants, Vi
             msg.what = HANDLER_SEND;
             handler.sendMessage(msg);
         }
+    }
+
+    private String getDisplayName(String tel) {
+        String name = "";
+
+        Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(tel));
+        String[] projection = new String[] { ContactsContract.PhoneLookup.DISPLAY_NAME };
+
+        Cursor cursor = getBaseContext().getContentResolver().query(uri, projection, null, null, null);
+        if(cursor != null) {
+            if(cursor.moveToFirst()) {
+                name = cursor.getString(0);
+            }
+            cursor.close();
+        }
+
+        return name;
     }
 }

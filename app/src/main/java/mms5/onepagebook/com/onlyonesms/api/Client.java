@@ -26,6 +26,10 @@ public interface Client {
     Call<DefaultResult> signIn(@FieldMap SignInBody body);
 
     @FormUrlEncoded
+    @POST("/omm/app_login_id.php")
+    Call<DefaultResult> signInWithoutPw(@FieldMap SignInBody body);
+
+    @FormUrlEncoded
     @POST("/mms/check_task.php")
     Call<DefaultResult> checkTasks(@FieldMap CheckTaskBody body);
 

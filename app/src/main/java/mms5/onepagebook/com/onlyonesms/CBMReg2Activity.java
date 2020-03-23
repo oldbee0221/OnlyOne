@@ -88,8 +88,8 @@ public class CBMReg2Activity extends AppCompatActivity implements Constants, Vie
 
         findViewById(R.id.btn_save).setOnClickListener(this);
         findViewById(R.id.btn_cancel).setOnClickListener(this);
-        findViewById(R.id.iv_back).setOnClickListener(this);
-        findViewById(R.id.iv_clear).setOnClickListener(this);
+        findViewById(R.id.iv_menu).setOnClickListener(this);
+        findViewById(R.id.iv_home).setOnClickListener(this);
 
         fl_photo = findViewById(R.id.fl_photo);
         fl_photo.setOnClickListener(this);
@@ -174,12 +174,12 @@ public class CBMReg2Activity extends AppCompatActivity implements Constants, Vie
                 }
                 break;
 
-            case R.id.iv_back:
-                finish();
+            case R.id.iv_menu:
+                startActivity(new Intent(CBMReg2Activity.this, LogActivity.class));
                 break;
 
-            case R.id.iv_clear:
-                finishAffinity();
+            case R.id.iv_home:
+                finish();
                 break;
         }
     }

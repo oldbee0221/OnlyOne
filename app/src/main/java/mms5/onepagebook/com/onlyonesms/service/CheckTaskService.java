@@ -19,7 +19,6 @@ import mms5.onepagebook.com.onlyonesms.api.Client;
 import mms5.onepagebook.com.onlyonesms.api.body.CheckTaskBody;
 import mms5.onepagebook.com.onlyonesms.api.body.GettingStatisticsBody;
 import mms5.onepagebook.com.onlyonesms.api.response.DefaultResult;
-import mms5.onepagebook.com.onlyonesms.common.Constants;
 import mms5.onepagebook.com.onlyonesms.manager.PreferenceManager;
 import mms5.onepagebook.com.onlyonesms.manager.RealmManager;
 import mms5.onepagebook.com.onlyonesms.manager.RetrofitManager;

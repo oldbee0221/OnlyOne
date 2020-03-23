@@ -6,39 +6,82 @@
     android:orientation="vertical">
 
     <RelativeLayout
-        android:id="@+id/rl_title"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary">
-
+        android:layout_height="50dp"
+        android:background="@android:color/white">
         <ImageView
-            android:id="@+id/iv_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="12dp"
-            android:src="@drawable/baseline_keyboard_backspace_white_24"
+            android:id="@+id/iv_home"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"/>
+            android:layout_marginLeft="12dp"
+            android:src="@drawable/baseline_arrow_back_ios_black_24"/>
 
         <ImageView
-            android:id="@+id/iv_clear"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/baseline_clear_white_24"
-            android:layout_marginRight="12dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/logo"/>
+
+        <ImageView
+            android:id="@+id/iv_menu"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"/>
+            android:layout_marginRight="12dp"
+            android:src="@drawable/baseline_menu_black_24"/>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp"
+        android:gravity="center"
+        android:background="@color/callback_primary"
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="@string/app_name"
+            android:text="@string/callback_title_sub"
             android:textColor="@android:color/white"
-            android:textSize="30sp"
-            android:textStyle="bold" />
+            android:textSize="14sp" />
 
-    </RelativeLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="@string/callback_title_main"
+            android:textColor="@android:color/white"
+            android:textSize="17sp"
+            android:textStyle="bold"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center">
+        <Button
+            android:id="@+id/btn_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="12dp"
+            android:layout_gravity="right"
+            android:text="@string/save"/>
+
+        <Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_gravity="right"
+            android:text="@string/cancel"/>
+    </LinearLayout>
 
 
     <ScrollView
@@ -104,7 +147,7 @@
             <android.support.v7.widget.AppCompatEditText
                 android:id="@+id/edt_msg"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:padding="8dp"
                 android:inputType="textMultiLine"
@@ -112,29 +155,6 @@
                 android:textSize="16sp"
                 android:gravity="top|left"
                 android:background="@drawable/bg_edit"/>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="36dp"
-                android:gravity="center">
-                <Button
-                    android:id="@+id/btn_save"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="12dp"
-                    android:layout_gravity="right"
-                    android:text="@string/save"/>
-
-                <Button
-                    android:id="@+id/btn_cancel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="12dp"
-                    android:layout_gravity="right"
-                    android:text="@string/cancel"/>
-            </LinearLayout>
 
         </LinearLayout>
 

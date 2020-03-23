@@ -16,8 +16,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.telephony.SmsManager;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -37,14 +35,16 @@ import mms5.onepagebook.com.onlyonesms.api.body.GettingStatisticsBody;
 import mms5.onepagebook.com.onlyonesms.common.Constants;
 import mms5.onepagebook.com.onlyonesms.dialog.MessageDialog;
 import mms5.onepagebook.com.onlyonesms.manager.BusManager;
+import mms5.onepagebook.com.onlyonesms.manager.GsonManager;
 import mms5.onepagebook.com.onlyonesms.manager.PreferenceManager;
 import mms5.onepagebook.com.onlyonesms.manager.RealmManager;
 import mms5.onepagebook.com.onlyonesms.manager.RetrofitManager;
 import mms5.onepagebook.com.onlyonesms.model.Statistics;
+import mms5.onepagebook.com.onlyonesms.model.UserInfo;
 import mms5.onepagebook.com.onlyonesms.util.Utils;
 
 public class MainActivity extends AppCompatActivity implements Constants {
-    public static final boolean HAS_TO_SHOW_LOGS = false;
+    public static boolean HAS_TO_SHOW_LOGS = false;
     private static final int REQUEST_DEFAULT_APP = 12;
     private static final int REQUEST_PERMISSION = 120;
 
@@ -55,33 +55,15 @@ public class MainActivity extends AppCompatActivity implements Constants {
     private TextView mBtnShowDialog;
     private TextView mTextDefaultApp;
     private TextView mTextGoToMsgBox;
+    private TextView mTextID;
 
     private ProgressBar mProgressBar;
 
     private String mRcvTelNum;
     private Context mContext;
+    private PreferenceManager mPrefManager;
 
     private boolean isBackground = false;
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        if (HAS_TO_SHOW_LOGS) {
-            getMenuInflater().inflate(R.menu.menu_scrolling, menu);
-        }
-        return HAS_TO_SHOW_LOGS;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (HAS_TO_SHOW_LOGS) {
-            if (item.getItemId() == R.id.action_logs) {
-                startActivity(new Intent(MainActivity.this, LogActivity.class));
-                return true;
-            }
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     protected void onResume() {
@@ -132,6 +114,12 @@ public class MainActivity extends AppCompatActivity implements Constants {
         mTextTodayCount = findViewById(R.id.text_today_count);
         mTextMonthCount = findViewById(R.id.text_month_count);
         mTextPhoneNumber = findViewById(R.id.text_phone_number);
+
+        mTextID = findViewById(R.id.tv_id);
+        mPrefManager = PreferenceManager.getInstance(getApplicationContext());
+        String userJson = mPrefManager.getUseJson();
+        UserInfo userInfo = GsonManager.getGson().fromJson(userJson, UserInfo.class);
+        mTextID.setText(userInfo.id);
 
         mProgressBar = findViewById(R.id.progress);
         mProgressBar.setVisibility(View.GONE);
@@ -185,6 +173,40 @@ public class MainActivity extends AppCompatActivity implements Constants {
             public void onClick(View v) {
                 Intent i = new Intent(MainActivity.this, CBMDoor2Activity.class);
                 startActivity(i);
+            }
+        });
+
+        findViewById(R.id.tv_phone_change).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utils.PutSharedPreference(mContext, PREF_AUTOLOGIN, 1);
+                mPrefManager.clear(getClass().getSimpleName());
+                startActivity(new Intent(MainActivity.this, LogInActivity.class));
+                finish();
+            }
+        });
+
+        findViewById(R.id.btn_go_iam).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                Uri u = Uri.parse("http://obmms.net/iam");
+                i.setData(u);
+                startActivity(i);
+            }
+        });
+
+        findViewById(R.id.iv_home).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        findViewById(R.id.iv_menu).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, LogActivity.class));
             }
         });
 

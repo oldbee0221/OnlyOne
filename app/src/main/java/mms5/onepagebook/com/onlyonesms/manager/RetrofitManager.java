@@ -20,8 +20,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class RetrofitManager {
-    public static final String BASE_URL = "https://www.obmms.net";
-    public static final String URL_SIGN_UP = "https://www.obmms.net/join.php";
+    public static final String BASE_URL = "http://www.obmms.net";
+    public static final String URL_SIGN_UP = "http://www.obmms.net/join.php";
     public static final String BASE_URL2 = "http://www.obmms.net";
 
     private static Retrofit retrofit = null;
