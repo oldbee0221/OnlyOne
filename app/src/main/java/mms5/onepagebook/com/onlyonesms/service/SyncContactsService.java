@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v4.app.JobIntentService;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Calendar;

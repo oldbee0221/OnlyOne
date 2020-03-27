@@ -140,7 +140,7 @@ public class LogInActivity extends AppCompatActivity implements Constants {
         if (!Utils.hasUsim(getApplicationContext())) {
             Toast.makeText(getApplicationContext(), R.string.msg_no_usim, Toast.LENGTH_LONG).show();
             finish();
-        } else if (!requestPermissions(Utils.checkPermission(this))) {
+        } else if (!requestPermissions(Utils.checkPermissions(this))) {
             showAgreePopupAndAutoLogin();
         }
     }
