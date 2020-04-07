@@ -12,6 +12,7 @@ public interface Constants {
     String PREF_CHECK1 = "onlyonesms.pref.chk1";
     String PREF_CHECK2 = "onlyonesms.pref.chk2";
     String PREF_CHECK3 = "onlyonesms.pref.chk3";
+    String PREF_CHECK4 = "onlyonesms.pref.chk4";
 
     String PREF_IDX = "onlyonesms.pref.idx";
     String PREF_PN = "onlyonesms.pref.pn";
@@ -19,6 +20,7 @@ public interface Constants {
     String PREF_ET = "onlyonesms.pref.et";
     String PREF_SENT = "onlyonesms.pref.sent";
     String PREF_AUTOLOGIN = "onlyonesms.pref.autologin";
+    String PREF_CB_AUTO_MSG = "onlyonesms.pref.cbautomsg";
 
     String FRAG_01 = "01";
     String FRAG_S1 = "번으로 변경";

@@ -35,7 +35,7 @@ import java.io.FileNotFoundException;
 import java.util.List;
 
 import io.fabric.sdk.android.Fabric;
-import mms5.onepagebook.com.onlyonesms.adapter.CallMsgAdapter;
+import mms5.onepagebook.com.onlyonesms.adapter.CallMsgChoiceAdapter;
 import mms5.onepagebook.com.onlyonesms.common.Constants;
 import mms5.onepagebook.com.onlyonesms.db.AppDatabase;
 import mms5.onepagebook.com.onlyonesms.db.entity.CallMsg;
@@ -44,9 +44,9 @@ import mms5.onepagebook.com.onlyonesms.util.Settings;
 import mms5.onepagebook.com.onlyonesms.util.Utils;
 
 /**
- * Created by jeonghopark on 2019-07-11.
+ * Created by jeonghopark on 2020/04/06.
  */
-public class CBMListActvitity extends AppCompatActivity implements Constants, View.OnClickListener {
+public class CBMChoiceListActivity extends AppCompatActivity implements Constants, View.OnClickListener {
     private final int HANDLER_SEND = 301;
     private final int REQ_UPDATE = 500;
 
@@ -55,7 +55,7 @@ public class CBMListActvitity extends AppCompatActivity implements Constants, Vi
     private SwipeRefreshLayout mSrl;
     private RecyclerView mRv;
     private LinearLayoutManager mLayoutManager;
-    private CallMsgAdapter mAdapter;
+    private CallMsgChoiceAdapter mAdapter;
     private TextView mTvPhoneNumber;
     private TextView mTvName;
     private LinearLayout mLayoutPhoneNumber;
@@ -74,7 +74,7 @@ public class CBMListActvitity extends AppCompatActivity implements Constants, Vi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Answers(), new Crashlytics());
-        setContentView(R.layout.activity_cbm_list);
+        setContentView(R.layout.activity_cbm_choice_list);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -115,7 +115,7 @@ public class CBMListActvitity extends AppCompatActivity implements Constants, Vi
             mSndNumber = "";
         }
 
-        mProgressDialog = new ProgressDialog(CBMListActvitity.this);
+        mProgressDialog = new ProgressDialog(CBMChoiceListActivity.this);
     }
 
     @Override
@@ -130,18 +130,21 @@ public class CBMListActvitity extends AppCompatActivity implements Constants, Vi
 
         switch (vid) {
             case R.id.btn_write: {
-                Intent i = new Intent(CBMListActvitity.this, CBMReg2Activity.class);
+                Intent i = new Intent(CBMChoiceListActivity.this, CBMReg2Activity.class);
                 startActivity(i);
             }
             break;
 
             case R.id.btn_cancel:
-            case R.id.iv_home:
                 finish();
                 break;
 
             case R.id.iv_menu:
-                startActivity(new Intent(CBMListActvitity.this, LogActivity.class));
+                startActivity(new Intent(CBMChoiceListActivity.this, LogActivity.class));
+                break;
+
+            case R.id.iv_home:
+                finish();
                 break;
         }
     }
@@ -193,7 +196,7 @@ public class CBMListActvitity extends AppCompatActivity implements Constants, Vi
 
         mRv.setHasFixedSize(true);
         mRv.setLayoutManager(mLayoutManager);
-        mAdapter = new CallMsgAdapter(mContext, mIsFromMsg, Utils.GetLongSharedPreference(mContext, PREF_CB_AUTO_MSG)) {
+        mAdapter = new CallMsgChoiceAdapter(mContext, mIsFromMsg, Utils.GetLongSharedPreference(mContext, PREF_CB_AUTO_MSG)) {
             @Override
             public void load() {
                 loadData();
@@ -208,22 +211,14 @@ public class CBMListActvitity extends AppCompatActivity implements Constants, Vi
             }
 
             @Override
-            public void onUpdate(CallMsg item) {
-                if(mIsFromMsg) {
-                    Intent i = new Intent(CBMListActvitity.this, CBMUpdate2Activity.class);
-                    i.putExtra(EXTRA_SND_NUM, mSndNumber);
-                    i.putExtra("data", item);
-                    startActivityForResult(i, REQ_UPDATE);
-                } else {
-                    Intent i = new Intent(CBMListActvitity.this, CBMUpdateActivity.class);
-                    i.putExtra("data", item);
-                    startActivity(i);
-                }
+            public void onUpdate(int position, long regdate) {
+                mAdapter.check(position);
+                Utils.PutSharedPreference(mContext, PREF_CB_AUTO_MSG, regdate);
             }
 
             @Override
             public void onDel(final CallMsg item) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(CBMListActvitity.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(CBMChoiceListActivity.this);
                 builder.setCancelable(false);
 
                 builder.setTitle(getString(R.string.msg_delete));
@@ -253,7 +248,7 @@ public class CBMListActvitity extends AppCompatActivity implements Constants, Vi
                     }
                 });
 
-                if (CBMListActvitity.this.isFinishing() == false) {
+                if (CBMChoiceListActivity.this.isFinishing() == false) {
                     builder.show();
                 }
             }
@@ -264,7 +259,7 @@ public class CBMListActvitity extends AppCompatActivity implements Constants, Vi
     }
 
     private void showFinDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(CBMListActvitity.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(CBMChoiceListActivity.this);
         builder.setCancelable(false);
 
         builder.setTitle(getString(R.string.app_name));
@@ -278,7 +273,7 @@ public class CBMListActvitity extends AppCompatActivity implements Constants, Vi
             }
         });
 
-        if (CBMListActvitity.this.isFinishing() == false) {
+        if (CBMChoiceListActivity.this.isFinishing() == false) {
             builder.show();
         }
     }

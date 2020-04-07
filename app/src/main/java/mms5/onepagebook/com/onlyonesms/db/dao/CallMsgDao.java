@@ -18,6 +18,9 @@ public interface CallMsgDao {
     @Query("SELECT * FROM callmsg")
     List<CallMsg> getAll();
 
+    @Query("SELECT * FROM callmsg WHERE regdate = :reg_date")
+    CallMsg getRow(long reg_date);
+
     @Insert
     void insert(CallMsg callMsg);
 

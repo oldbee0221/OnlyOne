@@ -215,6 +215,19 @@ public class Utils {
     editor.commit();
   }
 
+  public static Long GetLongSharedPreference(Context context, String key) {
+    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+    return prefs.getLong(key, 0);
+  }
+
+  public static void PutSharedPreference(Context context, String key, long value) {
+    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+    SharedPreferences.Editor editor = prefs.edit();
+
+    editor.putLong(key, value);
+    editor.commit();
+  }
+
   public static boolean Is010PhoneNumber(String str) {
     if(str == null) return false;
     String val = str.trim();

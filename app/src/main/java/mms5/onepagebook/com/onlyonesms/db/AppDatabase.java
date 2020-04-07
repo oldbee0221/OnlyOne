@@ -1,10 +1,8 @@
 package mms5.onepagebook.com.onlyonesms.db;
 
-import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
-import android.arch.persistence.room.migration.Migration;
 import android.content.Context;
 
 import mms5.onepagebook.com.onlyonesms.db.dao.CallMsgDao;

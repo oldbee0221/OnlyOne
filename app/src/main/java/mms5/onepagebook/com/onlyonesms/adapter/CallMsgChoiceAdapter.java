@@ -18,42 +18,42 @@ import java.util.List;
 
 import mms5.onepagebook.com.onlyonesms.R;
 import mms5.onepagebook.com.onlyonesms.base.GlideApp;
-import mms5.onepagebook.com.onlyonesms.common.Constants;
 import mms5.onepagebook.com.onlyonesms.db.entity.CallMsg;
-import mms5.onepagebook.com.onlyonesms.util.Utils;
 
 /**
- * Created by jeonghopark on 2019-07-12.
+ * Created by jeonghopark on 2020/04/06.
  */
-public abstract class CallMsgAdapter extends RecyclerView.Adapter<CallMsgAdapter.ViewHolder> {
+public abstract class CallMsgChoiceAdapter extends RecyclerView.Adapter<CallMsgChoiceAdapter.ViewHolder> {
     private Context mContext;
     private ArrayList<CallMsg> mItems;
+    private ArrayList<Boolean> mChecks;
     private boolean mIsFromMsg;
     private long mRegDate;
 
-    public CallMsgAdapter(Context context, boolean mode, long regdate) {
+    public CallMsgChoiceAdapter(Context context, boolean mode, long regdate) {
         mContext = context;
         mItems = new ArrayList<>();
+        mChecks = new ArrayList<>();
         mIsFromMsg = mode;
         mRegDate = regdate;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_callmsg, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_callchoicemsg, parent, false);
         return new ViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         final CallMsg item = mItems.get(position);
 
         if (mIsFromMsg) {
-            holder.mLayoutSend.setVisibility(View.VISIBLE);
+            holder.mLayoutSend.setVisibility(View.GONE);
             holder.mLayoutDelete.setVisibility(View.GONE);
         } else {
             holder.mLayoutSend.setVisibility(View.GONE);
-            holder.mLayoutDelete.setVisibility(View.VISIBLE);
+            holder.mLayoutDelete.setVisibility(View.GONE);
         }
 
         holder.mTvDate.setText(getDate(item.regdate));
@@ -67,10 +67,16 @@ public abstract class CallMsgAdapter extends RecyclerView.Adapter<CallMsgAdapter
                     .into(holder.mIvPhoto);
         }
 
+        if(mChecks.get(position)) {
+            holder.mLayoutItem.setBackgroundResource(R.color.color0);
+        } else {
+            holder.mLayoutItem.setBackgroundResource(R.color.white_two);
+        }
+
         holder.mLayoutUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onUpdate(item);
+                onUpdate(position, item.regdate);
             }
         });
 
@@ -80,7 +86,6 @@ public abstract class CallMsgAdapter extends RecyclerView.Adapter<CallMsgAdapter
                 onDel(item);
             }
         });
-
         holder.mLayoutSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -94,14 +99,30 @@ public abstract class CallMsgAdapter extends RecyclerView.Adapter<CallMsgAdapter
         return mItems.size();
     }
 
+    public void check(int pos) {
+        int size = mItems.size();
+        for (int i = 0; i < size; i++) {
+            mChecks.set(i, false);
+        }
+
+        mChecks.set(pos, true);
+        notifyDataSetChanged();
+    }
+
     public int add(List<CallMsg> arrayList) {
         mItems.clear();
+        mChecks.clear();
 
         if (arrayList == null) return 0;
 
         int size = arrayList.size();
         for (int i = 0; i < size; i++) {
             mItems.add(arrayList.get(i));
+            if(arrayList.get(i).regdate == mRegDate) {
+                mChecks.add(true);
+            } else {
+                mChecks.add(false);
+            }
         }
 
         notifyItemInserted(mItems.size());
@@ -120,10 +141,6 @@ public abstract class CallMsgAdapter extends RecyclerView.Adapter<CallMsgAdapter
                 mItems.remove(i);
                 break;
             }
-        }
-
-        if(item.regdate == mRegDate) {
-            Utils.PutSharedPreference(mContext, Constants.PREF_CB_AUTO_MSG, 0);
         }
 
         notifyDataSetChanged();
@@ -162,7 +179,7 @@ public abstract class CallMsgAdapter extends RecyclerView.Adapter<CallMsgAdapter
     public abstract void load();
     public abstract void onDel(CallMsg item);
     public abstract void onSend(CallMsg use);
-    public abstract void onUpdate(CallMsg item);
+    public abstract void onUpdate(int pos, long regdate);
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public CardView mCardView;
@@ -174,6 +191,7 @@ public abstract class CallMsgAdapter extends RecyclerView.Adapter<CallMsgAdapter
         public LinearLayout mLayoutUpdate;
         public LinearLayout mLayoutDelete;
         public LinearLayout mLayoutSend;
+        public LinearLayout mLayoutItem;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -187,6 +205,7 @@ public abstract class CallMsgAdapter extends RecyclerView.Adapter<CallMsgAdapter
             mLayoutUpdate = itemView.findViewById(R.id.ll_update);
             mLayoutDelete = itemView.findViewById(R.id.ll_delete);
             mLayoutSend = itemView.findViewById(R.id.ll_send);
+            mLayoutItem = itemView.findViewById(R.id.ll_item);
         }
     }
 }

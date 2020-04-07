@@ -7,6 +7,7 @@ import android.os.Build;
 import android.provider.Telephony;
 import android.telephony.TelephonyManager;
 
+import mms5.onepagebook.com.onlyonesms.CBMAutoSendActivity;
 import mms5.onepagebook.com.onlyonesms.CBMListActvitity;
 import mms5.onepagebook.com.onlyonesms.common.Constants;
 import mms5.onepagebook.com.onlyonesms.util.Utils;
@@ -33,13 +34,6 @@ public class ServiceReceiver extends BroadcastReceiver implements Constants {
             mPhoneNumberOut = intent.getExtras().getString(Intent.EXTRA_PHONE_NUMBER);
             Utils.Log("ServiceReceiver onReceive: 3 mPhoneNumberOut => " + mPhoneNumberOut);
         } else if(action.equals("android.intent.action.PHONE_STATE")) {
-
-            //if(state.equals(mLastState)) {
-            //    return;
-            //} else {
-            //    mLastState = state;
-            //}
-
             Utils.Log("ServiceReceiver onReceive: 11");
 
             if(TelephonyManager.EXTRA_STATE_RINGING.equals(state)) {
@@ -59,6 +53,17 @@ public class ServiceReceiver extends BroadcastReceiver implements Constants {
                             Utils.Log("ServiceReceiver onReceive: 16");
                             if(Utils.Is010PhoneNumber(mPhoneNumberIn)) {
                                 Intent it = new Intent(context, CBMListActvitity.class);
+                                it.putExtra(EXTRA_SND_NUM, mPhoneNumberIn);
+                                it.addFlags(FLAG_ACTIVITY_NEW_TASK);
+                                context.startActivity(it);
+                            }
+                        }
+
+                        boolean check4 = Utils.GetBooleanSharedPreference(context, PREF_CHECK4);
+                        if (check4) {
+                            Utils.Log("ServiceReceiver onReceive: 19");
+                            if(Utils.Is010PhoneNumber(mPhoneNumberIn)) {
+                                Intent it = new Intent(context, CBMAutoSendActivity.class);
                                 it.putExtra(EXTRA_SND_NUM, mPhoneNumberIn);
                                 it.addFlags(FLAG_ACTIVITY_NEW_TASK);
                                 context.startActivity(it);

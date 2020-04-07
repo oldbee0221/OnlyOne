@@ -3,6 +3,7 @@ package mms5.onepagebook.com.onlyonesms;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
@@ -56,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements Constants {
     private TextView mTextDefaultApp;
     private TextView mTextGoToMsgBox;
     private TextView mTextID;
+    private TextView mTextVer;
 
     private ProgressBar mProgressBar;
 
@@ -114,6 +116,9 @@ public class MainActivity extends AppCompatActivity implements Constants {
         mTextTodayCount = findViewById(R.id.text_today_count);
         mTextMonthCount = findViewById(R.id.text_month_count);
         mTextPhoneNumber = findViewById(R.id.text_phone_number);
+
+        mTextVer = findViewById(R.id.tv_ver);
+        mTextVer.setText("ver. " + getAppVer());
 
         mTextID = findViewById(R.id.tv_id);
         mPrefManager = PreferenceManager.getInstance(getApplicationContext());
@@ -381,5 +386,17 @@ public class MainActivity extends AppCompatActivity implements Constants {
             return false;
         }
         return false;
+    }
+
+    private String getAppVer() {
+        PackageInfo pInfo = null;
+
+        try {
+            pInfo = getPackageManager().getPackageInfo(this.getPackageName(), 0);
+        } catch(PackageManager.NameNotFoundException e) {
+            return "";
+        }
+
+        return pInfo.versionName;
     }
 }

@@ -157,6 +157,20 @@
             android:screenOrientation="portrait"/>
 
         <activity
+            android:name=".CBMAutoSendActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar"
+            tools:ignore="LockedOrientationActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".CBMChoiceListActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar"
+            tools:ignore="LockedOrientationActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity
             android:name=".CBMMainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"

@@ -5,11 +5,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.answers.Answers;
@@ -28,6 +28,8 @@ public class CBMDoor2Activity extends AppCompatActivity implements Constants, Vi
     private CheckBox mCheckBox1;
     private CheckBox mCheckBox2;
     private CheckBox mCheckBox3;
+    private CheckBox mCheckBox4;
+    private LinearLayout mLayoutMsgChoice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,14 +53,39 @@ public class CBMDoor2Activity extends AppCompatActivity implements Constants, Vi
         mCheckBox1 = findViewById(R.id.check1);
         mCheckBox2 = findViewById(R.id.check2);
         mCheckBox3 = findViewById(R.id.check3);
+        mCheckBox4 = findViewById(R.id.check4);
+        mLayoutMsgChoice = findViewById(R.id.ll_choice_msg);
 
         mCheckBox1.setOnCheckedChangeListener(this);
         mCheckBox2.setOnCheckedChangeListener(this);
         mCheckBox3.setOnCheckedChangeListener(this);
+        mCheckBox4.setOnCheckedChangeListener(this);
+        mLayoutMsgChoice.setOnClickListener(this);
 
         mCheckBox1.setChecked(Utils.GetBooleanSharedPreference(mContext, PREF_CHECK1));
         mCheckBox2.setChecked(Utils.GetBooleanSharedPreference(mContext, PREF_CHECK2));
         mCheckBox3.setChecked(Utils.GetBooleanSharedPreference(mContext, PREF_CHECK3));
+        mCheckBox4.setChecked(Utils.GetBooleanSharedPreference(mContext, PREF_CHECK4));
+
+        if(Utils.GetBooleanSharedPreference(mContext, PREF_CHECK4)) {
+            mLayoutMsgChoice.setVisibility(View.VISIBLE);
+        } else {
+            mLayoutMsgChoice.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(Utils.GetBooleanSharedPreference(mContext, PREF_CHECK4)) {
+            long msg = Utils.GetLongSharedPreference(mContext, PREF_CB_AUTO_MSG);
+            if(msg == 0) {
+                Toast.makeText(getApplicationContext(), R.string.please_choice_msg, Toast.LENGTH_LONG).show();
+            } else {
+                super.onBackPressed();
+            }
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @Override
@@ -71,7 +98,7 @@ public class CBMDoor2Activity extends AppCompatActivity implements Constants, Vi
                 i.putExtra(EXTRA_FROM_DOOR, "DOOR");
                 startActivity(i);
             }
-            break;
+                break;
 
             case R.id.iv_menu:
                 startActivity(new Intent(CBMDoor2Activity.this, LogActivity.class));
@@ -79,6 +106,13 @@ public class CBMDoor2Activity extends AppCompatActivity implements Constants, Vi
 
             case R.id.iv_home:
                 finish();
+                break;
+
+            case R.id.ll_choice_msg: {
+                Intent i = new Intent(CBMDoor2Activity.this, CBMChoiceListActivity.class);
+                i.putExtra(EXTRA_FROM_DOOR, "DOOR");
+                startActivity(i);
+            }
                 break;
         }
     }
@@ -94,10 +128,25 @@ public class CBMDoor2Activity extends AppCompatActivity implements Constants, Vi
 
             case R.id.check2:
                 Utils.PutSharedPreference(mContext, PREF_CHECK2, isChecked);
+                if(isChecked) {
+                    Utils.PutSharedPreference(mContext, PREF_CHECK4, false);
+                    mCheckBox4.setChecked(false);
+                }
                 break;
 
             case R.id.check3:
                 Utils.PutSharedPreference(mContext, PREF_CHECK3, isChecked);
+                break;
+
+            case R.id.check4:
+                Utils.PutSharedPreference(mContext, PREF_CHECK4, isChecked);
+                if(isChecked) {
+                    mLayoutMsgChoice.setVisibility(View.VISIBLE);
+                    Utils.PutSharedPreference(mContext, PREF_CHECK2, false);
+                    mCheckBox2.setChecked(false);
+                } else {
+                    mLayoutMsgChoice.setVisibility(View.GONE);
+                }
                 break;
         }
     }
