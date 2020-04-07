@@ -59,7 +59,7 @@ public class CBMAutoSendActivity extends AppCompatActivity implements Constants 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setContentView(R.layout.activity_cbm_list);
         mContext = getApplicationContext();
 
         mTvPhoneNumber = findViewById(R.id.tv_phonenum);
@@ -69,7 +69,6 @@ public class CBMAutoSendActivity extends AppCompatActivity implements Constants 
         Intent intent = getIntent();
 
         if(TextUtils.isEmpty(intent.getStringExtra(EXTRA_FROM_DOOR))) {
-            findViewById(R.id.btn_cancel).setVisibility(View.VISIBLE);
             mLayoutPhoneNumber.setVisibility(View.VISIBLE);
             mIsFromMsg = true;
             mSndNumber = intent.getStringExtra(EXTRA_SND_NUM);
@@ -164,8 +163,6 @@ public class CBMAutoSendActivity extends AppCompatActivity implements Constants 
     }
 
     private void prepareSending() {
-        mProgressDialog.show();
-
         mSettings = Settings.get(getApplicationContext());
         com.klinker.android.send_message.Settings sendSettings = new com.klinker.android.send_message.Settings();
         sendSettings.setMmsc(mSettings.getMmsc());
@@ -222,8 +219,6 @@ public class CBMAutoSendActivity extends AppCompatActivity implements Constants 
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-
-            mProgressDialog.dismiss();
 
             Message msg = new Message();
             msg.what = HANDLER_SEND;

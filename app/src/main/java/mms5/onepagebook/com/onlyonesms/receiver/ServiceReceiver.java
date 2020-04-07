@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.provider.Telephony;
+import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 
 import mms5.onepagebook.com.onlyonesms.CBMAutoSendActivity;
@@ -25,6 +26,12 @@ public class ServiceReceiver extends BroadcastReceiver implements Constants {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+
+        /*MyPhoneStateListener phoneStateListener = new MyPhoneStateListener(context);
+        TelephonyManager telephonyManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+        telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_SERVICE_STATE);
+        telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);*/
+
         String action = intent.getAction();
         String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
 
