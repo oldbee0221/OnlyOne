@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
 import android.provider.Telephony;
 import android.text.TextUtils;
 import android.util.Log;
@@ -51,6 +52,8 @@ public class TaskHandlerService implements Constants {
     private static final String EXTRA_IDX = "mms5.onepagebook.com.onlyonesms.service.extra.idx";
     private static final long MAYBE_SENDING_DURATION = 25 * 60 * 1000L;
     //private static final long MAYBE_SENDING_DURATION = 1 * 1 * 100L;
+
+    private static int RETRY_COUNT = 0;
 
     private static final int FOREGROUND_NOTIFICATION_ID = 14;
     private static final int START_HOUR = 8;
@@ -455,11 +458,11 @@ public class TaskHandlerService implements Constants {
             }
         }
 
-        private void sendStatusEnd(String idx,
-                                   String sendNumber,
-                                   String phoneNumber,
-                                   String isSent,
-                                   String endTime) {
+        private void sendStatusEnd(final String idx,
+                                   final String sendNumber,
+                                   final String phoneNumber,
+                                   final String isSent,
+                                   final String endTime) {
             try {
                 RetrofitManager.retrofit(m_context).create(Client.class)
                         .sendSendingStatusEnd(new SendingStatusBodyEnd(idx,
@@ -472,15 +475,113 @@ public class TaskHandlerService implements Constants {
                             public void onSuccess(DefaultResult response) {
                                 RealmManager.writeLog("[TaskHandlerService] sendStatus() - onSuccess");
                                 Log.e("TaskHandlerService", "onSuccess");
+                                if(!response.result.equals("0")) {
+                                    new Handler().postDelayed(new Runnable() {
+                                        public void run() {
+                                            if(RETRY_COUNT < 13) {
+                                                RETRY_COUNT++;
+                                                sendStatusEndRetry(idx, sendNumber, phoneNumber, isSent, endTime);
+                                            } else {
+                                                RETRY_COUNT = 0;
+                                            }
+                                        }
+                                    }, 300000);
+                                } else {
+                                    RETRY_COUNT = 0;
+                                }
                             }
 
                             @Override
                             public void onFail(int error, String msg) {
                                 RealmManager.writeLog("[TaskHandlerService] sendStatus() - onFail : " + msg + "[" + error + "]");
                                 Log.e("TaskHandlerService", "onFail" + msg);
+                                new Handler().postDelayed(new Runnable() {
+                                    public void run() {
+                                        if(RETRY_COUNT < 13) {
+                                            RETRY_COUNT++;
+                                            sendStatusEndRetry(idx, sendNumber, phoneNumber, isSent, endTime);
+                                        } else {
+                                            RETRY_COUNT = 0;
+                                        }
+                                    }
+                                }, 300000);
                             }
                         });
             } catch (Exception ignored) {
+                new Handler().postDelayed(new Runnable() {
+                    public void run() {
+                        if(RETRY_COUNT < 13) {
+                            RETRY_COUNT++;
+                            sendStatusEndRetry(idx, sendNumber, phoneNumber, isSent, endTime);
+                        } else {
+                            RETRY_COUNT = 0;
+                        }
+                    }
+                }, 300000);
+            }
+        }
+
+        private void sendStatusEndRetry(final String idx,
+                                   final String sendNumber,
+                                   final String phoneNumber,
+                                   final String isSent,
+                                   final String endTime) {
+            try {
+                RetrofitManager.retrofit(m_context).create(Client.class)
+                        .sendSendingStatusEnd(new SendingStatusBodyEnd(idx,
+                                sendNumber,
+                                phoneNumber,
+                                isSent,
+                                endTime))
+                        .enqueue(new ApiCallback<DefaultResult>() {
+                            @Override
+                            public void onSuccess(DefaultResult response) {
+                                RealmManager.writeLog("[TaskHandlerService] sendStatus() - onSuccess");
+                                Log.e("TaskHandlerService", "onSuccess");
+
+                                if(!response.result.equals("0")) {
+                                    new Handler().postDelayed(new Runnable() {
+                                        public void run() {
+                                            if(RETRY_COUNT < 13) {
+                                                RETRY_COUNT++;
+                                                sendStatusEnd(idx, sendNumber, phoneNumber, isSent, endTime);
+                                            } else {
+                                                RETRY_COUNT = 0;
+                                            }
+                                        }
+                                    }, 300000);
+                                } else {
+                                    RETRY_COUNT = 0;
+                                }
+                            }
+
+                            @Override
+                            public void onFail(int error, String msg) {
+                                RealmManager.writeLog("[TaskHandlerService] sendStatus() - onFail : " + msg + "[" + error + "]");
+                                Log.e("TaskHandlerService", "onFail" + msg);
+                                new Handler().postDelayed(new Runnable() {
+                                    public void run() {
+                                        if(RETRY_COUNT < 13) {
+                                            RETRY_COUNT++;
+                                            sendStatusEnd(idx, sendNumber, phoneNumber, isSent, endTime);
+                                        } else {
+                                            RETRY_COUNT = 0;
+                                        }
+                                    }
+                                }, 300000);
+                            }
+                        });
+            } catch (Exception ignored) {
+                new Handler().postDelayed(new Runnable() {
+                    public void run() {
+                        if(RETRY_COUNT < 13) {
+                            RETRY_COUNT++;
+                            sendStatusEnd(idx, sendNumber, phoneNumber, isSent, endTime);
+                        } else {
+                            RETRY_COUNT = 0;
+                        }
+                    }
+                }, 300000);
             }
         }
 

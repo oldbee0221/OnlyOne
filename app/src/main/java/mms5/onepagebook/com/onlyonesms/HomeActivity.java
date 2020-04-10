@@ -75,8 +75,14 @@ public class HomeActivity extends AppCompatActivity {
         }
 
         @JavascriptInterface
-        public void goCallbackApp() {
-
+        public void goCallbackApp(String id) {
+            Intent intent = new Intent(HomeActivity.this, CBMDoor2Activity.class);
+            if(Utils.IsEmpty(id)) {
+                intent.putExtra("ID", "");
+            } else {
+                intent.putExtra("ID", id);
+            }
+            startActivity(intent);
         }
     }
 
