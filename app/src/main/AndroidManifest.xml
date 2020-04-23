@@ -327,6 +327,11 @@
             android:enabled="true"
             android:exported="true" />
 
+        <service
+            android:name=".service.UndeadService"
+            android:enabled="true"
+            android:exported="true" />
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="mms5.onepagebook.com.onlyonesms.fileprovider"

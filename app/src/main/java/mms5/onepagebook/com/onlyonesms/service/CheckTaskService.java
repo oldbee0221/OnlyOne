@@ -135,8 +135,17 @@ public class CheckTaskService extends JobIntentService {
         private void handleTask(String result) {
             RealmManager.writeLog("[CheckTaskService] Result of GetTask: " + result);
             if (DefaultResult.RESULT_1.equals(result)) {
-//                TaskHandlerService.startWork(getApplicationContext(), "");
-                TaskHandlerService.getInstance(getApplicationContext()).onStartCommand("");
+//                TaskHandlerService.getInstance(getApplicationContext()).startWork(getApplicationContext(), "");
+                UndeadService.startWork(getApplicationContext(), "");
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                    Intent in = new Intent(getApplicationContext(), UndeadService.class);
+//                    getApplicationContext().startForegroundService(in);
+//                } else {
+//                    Intent in = new Intent(getApplicationContext(), UndeadService.class);
+//                    getApplicationContext().startService(in);
+//                }
+//
+//                TaskHandlerService.getInstance(getApplicationContext()).onStartCommand("");
             } else if (DefaultResult.RESULT_2.equals(result)) {
                 PreferenceManager.getInstance(getApplicationContext()).setChangedNumber(true);
             } else if (DefaultResult.RESULT_3.equals(result)) {

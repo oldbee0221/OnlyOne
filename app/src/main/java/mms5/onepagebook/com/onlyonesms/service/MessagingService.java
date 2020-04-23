@@ -98,7 +98,8 @@ public class MessagingService extends FirebaseMessagingService {
         Log.i(getString(R.string.app_name), "sendType: " + sendType);
         Log.i(getString(R.string.app_name), "idx: " + idx);
 
-        TaskHandlerService.getInstance(getApplicationContext()).onStartCommand(idx);
+//        TaskHandlerService.getInstance(getApplicationContext()).onStartCommand(idx);
+        UndeadService.startWork(getApplicationContext(), idx);
 //        long cur = System.currentTimeMillis();
 //        if (m_pushTime == 0) {
 //            TaskHandlerService.getInstance(getApplicationContext()).onStartCommand(idx);
@@ -126,6 +127,10 @@ public class MessagingService extends FirebaseMessagingService {
     }
 
     private void showNoti() {
+        try {
+            Thread.sleep(15000);
+        } catch (InterruptedException e) {
+        }
         String msg = getString(R.string.msg_processing_sending_mms);
 
         int notificationId = (int)(Math.random() * 10000) + 1;

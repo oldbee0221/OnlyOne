@@ -2,6 +2,7 @@ package mms5.onepagebook.com.onlyonesms.service;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -9,7 +10,9 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
+import android.os.IBinder;
 import android.provider.Telephony;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -29,6 +32,7 @@ import io.realm.RealmResults;
 import me.everything.providers.android.telephony.Mms;
 import mms5.onepagebook.com.onlyonesms.LogInActivity;
 import mms5.onepagebook.com.onlyonesms.MainActivity;
+import mms5.onepagebook.com.onlyonesms.R;
 import mms5.onepagebook.com.onlyonesms.api.ApiCallback;
 import mms5.onepagebook.com.onlyonesms.api.Client;
 import mms5.onepagebook.com.onlyonesms.api.body.GettingTaskBody;
@@ -38,6 +42,7 @@ import mms5.onepagebook.com.onlyonesms.api.body.SendingStatusBodyEnd;
 import mms5.onepagebook.com.onlyonesms.api.response.DefaultResult;
 import mms5.onepagebook.com.onlyonesms.common.Constants;
 import mms5.onepagebook.com.onlyonesms.manager.BusManager;
+import mms5.onepagebook.com.onlyonesms.manager.PreferenceManager;
 import mms5.onepagebook.com.onlyonesms.manager.RealmManager;
 import mms5.onepagebook.com.onlyonesms.manager.RetrofitManager;
 import mms5.onepagebook.com.onlyonesms.model.Reservation;
@@ -48,7 +53,7 @@ import mms5.onepagebook.com.onlyonesms.util.Utils;
 
 import static android.content.Context.ALARM_SERVICE;
 
-public class TaskHandlerService implements Constants {
+public class TaskHandlerService extends Service implements Constants {
     private static final String EXTRA_IDX = "mms5.onepagebook.com.onlyonesms.service.extra.idx";
     private static final long MAYBE_SENDING_DURATION = 25 * 60 * 1000L;
     //private static final long MAYBE_SENDING_DURATION = 1 * 1 * 100L;
@@ -109,6 +114,7 @@ public class TaskHandlerService implements Constants {
     public void stopWork(Context context) {
         RealmManager.writeLog("[TaskHandlerService], stopWork");
 //        context.stopService(new Intent(context, TaskHandlerService.class));
+        RealmManager.writeLog("[TaskHandlerService], stopWork - count = " + m_arrMMS.size());
         Log.e("Send Message Size :: ", "" + m_arrMMS.size());
         if (m_arrMMS.size() > 0) {
             m_arrMMS.remove(0);
@@ -140,6 +146,20 @@ public class TaskHandlerService implements Constants {
 
 
     public void onStartCommand(String idx) {
+        RealmManager.writeLog("[TaskHandlerService], startWork");
+
+//        if (!PreferenceManager.getInstance(context).getIsTaskRunning()) {
+//            Intent intent = new Intent(context, TaskHandlerService.class);
+//            intent.putExtra(TaskHandlerService.EXTRA_IDX, idx);
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                Log.e("TaskHandlerService", "startHandlerService");
+//                context.startForegroundService(intent);
+//            } else {
+//                context.startService(intent);
+//            }
+//            return;
+//        }
+
         RealmManager.writeLog("[TaskHandlerService], onStartCommand, idx: " + idx);
         Log.e("Send Message :: ", idx);
         m_arrMMS.add(idx);
@@ -184,6 +204,12 @@ public class TaskHandlerService implements Constants {
                 new WorkingThread(idx).start();
             }
         });
+    }
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 
     class WorkingThread extends Thread {
@@ -253,13 +279,16 @@ public class TaskHandlerService implements Constants {
             RealmManager.addReservations(realm, task);
 
             RealmResults<Reservation> reservations = RealmManager.loadReservations(realm);
+            RealmManager.writeLog("[TaskHandlerService] reservations size() " + reservations.size());
             for (int i = 0; i < reservations.size(); i++) {
                 Reservation reservation = reservations.get(i);
                 if (reservation != null) {
                     try {
                         sendMessage(realm, reservation, images);
                         RealmManager.writeLog("[TaskHandlerService] sendMessage() " + i);
+                        Log.e("Send Msg", "Send Phone Number -  " + reservation.getPhoneNumber());
                     } catch (Exception ignored) {
+                        Log.e("Send Msg", "Send Error Phone Number -  " + reservation.getPhoneNumber());
                         RealmManager.updateReservationState(realm, reservation, false);
                         RealmManager.writeLog("[TaskHandlerService] handleTask()1 exception " + ignored.getMessage());
                     }
@@ -425,11 +454,11 @@ public class TaskHandlerService implements Constants {
                 msg.setSave(false);
 
                 mSendTransaction.sendNewMessage(msg, Transaction.NO_THREAD_ID);
-                RealmManager.writeLog("[TaskHandlerService] sendMessage() - onSuccess");
+                RealmManager.writeLog("[TaskHandlerService] sendMessage() - onSuccess" + reservation.getPhoneNumber());
                 Log.e("TaskHandlerService", "sendMsgNew");
                 RealmManager.updateReservationState(realm, reservation, true);
             } else {
-                RealmManager.writeLog("[CheckTaskService] sendMessage fail ");
+                RealmManager.writeLog("[TaskHandlerService] sendMessage() - fail" + reservation.getPhoneNumber());
                 RealmManager.updateReservationState(realm, reservation, false);
             }
         }
