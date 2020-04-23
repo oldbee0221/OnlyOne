@@ -42,11 +42,13 @@ import mms5.onepagebook.com.onlyonesms.api.body.SendingStatusBodyEnd;
 import mms5.onepagebook.com.onlyonesms.api.response.DefaultResult;
 import mms5.onepagebook.com.onlyonesms.common.Constants;
 import mms5.onepagebook.com.onlyonesms.manager.BusManager;
+import mms5.onepagebook.com.onlyonesms.manager.GsonManager;
 import mms5.onepagebook.com.onlyonesms.manager.PreferenceManager;
 import mms5.onepagebook.com.onlyonesms.manager.RealmManager;
 import mms5.onepagebook.com.onlyonesms.manager.RetrofitManager;
 import mms5.onepagebook.com.onlyonesms.model.Reservation;
 import mms5.onepagebook.com.onlyonesms.model.Task;
+import mms5.onepagebook.com.onlyonesms.model.UserInfo;
 import mms5.onepagebook.com.onlyonesms.receiver.AlarmReceiver;
 import mms5.onepagebook.com.onlyonesms.util.Settings;
 import mms5.onepagebook.com.onlyonesms.util.Utils;
@@ -222,9 +224,14 @@ public class TaskHandlerService extends Service implements Constants {
         @Override
         public void run() {
             try {
+                PreferenceManager prefManager = PreferenceManager.getInstance(m_context);
+                String userJson = prefManager.getUseJson();
+
+                UserInfo userInfo = GsonManager.getGson().fromJson(userJson, UserInfo.class);
+
                 Task response = RetrofitManager.retrofit(m_context)
                         .create(Client.class)
-                        .getTasks(new GettingTaskBody(Utils.getPhoneNumber(m_context), mIdx))
+                        .getTasks(new GettingTaskBody(Utils.getPhoneNumber(m_context), mIdx, userInfo.id))
                         .execute()
                         .body();
 

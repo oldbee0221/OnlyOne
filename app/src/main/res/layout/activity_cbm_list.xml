@@ -36,32 +36,47 @@
             android:src="@drawable/baseline_menu_black_24"/>
     </RelativeLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="8dp"
         android:paddingTop="8dp"
-        android:gravity="center"
-        android:background="@color/callback_primary"
-        android:orientation="vertical">
+        android:background="@color/callback_primary">
 
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/callback_title_sub"
-            android:textColor="@android:color/white"
-            android:textSize="14sp" />
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/callback_title_sub"
+                android:textColor="@android:color/white"
+                android:textSize="14sp" />
 
-        <TextView
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="@string/callback_title_main"
+                android:textColor="@android:color/white"
+                android:textSize="17sp"
+                android:textStyle="bold"/>
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/iv_clear"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:text="@string/callback_title_main"
-            android:textColor="@android:color/white"
-            android:textSize="17sp"
-            android:textStyle="bold"/>
+            android:src="@drawable/baseline_clear_white_36"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="8dp"
+            android:visibility="gone"/>
 
-    </LinearLayout>
+    </RelativeLayout>
 
 
     <LinearLayout

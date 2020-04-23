@@ -59,6 +59,7 @@ public class CBMChoiceListActivity extends AppCompatActivity implements Constant
     private TextView mTvPhoneNumber;
     private TextView mTvName;
     private LinearLayout mLayoutPhoneNumber;
+    private LinearLayout mLayoutMenu;
 
     private List<CallMsg> mMsgs;
     private boolean mIsFromMsg;
@@ -83,6 +84,7 @@ public class CBMChoiceListActivity extends AppCompatActivity implements Constant
         mTvPhoneNumber = findViewById(R.id.tv_phonenum);
         mTvName = findViewById(R.id.tv_name);
         mLayoutPhoneNumber = findViewById(R.id.ll_phonenum);
+        mLayoutMenu = findViewById(R.id.ll_menu);
 
         mSrl = findViewById(R.id.srl_base);
         mSrl.setOnRefreshListener(onRefresh);
@@ -288,6 +290,9 @@ public class CBMChoiceListActivity extends AppCompatActivity implements Constant
                         .getAll();
 
                 mAdapter.add(mMsgs);
+                if(mMsgs.size() == 0) {
+                    mLayoutMenu.setVisibility(View.VISIBLE);
+                }
             }
         }).start();
 

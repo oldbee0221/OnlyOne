@@ -98,11 +98,14 @@ public class CBMListActvitity extends AppCompatActivity implements Constants, Vi
         findViewById(R.id.btn_cancel).setOnClickListener(this);
         findViewById(R.id.iv_home).setOnClickListener(this);
         findViewById(R.id.iv_menu).setOnClickListener(this);
+        findViewById(R.id.iv_clear).setOnClickListener(this);
 
         Intent intent = getIntent();
 
         if(TextUtils.isEmpty(intent.getStringExtra(EXTRA_FROM_DOOR))) {
             findViewById(R.id.btn_cancel).setVisibility(View.VISIBLE);
+            findViewById(R.id.iv_clear).setVisibility(View.VISIBLE);
+
             mLayoutPhoneNumber.setVisibility(View.VISIBLE);
             mIsFromMsg = true;
             mSndNumber = intent.getStringExtra(EXTRA_SND_NUM);
@@ -135,6 +138,7 @@ public class CBMListActvitity extends AppCompatActivity implements Constants, Vi
             }
             break;
 
+            case R.id.iv_clear:
             case R.id.btn_cancel:
             case R.id.iv_home:
                 finish();

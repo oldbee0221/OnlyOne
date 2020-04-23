@@ -22,7 +22,7 @@ import mms5.onepagebook.com.onlyonesms.util.Utils;
 public class SyncContactsService extends JobIntentService {
     private static final int JOB_ID = 87;
     private static final long MIN_ELAPSED_TIME = 8L * 60L * 60L * 1000L;
-    private static final long DELAY = 60L * 60L * 1000L;
+    private static final long DELAY = 300L * 60L * 1000L;
 
     private ArrayList<Long> mContactId = new ArrayList<>();
     private WorkingThread mWorker;
