@@ -49,6 +49,7 @@ import mms5.onepagebook.com.onlyonesms.util.Utils;
 public class CBMChoiceListActivity extends AppCompatActivity implements Constants, View.OnClickListener {
     private final int HANDLER_SEND = 301;
     private final int REQ_UPDATE = 500;
+    private final int MENU_VISIBLE = 600;
 
     private Context mContext;
 
@@ -291,7 +292,9 @@ public class CBMChoiceListActivity extends AppCompatActivity implements Constant
 
                 mAdapter.add(mMsgs);
                 if(mMsgs.size() == 0) {
-                    mLayoutMenu.setVisibility(View.VISIBLE);
+                    Message msg = new Message();
+                    msg.what = MENU_VISIBLE;
+                    handler.sendMessage(msg);
                 }
             }
         }).start();
@@ -310,6 +313,10 @@ public class CBMChoiceListActivity extends AppCompatActivity implements Constant
 
                 case HANDLER_SEND:
                     showFinDialog();
+                    break;
+
+                case MENU_VISIBLE:
+                    mLayoutMenu.setVisibility(View.VISIBLE);
                     break;
             }
         }

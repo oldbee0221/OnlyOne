@@ -224,9 +224,8 @@ public class TaskHandlerService extends Service implements Constants {
         @Override
         public void run() {
             try {
-                PreferenceManager prefManager = PreferenceManager.getInstance(m_context);
-                String userJson = prefManager.getUseJson();
-
+                PreferenceManager preferenceManager = PreferenceManager.getInstance(m_context);
+                String userJson = preferenceManager.getUseJson();
                 UserInfo userInfo = GsonManager.getGson().fromJson(userJson, UserInfo.class);
 
                 Task response = RetrofitManager.retrofit(m_context)

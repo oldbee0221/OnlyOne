@@ -105,7 +105,16 @@ public class CBMDoor2Activity extends AppCompatActivity implements Constants, Vi
                 break;
 
             case R.id.iv_home:
-                finish();
+                if(Utils.GetBooleanSharedPreference(mContext, PREF_CHECK4)) {
+                    long msg = Utils.GetLongSharedPreference(mContext, PREF_CB_AUTO_MSG);
+                    if(msg == 0) {
+                        Toast.makeText(getApplicationContext(), R.string.please_choice_msg, Toast.LENGTH_LONG).show();
+                    } else {
+                        finish();
+                    }
+                } else {
+                    finish();
+                }
                 break;
 
             case R.id.ll_choice_msg: {

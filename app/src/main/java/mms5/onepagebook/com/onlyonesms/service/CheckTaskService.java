@@ -19,10 +19,12 @@ import mms5.onepagebook.com.onlyonesms.api.Client;
 import mms5.onepagebook.com.onlyonesms.api.body.CheckTaskBody;
 import mms5.onepagebook.com.onlyonesms.api.body.GettingStatisticsBody;
 import mms5.onepagebook.com.onlyonesms.api.response.DefaultResult;
+import mms5.onepagebook.com.onlyonesms.manager.GsonManager;
 import mms5.onepagebook.com.onlyonesms.manager.PreferenceManager;
 import mms5.onepagebook.com.onlyonesms.manager.RealmManager;
 import mms5.onepagebook.com.onlyonesms.manager.RetrofitManager;
 import mms5.onepagebook.com.onlyonesms.model.Statistics;
+import mms5.onepagebook.com.onlyonesms.model.UserInfo;
 import mms5.onepagebook.com.onlyonesms.util.Utils;
 
 public class CheckTaskService extends JobIntentService {
@@ -33,9 +35,16 @@ public class CheckTaskService extends JobIntentService {
     private static final long DELAY = 60L * 1000L;
 
     private WorkingThread mWorker;
+    private Context m_context;
 
     public static void enqueue(Context context) {
         enqueueWork(context, CheckTaskService.class, JOB_ID, new Intent());
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        m_context = getApplicationContext();
     }
 
     @Override
@@ -118,9 +127,13 @@ public class CheckTaskService extends JobIntentService {
 
         private void checkTask(String phoneNumber, int count) {
             try {
+                PreferenceManager preferenceManager = PreferenceManager.getInstance(m_context);
+                String userJson = preferenceManager.getUseJson();
+                UserInfo userInfo = GsonManager.getGson().fromJson(userJson, UserInfo.class);
+
                 DefaultResult response = RetrofitManager.retrofit(getApplicationContext())
                         .create(Client.class)
-                        .checkTasks(new CheckTaskBody(phoneNumber, String.valueOf(count)))
+                        .checkTasks(new CheckTaskBody(phoneNumber, String.valueOf(count), userInfo.id))
                         .execute()
                         .body();
 

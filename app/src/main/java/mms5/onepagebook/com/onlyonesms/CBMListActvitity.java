@@ -21,7 +21,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
@@ -58,7 +58,7 @@ public class CBMListActvitity extends AppCompatActivity implements Constants, Vi
     private CallMsgAdapter mAdapter;
     private TextView mTvPhoneNumber;
     private TextView mTvName;
-    private LinearLayout mLayoutPhoneNumber;
+    private RelativeLayout mLayoutPhoneNumber;
 
     private List<CallMsg> mMsgs;
     private boolean mIsFromMsg;
