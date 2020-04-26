@@ -20,6 +20,8 @@
     <string name="login_guide4">* 추가폰ID : 타인 계정에 문자만 추가할 경우, 타인 계정의 로그인 ID</string>
     <string name="login_guide5">2.비밀번호 : 해당 계정의 PW를 입력하세요.</string>
 
+    <string name="join_guide">* 계정이 없으면 회원가입 하세요.</string>
+
     <string name="term_cancel">취소</string>
     <string name="term_agree">동의합니다.</string>
     <string name="msg_no_usim">해당폰은 USIM이 없어 사용할수 없습니다.\n만약 정상적으로 개통된 폰이라면 다시 실행해 주세요.</string>

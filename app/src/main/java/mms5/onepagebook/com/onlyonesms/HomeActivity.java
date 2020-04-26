@@ -92,7 +92,8 @@ public class HomeActivity extends AppCompatActivity {
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             Utils.Log("shouldOverrideUrlLoading() " + url);
 
-            if(url.contains("http://obmms.net/iam/")) {
+            //if(url.contains("http://obmms.net/iam/")) {
+            if(url.contains("http://obmms.net")) {
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 Uri u = Uri.parse(url);
                 i.setData(u);
