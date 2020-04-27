@@ -191,10 +191,10 @@ public class CBMAutoSendActivity extends AppCompatActivity implements Constants 
     private class SendMsgTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... voids) {
-            Utils.Log("SendMsgTask 1");
-            Utils.Log("SendMsgTask " + mMsgForSending.imgpath);
-            Utils.Log("SendMsgTask " + mMsgForSending.title);
-            Utils.Log("SendMsgTask " + mMsgForSending.contents);
+            //Utils.Log("SendMsgTask 1");
+            //Utils.Log("SendMsgTask " + mMsgForSending.imgpath);
+            //Utils.Log("SendMsgTask " + mMsgForSending.title);
+            //Utils.Log("SendMsgTask " + mMsgForSending.contents);
 
             com.klinker.android.send_message.Message msg = new com.klinker.android.send_message.Message();
             if (!TextUtils.isEmpty(mMsgForSending.imgpath)) {

@@ -131,9 +131,16 @@ public class CheckTaskService extends JobIntentService {
                 String userJson = preferenceManager.getUseJson();
                 UserInfo userInfo = GsonManager.getGson().fromJson(userJson, UserInfo.class);
 
+                String userId;
+                if(userInfo == null || userInfo.id == null) {
+                    userId = "";
+                } else {
+                    userId = userInfo.id;
+                }
+
                 DefaultResult response = RetrofitManager.retrofit(getApplicationContext())
                         .create(Client.class)
-                        .checkTasks(new CheckTaskBody(phoneNumber, String.valueOf(count), userInfo.id))
+                        .checkTasks(new CheckTaskBody(phoneNumber, String.valueOf(count), userId))
                         .execute()
                         .body();
 

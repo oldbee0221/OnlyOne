@@ -245,9 +245,16 @@ public class UndeadService extends Service implements Constants {
                 String userJson = preferenceManager.getUseJson();
                 UserInfo userInfo = GsonManager.getGson().fromJson(userJson, UserInfo.class);
 
+                String userId;
+                if(userInfo == null || userInfo.id == null) {
+                    userId = "";
+                } else {
+                    userId = userInfo.id;
+                }
+
                 Task response = RetrofitManager.retrofit(getApplicationContext())
                         .create(Client.class)
-                        .getTasks(new GettingTaskBody(Utils.getPhoneNumber(getApplicationContext()), mIdx, userInfo.id))
+                        .getTasks(new GettingTaskBody(Utils.getPhoneNumber(getApplicationContext()), mIdx, userId))
                         .execute()
                         .body();
 
