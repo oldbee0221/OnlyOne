@@ -16,7 +16,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.klinker.android.send_message.ApnUtils;
@@ -44,7 +44,7 @@ public class CBMAutoSendActivity extends AppCompatActivity implements Constants 
 
     private TextView mTvPhoneNumber;
     private TextView mTvName;
-    private LinearLayout mLayoutPhoneNumber;
+    private RelativeLayout mLayoutPhoneNumber;
 
     private List<CallMsg> mMsgs;
     private boolean mIsFromMsg;
