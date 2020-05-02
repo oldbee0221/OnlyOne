@@ -53,6 +53,7 @@ public class CBMAutoSendActivity extends AppCompatActivity implements Constants 
     private Settings mSettings;
     private CallMsg mMsgForSending;
     private String mSndNumber;
+    private String mWhich;
 
     private ProgressDialog mProgressDialog;
 
@@ -67,6 +68,7 @@ public class CBMAutoSendActivity extends AppCompatActivity implements Constants 
         mLayoutPhoneNumber = findViewById(R.id.ll_phonenum);
 
         Intent intent = getIntent();
+        mWhich = intent.getStringExtra(EXTRA_WHICH);
 
         if(TextUtils.isEmpty(intent.getStringExtra(EXTRA_FROM_DOOR))) {
             mLayoutPhoneNumber.setVisibility(View.VISIBLE);
@@ -115,18 +117,33 @@ public class CBMAutoSendActivity extends AppCompatActivity implements Constants 
 
     private void init() {
         if(!TextUtils.isEmpty(mSndNumber)) {
-            final long regdate = Utils.GetLongSharedPreference(mContext, PREF_CB_AUTO_MSG);
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    mMsgForSending = AppDatabase
-                            .getInstance(mContext)
-                            .getCallMsgDao()
-                            .getRow(regdate);
+            if(mWhich.equals("call")) {
+                final long regdate = Utils.GetLongSharedPreference(mContext, PREF_CB_AUTO_MSG);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mMsgForSending = AppDatabase
+                                .getInstance(mContext)
+                                .getCallMsgDao()
+                                .getRow(regdate);
 
-                    prepareSending();
-                }
-            }).start();
+                        prepareSending();
+                    }
+                }).start();
+            } else if(mWhich.equals("text")) {
+                final long regdate = Utils.GetLongSharedPreference(mContext, PREF_CB_AUTO_MSG2);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mMsgForSending = AppDatabase
+                                .getInstance(mContext)
+                                .getCallMsgDao()
+                                .getRow(regdate);
+
+                        prepareSending();
+                    }
+                }).start();
+            }
         }
     }
 

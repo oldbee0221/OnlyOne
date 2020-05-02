@@ -182,6 +182,14 @@ public class LogInActivity extends AppCompatActivity implements Constants {
             }
         });
 
+        findViewById(R.id.tv_join).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://obmms.net/m/join.php"));
+                startActivity(intent);
+            }
+        });
+
         findViewById(R.id.iv_home).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -187,6 +187,14 @@ public class DoorActivity extends AppCompatActivity implements Constants {
                 startActivity(new Intent(DoorActivity.this, LogActivity.class));
             }
         });
+
+        findViewById(R.id.tv_join).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://obmms.net/m/join.php"));
+                startActivity(intent);
+            }
+        });
     }
 
     private boolean isAllValidInput() {

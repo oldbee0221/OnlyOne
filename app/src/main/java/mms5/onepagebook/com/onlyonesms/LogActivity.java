@@ -9,8 +9,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -109,6 +107,7 @@ public class LogActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String logs) {
             super.onPostExecute(logs);
+            if(logs.equals("[]")) logs = "";
             mTextLogs.setText(logs);
             mBtnDelete.setVisibility(View.VISIBLE);
         }

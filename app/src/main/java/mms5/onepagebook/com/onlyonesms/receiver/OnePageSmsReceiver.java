@@ -23,6 +23,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import me.leolin.shortcutbadger.ShortcutBadger;
+import mms5.onepagebook.com.onlyonesms.CBMAutoSendActivity;
 import mms5.onepagebook.com.onlyonesms.CBMListActvitity;
 import mms5.onepagebook.com.onlyonesms.R;
 import mms5.onepagebook.com.onlyonesms.SteppingStoneActivity;
@@ -124,6 +125,8 @@ public class OnePageSmsReceiver extends BroadcastReceiver implements Constants {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        Utils.Log("OnePageSmsReceiver onReceive-------------");
+
         if (ACTION_RECEIVED.equals(intent.getAction())) {
             String number = "";
             Bundle bundle = intent.getExtras();
@@ -166,6 +169,18 @@ public class OnePageSmsReceiver extends BroadcastReceiver implements Constants {
                     if(Utils.Is010PhoneNumber(number)) {
                         Intent it = new Intent(context, CBMListActvitity.class);
                         it.putExtra(EXTRA_SND_NUM, number);
+                        it.addFlags(FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(it);
+                    }
+                }
+
+                boolean check5 = Utils.GetBooleanSharedPreference(context, PREF_CHECK5);
+                if (check5) {
+                    Utils.Log("ServiceReceiver onReceive: 19");
+                    if(Utils.Is010PhoneNumber(number)) {
+                        Intent it = new Intent(context, CBMAutoSendActivity.class);
+                        it.putExtra(EXTRA_SND_NUM, number);
+                        it.putExtra(EXTRA_WHICH, "text");
                         it.addFlags(FLAG_ACTIVITY_NEW_TASK);
                         context.startActivity(it);
                     }

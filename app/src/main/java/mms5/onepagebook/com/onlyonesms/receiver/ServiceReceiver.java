@@ -71,6 +71,7 @@ public class ServiceReceiver extends BroadcastReceiver implements Constants {
                             Utils.Log("ServiceReceiver onReceive: 19");
                             if(Utils.Is010PhoneNumber(mPhoneNumberIn)) {
                                 Intent it = new Intent(context, CBMAutoSendActivity.class);
+                                it.putExtra(EXTRA_WHICH, "call");
                                 it.putExtra(EXTRA_SND_NUM, mPhoneNumberIn);
                                 it.addFlags(FLAG_ACTIVITY_NEW_TASK);
                                 context.startActivity(it);

@@ -21,6 +21,7 @@
     <string name="login_guide5">2.비밀번호 : 해당 계정의 PW를 입력하세요.</string>
 
     <string name="join_guide">* 계정이 없으면 회원가입 하세요.</string>
+    <string name="join"><u>회원가입</u></string>
 
     <string name="term_cancel">취소</string>
     <string name="term_agree">동의합니다.</string>
@@ -72,13 +73,15 @@
     <string name="use_on_call_recv">전화수신 콜백사용</string>
     <string name="use_on_call_send">전화발신 콜백사용</string>
     <string name="call_recv_auto_callback">전화수신 자동콜백</string>
+    <string name="text_recv_auto_callback">문자수신 자동콜백</string>
     <string name="callback_write">콜백작성</string>
     <string name="callback_cancel">발송취소</string>
     <string name="choice_msg">메시지 선택</string>
 
-    <string name="callback_desc1">전화수신 콜백사용 : 전화가 왔을 때 콜백 문자사용 여부를 선택하세요.</string>
-    <string name="callback_desc2">전화발신 콜백사용 : 전화발신 후에 콜백문자 사용여부를 선택하세요.</string>
-    <string name="callback_desc3">전화수신 자동콜백 : 전화수신 후에 자동을 선택하고 메시지 조회를 통해 해당 메시지를 선택하면 자동으로 콜백이 발송된다.</string>
+    <string name="callback_desc1">전화수신 콜백사용 : 전화를 수신한 후에 수동으로 메시지를 선택하여 발송하는 기능입니다.</string>
+    <string name="callback_desc2">전화발신 콜백사용 : 전화를 발신한 후에 수동으로 메시지를 선택하여 발송하는 기능입니다.</string>
+    <string name="callback_desc3">전화수신 자동콜백 : 전화를 수신하고 나면 미리 선택한 메시지가 자동으로 발송됩니다.</string>
+    <string name="callback_desc4">문자수신 자동콜백 : 문자를 수신하고 나면 미리 선택한 메시지가 자동으로 발송됩니다.</string>
     <string name="please_choice_msg">전화수신 자동콜백을 선택하셨습니다.\n자동으로 보낼 메시지를 선택하셔야 합니다.</string>
     <string name="callback_title_sub">통화가 끝난 후 선택적으로 나를 알리는</string>
     <string name="callback_title_main">온리원콜백</string>

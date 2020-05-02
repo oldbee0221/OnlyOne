@@ -7,12 +7,14 @@ public interface Constants {
     String EXTRA_IMG_PATH = "onlyonesms.extra.imgpath";
     String EXTRA_FROM_DOOR = "onlyonesms.extra.from.door";
     String EXTRA_SND_NUM = "onlyonesms.extra.snd.num";
+    String EXTRA_WHICH = "onlyonesms.extra.which";
 
     String PREF_BADGE_CNT = "onlyonesms.pref.bc";
     String PREF_CHECK1 = "onlyonesms.pref.chk1";
     String PREF_CHECK2 = "onlyonesms.pref.chk2";
     String PREF_CHECK3 = "onlyonesms.pref.chk3";
     String PREF_CHECK4 = "onlyonesms.pref.chk4";
+    String PREF_CHECK5 = "onlyonesms.pref.chk5";
 
     String PREF_IDX = "onlyonesms.pref.idx";
     String PREF_PN = "onlyonesms.pref.pn";
@@ -21,6 +23,7 @@ public interface Constants {
     String PREF_SENT = "onlyonesms.pref.sent";
     String PREF_AUTOLOGIN = "onlyonesms.pref.autologin";
     String PREF_CB_AUTO_MSG = "onlyonesms.pref.cbautomsg";
+    String PREF_CB_AUTO_MSG2 = "onlyonesms.pref.cbautomsg2";
 
     String FRAG_01 = "01";
     String FRAG_S1 = "번으로 변경";

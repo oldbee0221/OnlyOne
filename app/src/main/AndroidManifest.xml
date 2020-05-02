@@ -180,6 +180,13 @@
             android:screenOrientation="portrait"/>
 
         <activity
+            android:name=".CBMChoiceList2Activity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar"
+            tools:ignore="LockedOrientationActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity
             android:name=".CBMMainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"

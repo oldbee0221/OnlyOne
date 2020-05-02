@@ -13,6 +13,7 @@ import com.android.mms.transaction.PushReceiver;
 
 import java.text.MessageFormat;
 
+import mms5.onepagebook.com.onlyonesms.CBMAutoSendActivity;
 import mms5.onepagebook.com.onlyonesms.CBMListActvitity;
 import mms5.onepagebook.com.onlyonesms.common.Constants;
 import mms5.onepagebook.com.onlyonesms.util.Utils;
@@ -74,6 +75,18 @@ public class OnePageMmsReceiver extends PushReceiver implements Constants {
                 if (check1) {
                     if(Utils.Is010PhoneNumber(number)) {
                         Intent it = new Intent(_context, CBMListActvitity.class);
+                        it.putExtra(EXTRA_SND_NUM, number);
+                        it.addFlags(FLAG_ACTIVITY_NEW_TASK);
+                        _context.startActivity(it);
+                    }
+                }
+
+                boolean check5 = Utils.GetBooleanSharedPreference(_context, PREF_CHECK5);
+                if (check5) {
+                    Utils.Log("ServiceReceiver onReceive: 19");
+                    if(Utils.Is010PhoneNumber(number)) {
+                        Intent it = new Intent(_context, CBMAutoSendActivity.class);
+                        it.putExtra(EXTRA_WHICH, "text");
                         it.putExtra(EXTRA_SND_NUM, number);
                         it.addFlags(FLAG_ACTIVITY_NEW_TASK);
                         _context.startActivity(it);

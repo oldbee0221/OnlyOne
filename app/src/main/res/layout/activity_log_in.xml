@@ -164,13 +164,26 @@
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
-                <TextView
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
-                    android:layout_marginTop="10dp"
-                    android:text="@string/join_guide"
-                    android:textSize="14sp"/>
+                    android:layout_marginTop="10dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/join_guide"
+                        android:textSize="14sp"/>
+
+                    <TextView
+                        android:id="@+id/tv_join"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="6dp"
+                        android:text="@string/join"
+                        android:textSize="14sp"
+                        android:textColor="@color/tomato"/>
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"

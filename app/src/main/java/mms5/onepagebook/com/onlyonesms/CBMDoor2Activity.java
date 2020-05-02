@@ -29,7 +29,9 @@ public class CBMDoor2Activity extends AppCompatActivity implements Constants, Vi
     private CheckBox mCheckBox2;
     private CheckBox mCheckBox3;
     private CheckBox mCheckBox4;
+    private CheckBox mCheckBox5;
     private LinearLayout mLayoutMsgChoice;
+    private LinearLayout mLayoutMsgChoice2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,23 +56,34 @@ public class CBMDoor2Activity extends AppCompatActivity implements Constants, Vi
         mCheckBox2 = findViewById(R.id.check2);
         mCheckBox3 = findViewById(R.id.check3);
         mCheckBox4 = findViewById(R.id.check4);
+        mCheckBox5 = findViewById(R.id.check5);
         mLayoutMsgChoice = findViewById(R.id.ll_choice_msg);
+        mLayoutMsgChoice2 = findViewById(R.id.ll_choice_msg2);
 
         mCheckBox1.setOnCheckedChangeListener(this);
         mCheckBox2.setOnCheckedChangeListener(this);
         mCheckBox3.setOnCheckedChangeListener(this);
         mCheckBox4.setOnCheckedChangeListener(this);
+        mCheckBox5.setOnCheckedChangeListener(this);
         mLayoutMsgChoice.setOnClickListener(this);
+        mLayoutMsgChoice2.setOnClickListener(this);
 
         mCheckBox1.setChecked(Utils.GetBooleanSharedPreference(mContext, PREF_CHECK1));
         mCheckBox2.setChecked(Utils.GetBooleanSharedPreference(mContext, PREF_CHECK2));
         mCheckBox3.setChecked(Utils.GetBooleanSharedPreference(mContext, PREF_CHECK3));
         mCheckBox4.setChecked(Utils.GetBooleanSharedPreference(mContext, PREF_CHECK4));
+        mCheckBox5.setChecked(Utils.GetBooleanSharedPreference(mContext, PREF_CHECK5));
 
         if(Utils.GetBooleanSharedPreference(mContext, PREF_CHECK4)) {
             mLayoutMsgChoice.setVisibility(View.VISIBLE);
         } else {
             mLayoutMsgChoice.setVisibility(View.GONE);
+        }
+
+        if(Utils.GetBooleanSharedPreference(mContext, PREF_CHECK5)) {
+            mLayoutMsgChoice2.setVisibility(View.VISIBLE);
+        } else {
+            mLayoutMsgChoice2.setVisibility(View.GONE);
         }
     }
 
@@ -93,11 +106,12 @@ public class CBMDoor2Activity extends AppCompatActivity implements Constants, Vi
         int vid = view.getId();
 
         switch (vid) {
-            case R.id.btn_cb_reg: {
-                Intent i = new Intent(CBMDoor2Activity.this, CBMListActvitity.class);
-                i.putExtra(EXTRA_FROM_DOOR, "DOOR");
-                startActivity(i);
-            }
+            case R.id.btn_cb_reg:
+                {
+                    Intent i = new Intent(CBMDoor2Activity.this, CBMListActvitity.class);
+                    i.putExtra(EXTRA_FROM_DOOR, "DOOR");
+                    startActivity(i);
+                }
                 break;
 
             case R.id.iv_menu:
@@ -117,11 +131,20 @@ public class CBMDoor2Activity extends AppCompatActivity implements Constants, Vi
                 }
                 break;
 
-            case R.id.ll_choice_msg: {
-                Intent i = new Intent(CBMDoor2Activity.this, CBMChoiceListActivity.class);
-                i.putExtra(EXTRA_FROM_DOOR, "DOOR");
-                startActivity(i);
-            }
+            case R.id.ll_choice_msg:
+                {
+                    Intent i = new Intent(CBMDoor2Activity.this, CBMChoiceListActivity.class);
+                    i.putExtra(EXTRA_FROM_DOOR, "DOOR");
+                    startActivity(i);
+                }
+                break;
+
+            case R.id.ll_choice_msg2:
+                {
+                    Intent i = new Intent(CBMDoor2Activity.this, CBMChoiceList2Activity.class);
+                    i.putExtra(EXTRA_FROM_DOOR, "DOOR");
+                    startActivity(i);
+                }
                 break;
         }
     }
@@ -155,6 +178,15 @@ public class CBMDoor2Activity extends AppCompatActivity implements Constants, Vi
                     mCheckBox2.setChecked(false);
                 } else {
                     mLayoutMsgChoice.setVisibility(View.GONE);
+                }
+                break;
+
+            case R.id.check5:
+                Utils.PutSharedPreference(mContext, PREF_CHECK5, isChecked);
+                if(isChecked) {
+                    mLayoutMsgChoice2.setVisibility(View.VISIBLE);
+                } else {
+                    mLayoutMsgChoice2.setVisibility(View.GONE);
                 }
                 break;
         }
