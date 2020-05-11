@@ -206,17 +206,23 @@ public class CBMChoiceList2Activity extends AppCompatActivity implements Constan
             }
 
             @Override
-            public void onSend(final CallMsg item) {
-                if(!TextUtils.isEmpty(mSndNumber)) {
-                    mMsgForSending = item;
-                    prepareSending();
-                }
+            public void onSelect(int position, long regdate) {
+                mAdapter.check(position);
+                Utils.PutSharedPreference(mContext, PREF_CB_AUTO_MSG2, regdate);
             }
 
             @Override
-            public void onUpdate(int position, long regdate) {
-                mAdapter.check(position);
-                Utils.PutSharedPreference(mContext, PREF_CB_AUTO_MSG2, regdate);
+            public void onUpdate(final CallMsg item) {
+                if(mIsFromMsg) {
+                    Intent i = new Intent(CBMChoiceList2Activity.this, CBMUpdate2Activity.class);
+                    i.putExtra(EXTRA_SND_NUM, mSndNumber);
+                    i.putExtra("data", item);
+                    startActivityForResult(i, REQ_UPDATE);
+                } else {
+                    Intent i = new Intent(CBMChoiceList2Activity.this, CBMUpdateActivity.class);
+                    i.putExtra("data", item);
+                    startActivity(i);
+                }
             }
 
             @Override

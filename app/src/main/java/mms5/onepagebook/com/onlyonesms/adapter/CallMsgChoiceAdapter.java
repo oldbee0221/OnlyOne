@@ -48,14 +48,6 @@ public abstract class CallMsgChoiceAdapter extends RecyclerView.Adapter<CallMsgC
     public void onBindViewHolder(ViewHolder holder, final int position) {
         final CallMsg item = mItems.get(position);
 
-        if (mIsFromMsg) {
-            holder.mLayoutSend.setVisibility(View.GONE);
-            holder.mLayoutDelete.setVisibility(View.GONE);
-        } else {
-            holder.mLayoutSend.setVisibility(View.GONE);
-            holder.mLayoutDelete.setVisibility(View.GONE);
-        }
-
         holder.mTvDate.setText(getDate(item.regdate));
         holder.mTvCategory.setText(item.category);
         holder.mTvTitle.setText(item.title);
@@ -76,7 +68,7 @@ public abstract class CallMsgChoiceAdapter extends RecyclerView.Adapter<CallMsgC
         holder.mLayoutUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onUpdate(position, item.regdate);
+                onUpdate(item);
             }
         });
 
@@ -86,10 +78,10 @@ public abstract class CallMsgChoiceAdapter extends RecyclerView.Adapter<CallMsgC
                 onDel(item);
             }
         });
-        holder.mLayoutSend.setOnClickListener(new View.OnClickListener() {
+        holder.mLayoutSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onSend(item);
+                onSelect(position, item.regdate);
             }
         });
     }
@@ -178,8 +170,8 @@ public abstract class CallMsgChoiceAdapter extends RecyclerView.Adapter<CallMsgC
 
     public abstract void load();
     public abstract void onDel(CallMsg item);
-    public abstract void onSend(CallMsg use);
-    public abstract void onUpdate(int pos, long regdate);
+    public abstract void onUpdate(CallMsg use);
+    public abstract void onSelect(int pos, long regdate);
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public CardView mCardView;
@@ -190,7 +182,7 @@ public abstract class CallMsgChoiceAdapter extends RecyclerView.Adapter<CallMsgC
         public ImageView mIvPhoto;
         public LinearLayout mLayoutUpdate;
         public LinearLayout mLayoutDelete;
-        public LinearLayout mLayoutSend;
+        public LinearLayout mLayoutSelect;
         public LinearLayout mLayoutItem;
 
         public ViewHolder(View itemView) {
@@ -204,7 +196,7 @@ public abstract class CallMsgChoiceAdapter extends RecyclerView.Adapter<CallMsgC
             mIvPhoto = itemView.findViewById(R.id.iv_photo);
             mLayoutUpdate = itemView.findViewById(R.id.ll_update);
             mLayoutDelete = itemView.findViewById(R.id.ll_delete);
-            mLayoutSend = itemView.findViewById(R.id.ll_send);
+            mLayoutSelect = itemView.findViewById(R.id.ll_select);
             mLayoutItem = itemView.findViewById(R.id.ll_item);
         }
     }

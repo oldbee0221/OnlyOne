@@ -86,7 +86,9 @@
                 <LinearLayout
                     android:id="@+id/ll_update"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="12dp"
+                    android:visibility="visible">
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -97,7 +99,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="4dp"
                         android:textSize="14sp"
-                        android:text="@string/choice"/>
+                        android:text="@string/update"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -105,7 +107,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="12dp"
-                    android:visibility="invisible">
+                    android:visibility="visible">
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -119,11 +121,10 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/ll_send"
+                    android:id="@+id/ll_select"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="12dp"
-                    android:visibility="invisible">
+                    android:layout_marginLeft="12dp">
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -133,7 +134,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="4dp"
                         android:textSize="14sp"
-                        android:text="@string/send"/>
+                        android:text="@string/choice"/>
                 </LinearLayout>
             </LinearLayout>
 
