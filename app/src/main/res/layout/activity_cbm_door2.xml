@@ -99,6 +99,16 @@
                 android:textColor="@android:color/white"
                 android:textSize="16sp" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                android:layout_marginBottom="8dp"
+                android:text="@string/callback_desc"
+                android:textColor="@android:color/black"
+                android:textSize="15sp" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -106,37 +116,84 @@
                 android:gravity="center_vertical"
                 android:orientation="vertical">
 
-                <CheckBox
-                    android:id="@+id/check1"
+                <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="12dp"
-                    android:text="@string/use_on_text_recv"
-                    android:visibility="gone"/>
-
-                <CheckBox
-                    android:id="@+id/check2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="12dp"
-                    android:text="@string/use_on_call_recv"/>
-
-                <CheckBox
-                    android:id="@+id/check3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="12dp"
-                    android:text="@string/use_on_call_send"/>
+                    android:layout_height="24dp"
+                    android:gravity="center_vertical"
+                    android:visibility="gone">
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/iocn_receive"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginLeft="12dp"/>
+                    <CheckBox
+                        android:id="@+id/check1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/use_on_text_recv"
+                        android:button="@null"
+                        android:drawableRight="?android:attr/listChoiceIndicatorMultiple"/>
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="24dp"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center_vertical">
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/iocn_receive"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginLeft="12dp"/>
+                    <CheckBox
+                        android:id="@+id/check2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/use_on_call_recv"
+                        android:button="@null"
+                        android:drawableRight="?android:attr/listChoiceIndicatorMultiple"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="24dp"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center_vertical">
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/icon_send"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginLeft="12dp"/>
+                    <CheckBox
+                        android:id="@+id/check3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/use_on_call_send"
+                        android:button="@null"
+                        android:drawableRight="?android:attr/listChoiceIndicatorMultiple"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="24dp"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center_vertical">
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/icon_auto_receive"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginLeft="12dp"/>
                     <CheckBox
                         android:id="@+id/check4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="12dp"
-                        android:text="@string/call_recv_auto_callback"/>
+                        android:text="@string/call_recv_auto_callback"
+                        android:button="@null"
+                        android:drawableRight="?android:attr/listChoiceIndicatorMultiple"/>
 
                     <LinearLayout
                         android:id="@+id/ll_choice_msg"
@@ -162,13 +219,22 @@
 
                 <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="24dp"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center_vertical">
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/icon_massage"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginLeft="12dp"/>
                     <CheckBox
                         android:id="@+id/check5"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="12dp"
-                        android:text="@string/text_recv_auto_callback"/>
+                        android:text="@string/text_recv_auto_callback"
+                        android:button="@null"
+                        android:drawableRight="?android:attr/listChoiceIndicatorMultiple"/>
 
                     <LinearLayout
                         android:id="@+id/ll_choice_msg2"

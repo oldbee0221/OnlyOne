@@ -195,6 +195,14 @@ public class DoorActivity extends AppCompatActivity implements Constants {
                 startActivity(intent);
             }
         });
+
+        findViewById(R.id.tv_find).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://obmms.net/m/search_id.php"));
+                startActivity(intent);
+            }
+        });
     }
 
     private boolean isAllValidInput() {

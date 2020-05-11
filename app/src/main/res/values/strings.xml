@@ -20,8 +20,13 @@
     <string name="login_guide4">* 추가폰ID : 타인 계정에 문자만 추가할 경우, 타인 계정의 로그인 ID</string>
     <string name="login_guide5">2.비밀번호 : 해당 계정의 PW를 입력하세요.</string>
 
+    <string name="login_desc1">온리원셀링의 모든 서비스를 사용하려면</string>
+    <string name="login_desc2">온리원문자앱 로그인이 필수입니다.</string>
+    <string name="login_desc3">온리원셀링은 온리원문자를 기반으로 연락처 관리 및 동기화, 콜백문자, 대량문자, 데일리문자, 아이엠 프렌즈 등 다양한 서비스를 제공하고 있습니다.\n\n따라서, 온리원문자 로그인을 하셔야 합니다. 비로그인시 서비스 일부가 작동되지 않을 수 있습니다.</string>
+
     <string name="join_guide">* 계정이 없으면 회원가입 하세요.</string>
-    <string name="join"><u>회원가입</u></string>
+    <string name="join">회원가입</string>
+    <string name="find">아이디/비밀번호 찾기</string>
 
     <string name="term_cancel">취소</string>
     <string name="term_agree">동의합니다.</string>
@@ -78,13 +83,14 @@
     <string name="callback_cancel">발송취소</string>
     <string name="choice_msg">메시지 선택</string>
 
-    <string name="callback_desc1">전화수신 콜백사용 : 전화를 수신한 후에 수동으로 메시지를 선택하여 발송하는 기능입니다.</string>
-    <string name="callback_desc2">전화발신 콜백사용 : 전화를 발신한 후에 수동으로 메시지를 선택하여 발송하는 기능입니다.</string>
-    <string name="callback_desc3">전화수신 자동콜백 : 전화를 수신하고 나면 미리 선택한 메시지가 자동으로 발송됩니다.</string>
-    <string name="callback_desc4">문자수신 자동콜백 : 문자를 수신하고 나면 미리 선택한 메시지가 자동으로 발송됩니다.</string>
+    <string name="callback_desc1">전화수신 선택콜백 : 전화를 걸어 통화한 후 그 때 콜백문자를 선택하여 발송하는 기능입니다.</string>
+    <string name="callback_desc2">전화발신 선택콜백 : 전화를 받아 통화한 후 그 때 콜백문자를 선택하여 발송하는 기능입니다.</string>
+    <string name="callback_desc3">전화수신 자동발송 : 전화를 받아 통화한 후 미리 선택한 콜백문자를 자동으로 발송하는 기능입니다.</string>
+    <string name="callback_desc4">문자수신 자동발송 : 문자를 수신하고 나면 미리 선택한 콜백문자를 자동으로 발송하는 기능입니다.</string>
     <string name="please_choice_msg">전화수신 자동콜백을 선택하셨습니다.\n자동으로 보낼 메시지를 선택하셔야 합니다.</string>
-    <string name="callback_title_sub">통화가 끝난 후 선택적으로 나를 알리는</string>
+    <string name="callback_title_sub">문자수신 또는 전화통화 후에 좋은 인상을 남기는</string>
     <string name="callback_title_main">온리원콜백</string>
+    <string name="callback_desc">인사말과 링크, 이미지를 준비하여 콜백문자를 작성하고 설정버튼을 선택하면 스마트폰의 무료문자로 발송됩니다.</string>
 
     <string name="connect_service">접속 서비스</string>
     <string name="choose_connect_service">접속 서비스를 선택하세요</string>
@@ -152,6 +158,11 @@
     <string name="log_delete">로그 삭제하기</string>
     <string name="log_on">로그기능 ON</string>
     <string name="log_off">로그기능 OFF</string>
+
+    <string name="log_warning">로그정보 저장과 분석비용 안내\n\n\n이제부터 앱이 사용되는 과정을 이 화면에 로그정보로 기록합니다.\n\n만약 오류가 발생할 경우 해당 로그 자료를 본사에 담당자에게 보내시면 됩니다.\n\n이때 해당 로그정보의 오류해결을 위해 앱 개발자에게 보내서 분석을 의뢰해야 하므로 유료입니다.\n\n단, 해당 오류가 앱 자체의 오류일 경우 납부한 비용은 환불해드리지만 사용자의 설정이나 통신 등의 오류일 경우에는 분석비용을 앱개발자에게 지급하게 됩니다.
+
+감사합니다.
+</string>
 
     <string-array name="send_types">
         <item>메시지 바로 전송</item>

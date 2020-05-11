@@ -165,15 +165,11 @@
                     android:textStyle="bold" />
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="center"
                     android:layout_marginLeft="20dp"
                     android:layout_marginTop="10dp">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/join_guide"
-                        android:textSize="14sp"/>
 
                     <TextView
                         android:id="@+id/tv_join"
@@ -182,7 +178,23 @@
                         android:layout_marginLeft="6dp"
                         android:text="@string/join"
                         android:textSize="14sp"
-                        android:textColor="@color/tomato"/>
+                        android:textColor="@color/brownish_grey"/>
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:background="@color/brownish_grey"/>
+
+                    <TextView
+                        android:id="@+id/tv_find"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="6dp"
+                        android:text="@string/find"
+                        android:textSize="14sp"
+                        android:textColor="@color/brownish_grey"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -192,21 +204,28 @@
                     android:layout_marginLeft="16dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="20dp"
+                    android:paddingRight="12dp"
+                    android:paddingLeft="12dp"
+                    android:paddingBottom="8dp"
+                    android:paddingTop="8dp"
                     android:orientation="vertical"
+                    android:gravity="center"
                     android:background="@drawable/box_guide">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:background="@color/colorPrimary"
-                        android:gravity="center">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/login_guide1"
-                            android:textColor="@android:color/white"
-                            android:textSize="17sp"
-                            android:textStyle="bold"/>
-                    </LinearLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/login_desc1"
+                        android:textColor="@android:color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/login_desc2"
+                        android:textColor="#ff0066"
+                        android:textSize="16sp"
+                        android:textStyle="bold"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -214,34 +233,10 @@
                         android:layout_marginTop="6dp"
                         android:layout_marginRight="6dp"
                         android:layout_marginLeft="6dp"
-                        android:text="@string/login_guide2"
-                        android:textSize="14sp"/>
+                        android:textColor="@android:color/black"
+                        android:text="@string/login_desc3"
+                        android:textSize="15sp"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="6dp"
-                        android:layout_marginLeft="6dp"
-                        android:text="@string/login_guide3"
-                        android:textSize="14sp"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="6dp"
-                        android:layout_marginLeft="6dp"
-                        android:text="@string/login_guide4"
-                        android:textSize="14sp"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/login_guide5"
-                        android:layout_marginRight="6dp"
-                        android:layout_marginLeft="6dp"
-                        android:layout_marginTop="6dp"
-                        android:layout_marginBottom="8dp"
-                        android:textSize="14sp"/>
                 </LinearLayout>
             </LinearLayout>
 

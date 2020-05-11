@@ -9,15 +9,17 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 import io.realm.Realm;
 import mms5.onepagebook.com.onlyonesms.manager.RealmManager;
-import mms5.onepagebook.com.onlyonesms.util.Utils;
 
 public class LogActivity extends AppCompatActivity {
     private TextView mTextLogs;
@@ -99,16 +101,25 @@ public class LogActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(Void... voids) {
-            String logs = RealmManager.loadLogs(Realm.getDefaultInstance()).toString();
-            logs = logs.replace(",", "");
+            ArrayList<String> temp = RealmManager.loadLogs(Realm.getDefaultInstance());
+            String logs = "";
+            if(temp.size() > 0) {
+                logs = temp.toString();
+                logs = logs.replace(",", "");
+            }
+
             return logs;
         }
 
         @Override
         protected void onPostExecute(String logs) {
             super.onPostExecute(logs);
-            if(logs.equals("[]")) logs = "";
-            mTextLogs.setText(logs);
+            if(TextUtils.isEmpty(logs)) {
+                mTextLogs.setText(getString(R.string.log_warning));
+            } else {
+                mTextLogs.setText(logs);
+            }
+
             mBtnDelete.setVisibility(View.VISIBLE);
         }
     }
