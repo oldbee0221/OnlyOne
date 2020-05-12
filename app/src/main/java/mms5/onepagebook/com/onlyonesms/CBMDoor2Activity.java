@@ -2,9 +2,12 @@ package mms5.onepagebook.com.onlyonesms;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.AssetManager;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -14,8 +17,18 @@ import android.widget.Toast;
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.answers.Answers;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.List;
+
 import io.fabric.sdk.android.Fabric;
 import mms5.onepagebook.com.onlyonesms.common.Constants;
+import mms5.onepagebook.com.onlyonesms.db.AppDatabase;
+import mms5.onepagebook.com.onlyonesms.db.entity.CallMsg;
+import mms5.onepagebook.com.onlyonesms.util.DownloadExUtil;
 import mms5.onepagebook.com.onlyonesms.util.Utils;
 
 /**
@@ -84,6 +97,22 @@ public class CBMDoor2Activity extends AppCompatActivity implements Constants, Vi
             mLayoutMsgChoice2.setVisibility(View.VISIBLE);
         } else {
             mLayoutMsgChoice2.setVisibility(View.GONE);
+        }
+
+        if(!Utils.GetBooleanSharedPreference(mContext, PREF_CB_MSG_DEFAULT)) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    List<CallMsg> msgs = AppDatabase
+                            .getInstance(mContext)
+                            .getCallMsgDao()
+                            .getAll();
+
+                    if(msgs.size() == 0) {
+                        saveDefaultMsg();
+                    }
+                }
+            }).start();
         }
     }
 
@@ -190,6 +219,132 @@ public class CBMDoor2Activity extends AppCompatActivity implements Constants, Vi
                 }
                 break;
         }
+    }
+
+    private void saveDefaultMsg() {
+        DownloadExUtil downloader = new DownloadExUtil(mContext, "http://obmms.net/images/icon-iammain.png", "default1.png") {
+            @Override
+            public void callback(String result) {
+                final CallMsg dMsg = new CallMsg();
+
+                dMsg.category = "샘플1";
+                dMsg.title = "수신이 어려워서...";
+                dMsg.contents = "지금 수신이 어려워 폰의\n" +
+                        "\n" +
+                        "자동콜백메시지로 발송\n" +
+                        "\n" +
+                        "합니다. 온리원 자동셀링\n" +
+                        "\n" +
+                        "솔루션의 10가지 기능중\n" +
+                        "\n" +
+                        "에 하나인 아이엠 명함 브랜드를 활용하니까 참 좋네요.\n" +
+                        "\n" +
+                        "[참고로 10가지 기능을 소개합니다]\n" +
+                        "\n" +
+                        "첫째 아이엠 모바일 명함, 브랜드 기능\n" +
+                        "\n" +
+                        "둘째 폰, 이메일, 주소 등 디비 수집 기능\n" +
+                        "\n" +
+                        "셋째 무스팸, 고회신 메시지 기술\n" +
+                        "\n" +
+                        "넷째 폰의 무료문자 자동 대량발송 기능\n" +
+                        "\n" +
+                        "다섯째 데일리 발송기능\n" +
+                        "\n" +
+                        "여섯째 이벤트 페이지 자동생성 기능\n" +
+                        "\n" +
+                        "일곱째 랜딩페이지 생성 기능\n" +
+                        "\n" +
+                        "여덟때 회신고객 단계별 자동발송기능\n" +
+                        "\n" +
+                        "아홉째 문자수신 전화수발신 콜백 기능\n" +
+                        "\n" +
+                        "열째 아이엠과 셀링을 활용한 마이샵 기능\n" +
+                        "\n" +
+                        "※ 자세히 보려면 아래 링크를 보세요.\n" +
+                        "\n" +
+                        "https://url.kr/MwKfmI\n" +
+                        "\n" +
+                        "곧 연락드리겠습니다.\n" +
+                        "\n" +
+                        "감사합니다.";
+
+                dMsg.imgpath = result;
+                dMsg.regdate = System.currentTimeMillis();
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AppDatabase.getInstance(mContext).getCallMsgDao().insert(dMsg);
+                        Utils.PutSharedPreference(mContext, PREF_CB_AUTO_MSG, dMsg.regdate);
+                        Utils.PutSharedPreference(mContext, PREF_CB_MSG_DEFAULT, true);
+                    }
+                }).start();
+            }
+        };
+        downloader.execute();
+
+        DownloadExUtil downloader2 = new DownloadExUtil(mContext, "http://obmms.net/images/icon-callback.PNG", "default2.png") {
+            @Override
+            public void callback(String result) {
+                final CallMsg dMsg = new CallMsg();
+
+                dMsg.category = "샘플2";
+                dMsg.title = "수신이 어려워서...";
+                dMsg.contents = "지금 수신이 어려워 폰의\n" +
+                        "\n" +
+                        "자동콜백메시지로 발송\n" +
+                        "\n" +
+                        "합니다. 온리원 자동셀링\n" +
+                        "\n" +
+                        "솔루션의 10가지 기능중\n" +
+                        "\n" +
+                        "에 하나인 아이엠 명함 브랜드를 활용하니까 참 좋네요.\n" +
+                        "\n" +
+                        "[참고로 10가지 기능을 소개합니다]\n" +
+                        "\n" +
+                        "첫째 아이엠 모바일 명함, 브랜드 기능\n" +
+                        "\n" +
+                        "둘째 폰, 이메일, 주소 등 디비 수집 기능\n" +
+                        "\n" +
+                        "셋째 무스팸, 고회신 메시지 기술\n" +
+                        "\n" +
+                        "넷째 폰의 무료문자 자동 대량발송 기능\n" +
+                        "\n" +
+                        "다섯째 데일리 발송기능\n" +
+                        "\n" +
+                        "여섯째 이벤트 페이지 자동생성 기능\n" +
+                        "\n" +
+                        "일곱째 랜딩페이지 생성 기능\n" +
+                        "\n" +
+                        "여덟때 회신고객 단계별 자동발송기능\n" +
+                        "\n" +
+                        "아홉째 문자수신 전화수발신 콜백 기능\n" +
+                        "\n" +
+                        "열째 아이엠과 셀링을 활용한 마이샵 기능\n" +
+                        "\n" +
+                        "※ 자세히 보려면 아래 링크를 보세요.\n" +
+                        "\n" +
+                        "https://url.kr/MwKfmI\n" +
+                        "\n" +
+                        "곧 연락드리겠습니다.\n" +
+                        "\n" +
+                        "감사합니다.";
+
+                dMsg.imgpath = result;
+                dMsg.regdate = System.currentTimeMillis();
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AppDatabase.getInstance(mContext).getCallMsgDao().insert(dMsg);
+                        Utils.PutSharedPreference(mContext, PREF_CB_AUTO_MSG2, dMsg.regdate);
+                        Utils.PutSharedPreference(mContext, PREF_CB_MSG_DEFAULT, true);
+                    }
+                }).start();
+            }
+        };
+        downloader2.execute();
     }
 }
 

@@ -24,6 +24,7 @@ public interface Constants {
     String PREF_AUTOLOGIN = "onlyonesms.pref.autologin";
     String PREF_CB_AUTO_MSG = "onlyonesms.pref.cbautomsg";
     String PREF_CB_AUTO_MSG2 = "onlyonesms.pref.cbautomsg2";
+    String PREF_CB_MSG_DEFAULT = "onlyonesms.pref.cbmsgdefault";
 
     String FRAG_01 = "01";
     String FRAG_S1 = "번으로 변경";
@@ -40,4 +41,6 @@ public interface Constants {
     int REQUEST_CODE_IMGBOX = 506;
 
     int NOTIFICATION_ID = 325;
+
+    String DOWNLOAD_DIR = "/download/onlyone";
 }

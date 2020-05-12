@@ -208,7 +208,7 @@ public class CBMChoiceListActivity extends AppCompatActivity implements Constant
             @Override
             public void onSelect(int position, long regdate) {
                 mAdapter.check(position);
-                Utils.PutSharedPreference(mContext, PREF_CB_AUTO_MSG2, regdate);
+                Utils.PutSharedPreference(mContext, PREF_CB_AUTO_MSG, regdate);
             }
 
             @Override
