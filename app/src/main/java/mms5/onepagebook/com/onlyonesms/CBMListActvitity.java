@@ -313,6 +313,7 @@ public class CBMListActvitity extends AppCompatActivity implements Constants, Vi
                     break;
 
                 case HANDLER_SEND:
+                    Utils.PutSharedPreference(mContext, PREF_CB_MSG_SENT, true);
                     showFinDialog();
                     break;
             }

@@ -575,6 +575,7 @@ public class CBMUpdate2Activity extends AppCompatActivity implements Constants, 
                     break;
 
                 case HANDLER_SEND:
+                    Utils.PutSharedPreference(mContext, PREF_CB_MSG_SENT, true);
                     showFinDialog();
                     break;
 

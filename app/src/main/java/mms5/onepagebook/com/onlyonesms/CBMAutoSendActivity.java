@@ -267,6 +267,7 @@ public class CBMAutoSendActivity extends AppCompatActivity implements Constants 
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case HANDLER_SEND:
+                    Utils.PutSharedPreference(mContext, PREF_CB_MSG_SENT, true);
                     showFinDialog();
                     break;
             }

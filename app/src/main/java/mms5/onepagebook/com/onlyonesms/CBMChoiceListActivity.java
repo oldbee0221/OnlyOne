@@ -318,6 +318,7 @@ public class CBMChoiceListActivity extends AppCompatActivity implements Constant
                     break;
 
                 case HANDLER_SEND:
+                    Utils.PutSharedPreference(mContext, PREF_CB_MSG_SENT, true);
                     showFinDialog();
                     break;
 

@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.Telephony;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.klinker.android.send_message.MmsSentReceiver;
 
@@ -14,18 +15,27 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import me.everything.providers.android.telephony.Mms;
+import mms5.onepagebook.com.onlyonesms.util.Utils;
+
+import static mms5.onepagebook.com.onlyonesms.common.Constants.PREF_CB_MSG_SENT;
 
 public class OneMmsSentReceiver extends MmsSentReceiver {
     private static final long MAYBE_SENDING_DURATION = 5 * 60 * 1000L;
 
     @Override
     public void onMessageStatusUpdated(Context context, Intent intent, int i) {
-        String contentUri = intent.getStringExtra("content_uri");
-        if (TextUtils.isEmpty(contentUri)) {
-            removeSentMessageWithUri(context, Mms.uriSent);
-            removeSentMessageWithUri(context, Mms.uriOutbox);
+        boolean flag = Utils.GetBooleanSharedPreference(context, PREF_CB_MSG_SENT);
+
+        if(flag) {
+            Utils.PutSharedPreference(context, PREF_CB_MSG_SENT, false);
         } else {
-            removeSentMessage(context, Uri.parse(contentUri));
+            String contentUri = intent.getStringExtra("content_uri");
+            if (TextUtils.isEmpty(contentUri)) {
+                removeSentMessageWithUri(context, Mms.uriSent);
+                removeSentMessageWithUri(context, Mms.uriOutbox);
+            } else {
+                removeSentMessage(context, Uri.parse(contentUri));
+            }
         }
     }
 
