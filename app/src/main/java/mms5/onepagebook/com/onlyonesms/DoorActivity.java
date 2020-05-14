@@ -464,7 +464,7 @@ public class DoorActivity extends AppCompatActivity implements Constants {
     }
 
     private void goToHomeActivity() {
-        Intent i = new Intent(this, HomeActivity.class);
+        Intent i = new Intent(this, MainActivity.class);
         i.putExtra(EXTRA_RCV_TEL_NUM, mRcvTelNum);
         startActivity(i);
         finish();

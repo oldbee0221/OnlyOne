@@ -209,6 +209,9 @@ public class MainActivity extends AppCompatActivity implements Constants {
         findViewById(R.id.iv_home).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, HomeActivity.class);
+                i.putExtra(EXTRA_RCV_TEL_NUM, mRcvTelNum);
+                startActivity(i);
                 finish();
             }
         });
