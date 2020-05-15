@@ -29,6 +29,7 @@ public abstract class CallMsgChoiceAdapter extends RecyclerView.Adapter<CallMsgC
     private ArrayList<Boolean> mChecks;
     private boolean mIsFromMsg;
     private long mRegDate;
+    private int mSeletedPos = -1;
 
     public CallMsgChoiceAdapter(Context context, boolean mode, long regdate) {
         mContext = context;
@@ -51,7 +52,16 @@ public abstract class CallMsgChoiceAdapter extends RecyclerView.Adapter<CallMsgC
         holder.mTvDate.setText(getDate(item.regdate));
         holder.mTvCategory.setText(item.category);
         holder.mTvTitle.setText(item.title);
-        holder.mTvMessage.setText(item.contents);
+
+        if(item.contents.length() > 30) {
+            if(mSeletedPos == position) {
+                holder.mTvMessage.setText(item.contents);
+            } else {
+                holder.mTvMessage.setText(item.contents.substring(0, 30) + "...");
+            }
+        } else {
+            holder.mTvMessage.setText(item.contents);
+        }
 
         if(!TextUtils.isEmpty((item.imgpath))) {
             GlideApp.with(mContext)
@@ -64,6 +74,13 @@ public abstract class CallMsgChoiceAdapter extends RecyclerView.Adapter<CallMsgC
         } else {
             holder.mLayoutItem.setBackgroundResource(R.color.white_two);
         }
+
+        holder.mCardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onContents(position);
+            }
+        });
 
         holder.mLayoutUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,6 +95,7 @@ public abstract class CallMsgChoiceAdapter extends RecyclerView.Adapter<CallMsgC
                 onDel(item);
             }
         });
+
         holder.mLayoutSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -138,6 +156,16 @@ public abstract class CallMsgChoiceAdapter extends RecyclerView.Adapter<CallMsgC
         notifyDataSetChanged();
     }
 
+    public void selected(int pos) {
+        if(mSeletedPos == -1) {
+            mSeletedPos = pos;
+        } else {
+            mSeletedPos = -1;
+        }
+
+        notifyDataSetChanged();
+    }
+
     private String getDate(long millis) {
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(millis);
@@ -172,6 +200,7 @@ public abstract class CallMsgChoiceAdapter extends RecyclerView.Adapter<CallMsgC
     public abstract void onDel(CallMsg item);
     public abstract void onUpdate(CallMsg use);
     public abstract void onSelect(int pos, long regdate);
+    public abstract void onContents(int pos);
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public CardView mCardView;

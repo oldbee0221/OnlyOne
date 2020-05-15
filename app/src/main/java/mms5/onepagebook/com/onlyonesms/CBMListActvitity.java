@@ -226,6 +226,11 @@ public class CBMListActvitity extends AppCompatActivity implements Constants, Vi
             }
 
             @Override
+            public void onContents(int pos) {
+                mAdapter.selected(pos);
+            }
+
+            @Override
             public void onDel(final CallMsg item) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(CBMListActvitity.this);
                 builder.setCancelable(false);

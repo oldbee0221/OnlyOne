@@ -261,6 +261,11 @@ public class CBMChoiceListActivity extends AppCompatActivity implements Constant
                     builder.show();
                 }
             }
+
+            @Override
+            public void onContents(int pos) {
+                mAdapter.selected(pos);
+            }
         };
 
         mRv.setAdapter(mAdapter);
