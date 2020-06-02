@@ -27,6 +27,9 @@ public interface Constants {
     String PREF_CB_MSG_DEFAULT = "onlyonesms.pref.cbmsgdefault";
     String PREF_CB_MSG_SENT = "onlyonesms.pref.cbmsgsent";
 
+    String PREF_CB_SENT_NUM = "onlyonesms.pref.cbsentnum";
+    String PREF_CB_SENT_TIME = "onlyonesms.pref.cbmsenttime";
+
     String FRAG_01 = "01";
     String FRAG_S1 = "번으로 변경";
     String FRAG_S2 = "유효하지 않은 번호";

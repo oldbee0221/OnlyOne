@@ -34,6 +34,7 @@ import mms5.onepagebook.com.onlyonesms.dialog.ProgressDialog;
 import mms5.onepagebook.com.onlyonesms.util.Settings;
 import mms5.onepagebook.com.onlyonesms.util.Utils;
 
+
 /**
  * Created by jeonghopark on 2020/04/07.
  */
@@ -85,7 +86,18 @@ public class CBMAutoSendActivity extends AppCompatActivity implements Constants 
 
         mProgressDialog = new ProgressDialog(CBMAutoSendActivity.this);
 
-        init();
+        String sendnum = Utils.GetStringSharedPreference(mContext, PREF_CB_SENT_NUM);
+        if(!Utils.IsEmpty(sendnum) && sendnum.equals(mSndNumber)) {
+            long sendtime = Utils.GetLongSharedPreference(mContext, PREF_CB_SENT_TIME);
+            long currtime = System.currentTimeMillis();
+            if((currtime - sendtime) > (1000*60*10)) {
+                init();
+            } else {
+                finish();
+            }
+        } else {
+            init();
+        }
     }
 
     private String makePhonenum(String p) {
@@ -117,6 +129,9 @@ public class CBMAutoSendActivity extends AppCompatActivity implements Constants 
 
     private void init() {
         if(!TextUtils.isEmpty(mSndNumber)) {
+            Utils.PutSharedPreference(mContext, PREF_CB_SENT_NUM, mSndNumber);
+            Utils.PutSharedPreference(mContext, PREF_CB_SENT_TIME, System.currentTimeMillis());
+
             if(mWhich.equals("call")) {
                 final long regdate = Utils.GetLongSharedPreference(mContext, PREF_CB_AUTO_MSG);
                 new Thread(new Runnable() {
