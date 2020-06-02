@@ -60,8 +60,10 @@ public class Utils {
             permissionToRequest.add(Manifest.permission.READ_CALL_LOG);
         }
 
-        if (checkNoPermission(context, Manifest.permission.FOREGROUND_SERVICE)) {
-            permissionToRequest.add(Manifest.permission.FOREGROUND_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (checkNoPermission(context, Manifest.permission.FOREGROUND_SERVICE)) {
+                permissionToRequest.add(Manifest.permission.FOREGROUND_SERVICE);
+            }
         }
 
         String[] permissionArray = new String[permissionToRequest.size()];
