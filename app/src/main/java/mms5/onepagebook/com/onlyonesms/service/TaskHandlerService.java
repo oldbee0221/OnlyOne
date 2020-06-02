@@ -77,6 +77,10 @@ public class TaskHandlerService extends Service implements Constants {
 
     private ArrayList<String> m_arrMMS = new ArrayList<>();
 
+    public TaskHandlerService() {
+
+    }
+
     public static synchronized TaskHandlerService getInstance(Context context) {
         if (instance == null) {
             instance = new TaskHandlerService(context);

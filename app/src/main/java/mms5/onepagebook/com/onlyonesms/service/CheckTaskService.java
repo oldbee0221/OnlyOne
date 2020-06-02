@@ -10,6 +10,8 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.JobIntentService;
 import android.text.TextUtils;
 
+import com.google.gson.JsonSyntaxException;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -105,6 +107,8 @@ public class CheckTaskService extends JobIntentService {
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
+                } catch (JsonSyntaxException e) {
+                    RealmManager.writeLog("[CheckTaskService] run() exception " + e.getMessage());
                 }
 
                 try {
