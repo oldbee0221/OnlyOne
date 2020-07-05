@@ -235,7 +235,7 @@ public class MainActivity extends AppCompatActivity implements Constants {
         if (requestCode == REQUEST_PERMISSION) {
             for (int grantResult : grantResults) {
                 if (grantResult != PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(getApplicationContext(), "Please allow permissions.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Please allow permissions.(3)", Toast.LENGTH_SHORT).show();
                     finish();
                     return;
                 }

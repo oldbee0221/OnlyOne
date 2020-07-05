@@ -60,7 +60,7 @@ public class Utils {
             permissionToRequest.add(Manifest.permission.READ_CALL_LOG);
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             if (checkNoPermission(context, Manifest.permission.FOREGROUND_SERVICE)) {
                 permissionToRequest.add(Manifest.permission.FOREGROUND_SERVICE);
             }

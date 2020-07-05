@@ -14,6 +14,7 @@ import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
@@ -224,7 +225,7 @@ public class DoorActivity extends AppCompatActivity implements Constants {
         if (requestCode == REQUEST_PERMISSION) {
             for (int grantResult : grantResults) {
                 if (grantResult != PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(getApplicationContext(), "Please allow permissions.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Please allow permissions.(1)", Toast.LENGTH_SHORT).show();
                     finish();
                     return;
                 }

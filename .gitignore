@@ -53,3 +53,5 @@ app/src/main/java/mms5/onepagebook/com/onlyonesms/.DS_Store
 .gradle/5.4.1/fileChanges/last-build.bin
 .gradle/5.4.1/fileHashes/fileHashes.bin
 .gradle/5.4.1/fileHashes/fileHashes.lock
+
+.gradle/checksums/checksums.lock
